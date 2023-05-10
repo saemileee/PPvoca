@@ -1,9 +1,10 @@
 import React from 'react';
+import Component from '../components/BookForm/Component';
 
 function BookForm() {
 	return (
 		<main>
-			<h1>BookForm</h1>
+			<Component />
 		</main>
 	);
 }

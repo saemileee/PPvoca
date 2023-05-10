@@ -1,0 +1,86 @@
+input,
+textarea {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #dddddd;
+	border-radius: 3px;
+	font-size: 14pt;
+}
+
+button {
+	background: inherit;
+	border: none;
+	cursor: pointer;
+}
+
+.icon {
+	font-size: 17pt;
+}
+
+.container {
+	padding: 20px 15px;
+}
+
+.bookHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 22pt;
+	h1,
+	button,
+	.icon {
+		font-size: 22pt;
+	}
+}
+
+.bookForm {
+	& > * {
+		margin-top: 30px;
+	}
+	p {
+		font-size: 17pt;
+		display: flex;
+		align-items: center;
+
+		.icon {
+			margin-right: 10px;
+		}
+	}
+	textarea {
+		height: 200px;
+		resize: none;
+	}
+}
+
+// .bookLanguage {
+//     font-size: 14pt;
+//     & > * {
+//         margin-bottom: 20px;
+//     }
+//     ul {
+//         display: flex;
+//     }
+//     li {
+//         flex-grow: 1;
+//     }
+//     button {
+//         text-align: center;
+//     }
+// }
+
+.bookLanguage {
+	width: 100%;
+	text-align: left;
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
+
+	td {
+		width: 50%; /* adjust as needed */
+	}
+
+	button {
+		width: 100%;
+	}
+}
