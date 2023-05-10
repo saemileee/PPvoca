@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.scss';
+import {
+	BsPencil,
+	BsJournalBookmark,
+	BsPatchQuestion,
+	BsCalendar4Week,
+} from 'react-icons/bs';
 
 const Header = () => {
 	return (
@@ -8,16 +14,24 @@ const Header = () => {
 			<nav className={styles.menu}>
 				<ul className={styles.menuList}>
 					<li className={styles.menuItem}>
-						<Link to='/'>메뉴1</Link>
+						<Link to='/'>
+							<BsPencil size={20} />
+						</Link>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>메뉴2</Link>
+						<Link to='/'>
+							<BsJournalBookmark size={20} />
+						</Link>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>메뉴3</Link>
+						<Link to='/'>
+							<BsPatchQuestion size={20} />
+						</Link>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>메뉴4</Link>
+						<Link to='/'>
+							<BsCalendar4Week size={20} />
+						</Link>
 					</li>
 				</ul>
 			</nav>
