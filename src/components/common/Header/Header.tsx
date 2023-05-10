@@ -7,6 +7,7 @@ import {
 	BsPatchQuestion,
 	BsCalendar4Week,
 } from 'react-icons/bs';
+import { TbLogin } from 'react-icons/tb';
 
 const Header = () => {
 	return (
@@ -31,6 +32,11 @@ const Header = () => {
 					<li className={styles.menuItem}>
 						<Link to='/'>
 							<BsCalendar4Week size={20} />
+						</Link>
+					</li>
+					<li className={styles.menuItem}>
+						<Link to='/'>
+							<TbLogin size={20} />
 						</Link>
 					</li>
 				</ul>
