@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './WordListStyle.module.scss';
 
-function Component() {
+function WordListComponents() {
 	return <></>;
 }
 
-export default Component;
+export default WordListComponents;
