@@ -15,7 +15,6 @@ function App() {
 	return (
 		<BrowserRouter>
 			<React.Fragment>
-				{/* Header 컴포넌트 자리 */}
 				<Header />
 				<Routes>
 					<Route path='/' element={<Navigate to='/book/list' />} />

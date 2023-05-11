@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './Header.module.scss';
 import {
 	BsPencil,
@@ -9,40 +9,70 @@ import {
 } from 'react-icons/bs';
 import { TbLogin } from 'react-icons/tb';
 
-const Header = () => {
+function Header() {
 	return (
 		<header className={styles.container}>
 			<nav className={styles.menu}>
 				<ul className={styles.menuList}>
 					<li className={styles.menuItem}>
-						<Link to='/'>
-							<BsPencil size={20} />
-						</Link>
+						<NavLink
+							to='/'
+							style={({ isActive }) => ({
+								color: isActive ? 'red' : 'black',
+							})}>
+							<div className={styles.iconWrapper}>
+								<BsPencil size={20} />
+							</div>
+						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>
-							<BsJournalBookmark size={20} />
-						</Link>
+						<NavLink
+							to='./book/list'
+							style={({ isActive }) => ({
+								color: isActive ? 'red' : 'black',
+							})}>
+							<div className={styles.iconWrapper}>
+								<BsJournalBookmark size={20} />
+							</div>
+						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>
-							<BsPatchQuestion size={20} />
-						</Link>
+						<NavLink
+							to='/'
+							style={({ isActive }) => ({
+								color: isActive ? 'red' : 'black',
+							})}>
+							<div className={styles.iconWrapper}>
+								<BsPatchQuestion size={20} />
+							</div>
+						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>
-							<BsCalendar4Week size={20} />
-						</Link>
+						<NavLink
+							to='./Calendar'
+							style={({ isActive }) => ({
+								color: isActive ? 'red' : 'black',
+							})}>
+							<div className={styles.iconWrapper}>
+								<BsCalendar4Week size={20} />
+							</div>
+						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
-						<Link to='/'>
-							<TbLogin size={20} />
-						</Link>
+						<NavLink
+							to='./Login'
+							style={({ isActive }) => ({
+								color: isActive ? 'red' : 'black',
+							})}>
+							<div className={styles.iconWrapper}>
+								<TbLogin size={20} />
+							</div>
+						</NavLink>
 					</li>
 				</ul>
 			</nav>
 		</header>
 	);
-};
+}
 
 export default Header;
