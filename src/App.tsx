@@ -8,6 +8,7 @@ import Calendar from './pages/Calendar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
+import UserEdit from './pages/UserEdit';
 
 function App() {
 	return (
@@ -27,6 +28,7 @@ function App() {
 					<Route path='/login' element={<Login />}></Route>
 					<Route path='/register' element={<Register />}></Route>
 					<Route path='/user/info' element={<UserInfo />}></Route>
+					<Route path='/user/edit' element={<UserEdit />}></Route>
 				</Routes>
 			</React.Fragment>
 		</BrowserRouter>
