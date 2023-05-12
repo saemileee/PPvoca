@@ -16,7 +16,7 @@ function Header() {
 				<ul className={styles.menuList}>
 					<li className={styles.menuItem}>
 						<NavLink
-							to='/'
+							to='./word/add'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
 							})}>

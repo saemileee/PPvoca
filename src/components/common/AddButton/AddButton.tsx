@@ -28,8 +28,7 @@ const WordAddButton = ({ url }: Props) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					fontSize: '24px',
-				}}
-			>
+				}}>
 				<AiOutlinePlus style={{ color: 'black' }} />
 			</button>
 		</Link>
