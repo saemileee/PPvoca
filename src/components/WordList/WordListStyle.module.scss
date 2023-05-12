@@ -1,3 +1,146 @@
+//Title
 .head {
-    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    margin: 10px auto 5px;
+
+    .back {
+        width: 5%;
+        margin-right: 10px;
+    }
+
+    .title {
+        width: 70%;
+        font-size: 29px;
+        margin-right: 50px;
+    }
+
+    .filter {
+        margin-left: 20px;
+
+    }
+
+    .options {
+        margin-left: 20px;
+
+    }
+
+    .plus {
+        margin-left: 20px;
+        margin-right: 5px;
+    }
 }
+
+//Search
+.input {
+    width: 90%;
+    height: 35px;
+    margin-left: 5px;
+    margin-right: 13px;
+    border-radius: 3px;
+    border-color: #dddddd;
+    font-size: 23px;
+    .search {
+        width: 10%;
+        margin-right: 5px;
+    }
+}
+
+//List
+.count {
+    padding: 5px;
+    font-size: 13px;
+    color: #CC99FF;
+}
+.box {
+    padding: 5px 8px 8px;
+    border-bottom: 1px solid #dddddd;
+
+    .menus {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .list {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 5px;
+        }
+
+        .status {
+            padding-right: 20px;
+        }
+
+        .speaker {
+            padding-right: 5px;
+        }
+    }
+
+    .word {
+        font-size: 22px;
+        font-weight: bold;
+        padding-bottom: 5px;
+    }
+
+    .meanings {
+        font-size: 20px;
+        text-align: center;
+        display: inline-block;
+        padding: 5px;
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+    }
+}
+
+//Filter Modal
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 180px;
+    height: 220px;
+    z-index: 999;
+    
+    position: absolute;
+    top: 15%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+  
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 15px;
+
+    font-weight: bold;
+
+    .delete {
+        margin-top: 18px;
+        flex-grow: 1;
+        width: 100%;
+        text-align: center;
+    }
+
+    .unmark {
+        flex-grow: 1;
+        width: 100%;
+        text-align: center;
+    }
+
+    .remember {
+        flex-grow: 1;
+        width: 100%;
+        text-align: center;
+    }
+
+    .unknown {
+        flex-grow: 1;
+        width: 100%;
+        text-align: center;
+    }
+  }
+  
