@@ -16,23 +16,25 @@ function Header() {
 				<ul className={styles.menuList}>
 					<li className={styles.menuItem}>
 						<NavLink
-							to='./word/add'
+							to='/word/add'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
-								<BsPencil size={20} />
+								<BsPencil size={24} />
 							</div>
 						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
 						<NavLink
-							to='./book/list'
+							to='/book/list'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
-								<BsJournalBookmark size={20} />
+								<BsJournalBookmark size={24} />
 							</div>
 						</NavLink>
 					</li>
@@ -41,31 +43,34 @@ function Header() {
 							to='/'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
-								<BsPatchQuestion size={20} />
+								<BsPatchQuestion size={24} />
 							</div>
 						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
 						<NavLink
-							to='./Calendar'
+							to='/calendar'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
-								<BsCalendar4Week size={20} />
+								<BsCalendar4Week size={24} />
 							</div>
 						</NavLink>
 					</li>
 					<li className={styles.menuItem}>
 						<NavLink
-							to='./Login'
+							to='/login'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
-								<TbLogin size={20} />
+								<TbLogin size={24} />
 							</div>
 						</NavLink>
 					</li>
