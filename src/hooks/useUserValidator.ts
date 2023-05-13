@@ -131,7 +131,14 @@ function useUserValidator(values: ValuesProps) {
 		}
 	}, [submitAttempt, errors]);
 
-	return { errors, setErrors, userValidator, setSubmitAttempt, validationPass };
+	return {
+		errors,
+		setErrors,
+		userValidator,
+		setSubmitAttempt,
+		validationPass,
+		setValidationPass,
+	};
 }
 
 export default useUserValidator;
