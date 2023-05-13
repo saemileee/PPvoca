@@ -8,6 +8,7 @@ import {
 } from 'react-icons/bi';
 import Speaker from '../common/Speaker/Speaker';
 import AddButton from '../common/AddButton/AddButton';
+import ChangeStatus from '../common/Status/Status';
 
 //단어장 이름, 단어 국적(populate), 단어, 뜻, 상태, 생성시간
 const dummyList = [
@@ -163,9 +164,7 @@ const WordListList = () => {
 								{item.shortId}. {item.createdAt}
 							</div>
 							<div className={styles.status} onClick={handleStatus}>
-								{item.status === 0 && <BiMessageSquare />}
-								{item.status === 1 && <BiMessageSquareCheck />}
-								{item.status === 2 && <BiMessageSquareError />}
+								<ChangeStatus initialStatus={item.status} />
 							</div>
 							<Speaker
 								text={item.word}

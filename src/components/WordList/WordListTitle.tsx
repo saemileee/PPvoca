@@ -6,6 +6,7 @@ import { CiMenuKebab } from 'react-icons/ci';
 import { GiSettingsKnobs } from 'react-icons/gi';
 import WordListOptionsModal from './WordListOptionsModal';
 import WordListFilterModal from './WordListFilterModal';
+import Modal from '../../components/common/Modal/Modal';
 
 const WordListTitle = () => {
 	const [optionsModalOpen, setOptionsModalOpen] = useState(false);

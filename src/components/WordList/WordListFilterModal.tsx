@@ -31,7 +31,11 @@ function WordListFilterModal({ setModalOpen }: Props) {
 	});
 
 	return (
-		<div className={styles.modalWrapper} ref={modalRef}>
+		<div
+			className={styles.modalBack}
+			ref={modalRef}
+			onClick={() => setModalOpen(false)}
+		>
 			<div className={styles.modal}>
 				<div className={styles.header}>
 					<div className={styles.title}>보기 설정</div>
@@ -60,10 +64,6 @@ function WordListFilterModal({ setModalOpen }: Props) {
 					</div>
 				</div>
 			</div>
-			<div
-				className={styles.backdrop}
-				onClick={() => setModalOpen(false)}
-			></div>
 		</div>
 	);
 }
