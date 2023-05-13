@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router';
+import { useSetRecoilState } from 'recoil';
+import { userTokenState } from '../recoil/userState';
+import { loginUser } from '../apis/user';
 import useUserValidator from '../hooks/useUserValidator';
 import styles from '../components/User/Login.module.scss';
 import Logo from '../components/common/Logo/Logo';
@@ -6,6 +11,9 @@ import UserInput from '../components/User/UserInput/UserInput';
 import UserButton from '../components/User/UserButton/UserButton';
 
 function Login() {
+	const navigate = useNavigate();
+	const setUserToken = useSetRecoilState(userTokenState);
+
 	const logoStyle = {
 		transform: 'translateX(-10px)',
 		marginBottom: '5vh',
@@ -17,11 +25,47 @@ function Login() {
 	};
 
 	const [values, setValues] = useState(initValues);
-	const { errors, setErrors, userValidator, validationPass } =
-		useUserValidator(initValues);
+	const {
+		errors,
+		setErrors,
+		userValidator,
+		validationPass,
+		setValidationPass,
+	} = useUserValidator(initValues);
+
+	const handleSubmit = async () => {
+		try {
+			const data = {
+				userEmail: values.email,
+				password: values.password,
+			};
+			const response = await loginUser(data);
+			if (response.status === 200) {
+				const { token } = response.data;
+				setUserToken(token);
+				alert('로그인되었습니다.');
+				navigate('/user/info');
+			}
+		} catch (err: unknown) {
+			if (err instanceof AxiosError) {
+				if (err.response?.status === 400) {
+					//수정 필요
+					const errMsg = err.response.data.reason;
+					return alert(errMsg);
+				}
+			}
+
+			//console.log(err);
+			alert('로그인에 실패하였습니다.');
+		}
+	};
 
 	useEffect(() => {
-		if (validationPass) alert('유효성 검사 통과!!!');
+		if (validationPass) {
+			handleSubmit();
+			//유효성 검사 성공 여부 초기화
+			setValidationPass(false);
+		}
 	}, [validationPass]);
 
 	return (
@@ -53,8 +97,7 @@ function Login() {
 							onClick={e => {
 								e.preventDefault();
 								userValidator(values, true);
-							}}
-						>
+							}}>
 							로그인
 						</UserButton>
 					</li>
