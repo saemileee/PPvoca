@@ -13,8 +13,6 @@ const mockData = {
 	book: '영단어',
 };
 
-
-
 function WordForm() {
 	const [buttonText, setButtonText] = useState('');
 	const [bookName, setBookName] = useState(mockData.book);
@@ -121,13 +119,7 @@ function WordForm() {
 							showModal={showModal}
 							setShowModal={setShowModal}
 							title='단어장 선택'
-						>
-							<ul>
-								<li>dsfjkfhs</li>
-							</ul>
-
-						</Modal>
-
+						></Modal>
 					</div>
 				)}
 			</div>
