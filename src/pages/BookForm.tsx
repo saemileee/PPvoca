@@ -7,45 +7,45 @@ import { BsJournalBookmark } from 'react-icons/bs';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BsArrowDownUp } from 'react-icons/bs';
 
-
 // 더미 데이터
 const mockData = {
-	description: "단어장 설명입니다",
-	end_lang: "English",
-	name: "영단어",
-	start_lang: "Korean"
-}
+	description: '단어장 설명입니다',
+	end_lang: 'English',
+	name: '영단어',
+	start_lang: 'Korean',
+};
 
-const editPage = location.pathname === "/book/edit"
-const addPage = location.pathname === "/book/add"
+const editPage = location.pathname === '/book/edit';
+const addPage = location.pathname === '/book/add';
 
 function BookForm() {
 	const navigate = useNavigate();
 
 	const [buttonText, setButtonText] = useState('');
-	const [bookName, setBookName] = useState('')
-	const [bookDescription, setBookDescription] = useState('')
-	const [bookLanguage, setBookLanguage] = useState({ word: 'English', meaning: 'Korean' });
-
+	const [bookName, setBookName] = useState('');
+	const [bookDescription, setBookDescription] = useState('');
+	const [bookLanguage, setBookLanguage] = useState({
+		word: 'English',
+		meaning: 'Korean',
+	});
 
 	// 생성, 수정 버튼 글자 바꾸기, 수정페이지면 데이터 가져오기
 	useEffect(() => {
 		if (addPage) {
-			setButtonText("생성");
+			setButtonText('생성');
 		} else if (editPage) {
-			setButtonText("수정");
+			setButtonText('수정');
 			setBookName(mockData.name);
 			setBookDescription(mockData.description);
 			setBookLanguage({
 				word: mockData.start_lang,
-				meaning: mockData.end_lang
+				meaning: mockData.end_lang,
 			});
 		}
 	}, []);
 
 	// add, edit 다르게 처리
 	function handleSubmit() {
-
 		if (!bookName) {
 			return;
 		}
@@ -53,8 +53,8 @@ function BookForm() {
 			name: bookName,
 			description: bookDescription,
 			start_lang: bookLanguage.word,
-			end_lang: bookLanguage.meaning
-		}
+			end_lang: bookLanguage.meaning,
+		};
 
 		if (editPage) {
 			if (
@@ -68,11 +68,11 @@ function BookForm() {
 		}
 		console.log(bookData);
 		if (editPage) {
-			alert(`${bookName} 수정 완료`)
+			alert(`${bookName} 수정 완료`);
 		} else if (addPage) {
-			alert(`${bookName} 생성 완료`)
+			alert(`${bookName} 생성 완료`);
 		}
-		navigate('/book/list')
+		navigate('/book/list');
 	}
 
 	// if (addPage) {
@@ -96,9 +96,7 @@ function BookForm() {
 	}
 
 	// 설명
-	function handleDescChange(
-		event: ChangeEvent<HTMLTextAreaElement>
-	) {
+	function handleDescChange(event: ChangeEvent<HTMLTextAreaElement>) {
 		setBookDescription(event.target.value);
 	}
 
@@ -110,16 +108,27 @@ function BookForm() {
 	return (
 		<main>
 			<div className={styles.container}>
-				<BookHeader title="단어장" buttonText={buttonText} onButtonClick={handleSubmit} />
+				<BookHeader
+					title='단어장'
+					buttonText={buttonText}
+					onButtonClick={handleSubmit}
+				/>
 				<form className={styles.bookForm}>
 					<p>
 						<BsJournalBookmark className={styles.icon} />
 						이름 & 설명
 					</p>
-					<input type='text' placeholder='단어장 이름을 입력해 주세요!' value={bookName}
-						onChange={handleNameChange} />
-					<textarea placeholder='단어장 설명을 입력해 주세요! (선택)' value={bookDescription}
-						onChange={handleDescChange} />
+					<input
+						type='text'
+						placeholder='단어장 이름을 입력해 주세요!'
+						value={bookName}
+						onChange={handleNameChange}
+					/>
+					<textarea
+						placeholder='단어장 설명을 입력해 주세요! (선택)'
+						value={bookDescription}
+						onChange={handleDescChange}
+					/>
 					<p>
 						<IoLanguageOutline className={styles.icon} />
 						언어
@@ -132,7 +141,12 @@ function BookForm() {
 							</tr>
 							<tr>
 								<td>
-									<button onClick={(e) => { e.preventDefault(); handleToggleLanguage(); }}>
+									<button
+										onClick={e => {
+											e.preventDefault();
+											handleToggleLanguage();
+										}}
+									>
 										<BsArrowDownUp className={styles.icon} />
 									</button>
 								</td>
