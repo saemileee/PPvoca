@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import styles from '../components/WordForm/wordform.module.scss';
-import WordformLayout from '../components/WordForm/WordformLayout'
+import WordformLayout from '../components/WordForm/WordformLayout';
 import { BsJournalBookmark } from 'react-icons/bs';
 import { MdArrowBackIosNew } from 'react-icons/md';
 
-import Modal from '../components/common/Modal/Modal'
-
+import Modal from '../components/common/Modal/Modal';
 
 const mockData = {
-	word: "word",
+	word: 'word',
 	meanings: ['이야기', '말을 쓰다', '단어'],
-	book: "영단어",
-}
+	book: '영단어',
+};
 
-
-const editPage = location.pathname === "/word/edit"
-const addPage = location.pathname === "/word/add"
+const editPage = location.pathname === '/word/edit';
+const addPage = location.pathname === '/word/add';
 
 function WordForm() {
-	const [buttonText, setButtonText] = useState("");
+	const [buttonText, setButtonText] = useState('');
 	const [bookName, setBookName] = useState(mockData.book);
-	const [word, setWord] = useState("");
+	const [word, setWord] = useState('');
 	const [meaning, setMeaning] = useState<string[]>([]);
-	const [meaningInput, setMeaningInput] = useState("");
+	const [meaningInput, setMeaningInput] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (addPage) {
-			setButtonText("추가");
+			setButtonText('추가');
 		} else if (editPage) {
-			setButtonText("수정");
+			setButtonText('수정');
 			setMeaning(mockData.meanings);
 			setWord(mockData.word);
 		}
@@ -52,9 +50,9 @@ function WordForm() {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (meaningInput.trim() !== "") {
+		if (meaningInput.trim() !== '') {
 			setMeaning([meaningInput.trim(), ...meaning]);
-			setMeaningInput("");
+			setMeaningInput('');
 		}
 	};
 
@@ -71,14 +69,13 @@ function WordForm() {
 			word: word,
 			meanings: meaning,
 			book: bookName,
-		}
-		console.log(wordData)
+		};
+		console.log(wordData);
 	}
 
 	return (
 		<main>
 			<div className={styles.container}>
-
 				<div className={styles.wordHeader}>
 					{addPage ? (
 						<span>
@@ -87,11 +84,15 @@ function WordForm() {
 						</span>
 					) : editPage ? (
 						<div className={styles.editHeader}>
-							<button className={styles.arrowBtn} onClick={() => navigate(-1)} ><MdArrowBackIosNew className={styles.icon} /></button>
+							<button className={styles.arrowBtn} onClick={() => navigate(-1)}>
+								<MdArrowBackIosNew className={styles.icon} />
+							</button>
 							<h1 className={styles.bookTitle}>단어</h1>
 						</div>
 					) : null}
-					<div className={styles.submitBtn} onClick={handleAddBtn}>{buttonText}</div>
+					<div className={styles.submitBtn} onClick={handleAddBtn}>
+						{buttonText}
+					</div>
 				</div>
 
 				<WordformLayout
@@ -107,13 +108,16 @@ function WordForm() {
 
 				{addPage && (
 					<div className={styles.bookBtn}>
-						<button className={styles.bookBtn_circle} onClick={() => setShowModal(true)}>
+						<button
+							className={styles.bookBtn_circle}
+							onClick={() => setShowModal(true)}
+						>
 							<BsJournalBookmark className={styles.icon} />
 						</button>
 						<Modal
 							showModal={showModal}
 							setShowModal={setShowModal}
-							title="단어장 선택"
+							title='단어장 선택'
 						/>
 					</div>
 				)}
