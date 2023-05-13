@@ -17,7 +17,9 @@ function Register() {
 		password: '',
 		passwordConfirm: '',
 	};
+
 	const [values, setValues] = useState(initValues);
+
 	const { errors, setErrors, userValidator, validationPass } =
 		useUserValidator(initValues);
 
@@ -74,7 +76,8 @@ function Register() {
 							onClick={e => {
 								e.preventDefault();
 								userValidator(values);
-							}}>
+							}}
+						>
 							가입하기
 						</UserButton>
 					</li>

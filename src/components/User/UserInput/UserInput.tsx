@@ -53,7 +53,8 @@ function UserInput<T>({
 					htmlFor={name}
 					className={
 						disabled ? styles.label + ' ' + styles.disabled : styles.label
-					}>
+					}
+				>
 					<span>
 						<SiRabbitmq />
 					</span>
