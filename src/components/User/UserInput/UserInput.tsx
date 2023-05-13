@@ -12,6 +12,8 @@ type InputProps<T> = {	//disabled = false
 	label?: string;
 	disabled?: boolean;
 	defaultValue?: string;
+	condition?: string;
+	error?: string;
 	setValues: React.Dispatch<React.SetStateAction<T>>;
 } | {	//disabled = true
 	style?: React.CSSProperties;
@@ -21,6 +23,8 @@ type InputProps<T> = {	//disabled = false
 	label?: string;
 	defaultValue: string;
 	disabled: boolean;
+	condition?: string;
+	error?: string;
 	setValues?: React.Dispatch<React.SetStateAction<T>>;
 };
 
@@ -33,6 +37,8 @@ function UserInput<T>({
 	setValues,
 	defaultValue = '',
 	disabled = false,
+	condition,
+	error,
 }: InputProps<T>) {
 	const [value, handleChange] = useInput('');
 
@@ -78,8 +84,8 @@ function UserInput<T>({
 					placeholder={placeholder}
 				/>
 			)}
-
-			{/* <p className={styles.errMsg}>에러메시지입니다.</p> */}
+			{error && <p className={styles.errMsg}>{error}</p>}
+			{condition && <p className={styles.msg}>{condition}</p>}
 		</div>
 	);
 }
