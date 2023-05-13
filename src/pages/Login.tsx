@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import useUserValidator from '../hooks/useUserValidator';
 import styles from '../components/User/Login.module.scss';
 import Logo from '../components/common/Logo/Logo';
 import UserInput from '../components/User/UserInput/UserInput';
@@ -16,10 +17,12 @@ function Login() {
 	};
 
 	const [values, setValues] = useState(initValues);
+	const { errors, setErrors, userValidator, validationPass } =
+		useUserValidator(initValues);
 
 	useEffect(() => {
-		console.log(values);
-	}, [values]);
+		if (validationPass) alert('유효성 검사 통과!!!');
+	}, [validationPass]);
 
 	return (
 		<main className={styles.container}>
@@ -32,6 +35,7 @@ function Login() {
 							name='email'
 							label='이메일'
 							setValues={setValues}
+							error={errors.email}
 						/>
 					</li>
 					<li>
@@ -40,10 +44,16 @@ function Login() {
 							name='password'
 							label='비밀번호'
 							setValues={setValues}
+							error={errors.password}
 						/>
 					</li>
 					<li>
-						<UserButton type='submit' onClick={() => console.log('login')}>
+						<UserButton
+							type='submit'
+							onClick={e => {
+								e.preventDefault();
+								userValidator(values, true);
+							}}>
 							로그인
 						</UserButton>
 					</li>
