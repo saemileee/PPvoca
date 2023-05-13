@@ -103,14 +103,14 @@ function UserEdit() {
 						</>
 					)}
 					{!passwordEdit && (
-						<li>
+						<li style={{ marginBottom: '10px' }}>
 							<UserButton onClick={() => switchEditMode(true)}>
 								비밀번호 수정
 							</UserButton>
 						</li>
 					)}
 					{passwordEdit && (
-						<li>
+						<li style={{ marginBottom: '10px' }}>
 							<UserButton onClick={() => switchEditMode(false)}>
 								비밀번호 수정 취소
 							</UserButton>
