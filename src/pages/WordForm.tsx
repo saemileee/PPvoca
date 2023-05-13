@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../components/WordForm/wordform.module.scss';
 import WordformLayout from '../components/WordForm/WordformLayout';
 import { BsJournalBookmark } from 'react-icons/bs';
@@ -13,8 +13,7 @@ const mockData = {
 	book: '영단어',
 };
 
-const editPage = location.pathname === '/word/edit';
-const addPage = location.pathname === '/word/add';
+
 
 function WordForm() {
 	const [buttonText, setButtonText] = useState('');
@@ -24,6 +23,10 @@ function WordForm() {
 	const [meaningInput, setMeaningInput] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const navigate = useNavigate();
+
+	const location = useLocation();
+	const editPage = location.pathname === '/word/edit';
+	const addPage = location.pathname === '/word/add';
 
 	useEffect(() => {
 		if (addPage) {
@@ -118,7 +121,13 @@ function WordForm() {
 							showModal={showModal}
 							setShowModal={setShowModal}
 							title='단어장 선택'
-						/>
+						>
+							<ul>
+								<li>dsfjkfhs</li>
+							</ul>
+
+						</Modal>
+
 					</div>
 				)}
 			</div>
