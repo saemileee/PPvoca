@@ -8,7 +8,7 @@ type ValuesProps = {
 };
 
 function useUserValidator(values: ValuesProps) {
-	const [errors, setErrors] = useState<{ [x: string]: string }>(values);
+	const [errors, setErrors] = useState<ValuesProps>(values);
 	const [validationPass, setValidationPass] = useState<boolean>(false);
 	const [submitAttempt, setSubmitAttempt] = useState<boolean>(false);
 
