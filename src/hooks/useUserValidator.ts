@@ -8,7 +8,7 @@ type ValuesProps = {
 };
 
 function useUserValidator(values: ValuesProps) {
-	const [errors, setErrors] = useState<{ [x: string]: string }>(values);
+	const [errors, setErrors] = useState<ValuesProps>(values);
 	const [validationPass, setValidationPass] = useState<boolean>(false);
 	const [submitAttempt, setSubmitAttempt] = useState<boolean>(false);
 
@@ -131,7 +131,14 @@ function useUserValidator(values: ValuesProps) {
 		}
 	}, [submitAttempt, errors]);
 
-	return { errors, setErrors, userValidator, setSubmitAttempt, validationPass };
+	return {
+		errors,
+		setErrors,
+		userValidator,
+		setSubmitAttempt,
+		validationPass,
+		setValidationPass,
+	};
 }
 
 export default useUserValidator;
