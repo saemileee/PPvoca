@@ -17,6 +17,10 @@ type WordListItem = {
 	createdAt: string;
 };
 
+type RouteParams = {
+	short_id: string;
+};
+
 const WordListList = () => {
 	const [checkedList, setCheckedList] = useState<Array<string>>([]);
 	const [wordList, setWordList] = useState<any>([]);
@@ -26,6 +30,7 @@ const WordListList = () => {
 	useEffect(() => {
 		const fetchWords = async () => {
 			try {
+				//쿼리 스트링이 있는지 없는지 조건문 설정할 것 all은 다
 				const response = await getWords(userToken);
 				setWordList(response);
 				console.log(response);
@@ -142,7 +147,15 @@ const WordListList = () => {
 							/>
 						</div>
 						<div className={styles.word}>{item.word}</div>
-						<div className={styles.meanings}>{item.meanings.join(', ')}</div>
+						<div className={styles.meanings}>
+							{item.meanings.map((meaning, index) => {
+								return (
+									<div className={styles.meaningBlock} key={index}>
+										{meaning}
+									</div>
+								);
+							})}
+						</div>
 					</div>
 				))}
 				<AddButton url={'/word/add'} />

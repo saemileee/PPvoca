@@ -121,11 +121,20 @@
 
 	.meanings {
 		font-size: 20px;
-		text-align: center;
+		text-align: left;
 		display: inline-block;
-		padding: 5px;
-		border: 1px solid #dddddd;
 		border-radius: 3px;
+
+		.meaningBlock {
+			display: inline-block;
+			margin-right: 5px;
+			background-color: #f0e1ff;
+			margin: 3px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #000000;
+			font-size: 15px;
+		}
 	}
 }
 

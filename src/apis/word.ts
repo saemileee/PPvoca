@@ -13,6 +13,28 @@ export const getWords = async (token: string) => {
 };
 //
 
+//특정 단어장의 단어 가져오기
+export const getWordsByBook = async (token: string, id: string) => {
+	const response = await axios.get(`${baseUrl}/words?books=${id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};
+//
+
+//단어장 가져오기
+export const getBookName = async (token: string, id: string) => {
+	const response = await axios.get(`${baseUrl}/books/${id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};
+//
+
 //선택 단어 삭제
 export const deleteWords = async (token: string, id: string) => {
 	const response = await axios.delete(`${baseUrl}/words/${id}`, {
