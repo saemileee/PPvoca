@@ -66,10 +66,15 @@
 
 	.submitBtn {
 		font-size: var(--font-size);
+		color: var(--color-grey);
 		position: absolute;
 		right: 0;
 		cursor: pointer;
 		padding: 10px 0 10px 10px;
+
+		&.active {
+			color: var(--color-pink);
+		}
 	}
 }
 
@@ -143,5 +148,35 @@
 		position: absolute;
 		background-color: #fff;
 		box-shadow: 0 0 7px -2px var(--color-grey);
+	}
+}
+
+.modalBookList {
+	width: 100%;
+	.modalBookItem {
+		display: flex;
+		align-items: center;
+
+		padding: 10px;
+		border-bottom: 1px solid #ddd;
+		cursor: pointer;
+		font-size: var(--font-size);
+
+		div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			margin-right: 10px;
+			.icon {
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+
+	.selected {
+		color: var(--color-pink);
 	}
 }
