@@ -43,10 +43,10 @@ function LoginForm() {
 			}
 		} catch (err: unknown) {
 			if (err instanceof AxiosError) {
-				if (err.response?.status === 400) {
+				if (err.response?.status === 401) {
 					//수정 필요
 					const errMsg = err.response.data.reason;
-					return alert(errMsg);
+					return setErrors(prev => ({ ...prev, password: errMsg }));
 				}
 			}
 
@@ -90,8 +90,7 @@ function LoginForm() {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values, true);
-						}}
-					>
+						}}>
 						로그인
 					</UserButton>
 				</li>
