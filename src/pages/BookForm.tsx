@@ -1,11 +1,11 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 import BookHeader from '../components/BookForm/BookHeader';
 import styles from '../components/BookForm/bookform.module.scss';
 import { BsJournalBookmark } from 'react-icons/bs';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BsArrowDownUp } from 'react-icons/bs';
+import axios from 'axios';
 
 // 더미 데이터
 const mockData = {
@@ -15,12 +15,8 @@ const mockData = {
 	start_lang: 'Korean',
 };
 
-const editPage = location.pathname === '/book/edit';
-const addPage = location.pathname === '/book/add';
-
 function BookForm() {
 	const navigate = useNavigate();
-
 	const [buttonText, setButtonText] = useState('');
 	const [bookName, setBookName] = useState('');
 	const [bookDescription, setBookDescription] = useState('');
@@ -28,6 +24,10 @@ function BookForm() {
 		word: 'English',
 		meaning: 'Korean',
 	});
+
+	const location = useLocation();
+	const editPage = location.pathname === '/book/edit';
+	const addPage = location.pathname === '/book/add';
 
 	// 생성, 수정 버튼 글자 바꾸기, 수정페이지면 데이터 가져오기
 	useEffect(() => {
