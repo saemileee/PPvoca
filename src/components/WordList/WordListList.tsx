@@ -1,100 +1,42 @@
-import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './WordListStyle.module.scss';
-import {
-	BiMessageSquare,
-	BiMessageSquareCheck,
-	BiMessageSquareError,
-} from 'react-icons/bi';
 import Speaker from '../common/Speaker/Speaker';
 import AddButton from '../common/AddButton/AddButton';
 import ChangeStatus from '../common/Status/Status';
+import { HiOutlinePencil } from 'react-icons/hi';
+import { getWords } from '../../apis/word';
+import { useRecoilValue } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
 
-//단어장 이름, 단어 국적(populate), 단어, 뜻, 상태, 생성시간
-const dummyList = [
-	{
-		shortId: 1,
-		name: '영어 단어장',
-		word: 'apple',
-		meanings: ['애플', '사과', '사과나무', '뉴욕'],
-		status: 0,
-		createdAt: '2023-05-10',
-	},
-	{
-		shortId: 2,
-		name: '영어 단어장',
-		word: '사과',
-		meanings: ['apple', 'apologize'],
-		status: 1,
-		createdAt: '2023-05-11',
-	},
-	{
-		shortId: 3,
-		name: '영어 단어장',
-		word: 'help',
-		meanings: ['도움', '돕다', '도와주다', '기여하다'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-	{
-		shortId: 4,
-		name: '영어 단어장',
-		word: 'help',
-		meanings: ['도움', '돕다', '도와주다', '기여하다'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-	{
-		shortId: 5,
-		name: '영어 단어장',
-		word: 'help',
-		meanings: ['도움', '돕다', '도와주다', '기여하다'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-	{
-		shortId: 6,
-		name: '영어 단어장',
-		word: 'help',
-		meanings: ['도움', '돕다', '도와주다', '기여하다'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-	{
-		shortId: 7,
-		name: '영어 단어장',
-		word: '체크 박스',
-		meanings: ['checkbox'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-	{
-		shortId: 8,
-		name: '영어 단어장',
-		word: 'help',
-		meanings: ['도움', '돕다', '도와주다', '기여하다'],
-		status: 2,
-		createdAt: '2023-05-12',
-	},
-];
+type WordListItem = {
+	short_id: string;
+	word: string;
+	meanings: Array<string>;
+	status: number;
+	createdAt: string;
+}
 
 const WordListList = () => {
-	const [status, setStatus] = useState(0);
-	const [checkedList, setCheckedList] = useState<Array<number>>([]);
+	const [checkedList, setCheckedList] = useState<Array<string>>([]);
+	const [wordList, setWordList] = useState<any>([]);
+	const userToken = useRecoilValue(userTokenState);
+	const nav = useNavigate();
 
-	const handleStatus = () => {
-		if (status === 0) {
-			setStatus(1);
-			return <BiMessageSquareCheck />;
-		} else if (status === 1) {
-			setStatus(2);
-			return <BiMessageSquareError />;
-		} else if (status === 2) {
-			setStatus(0);
-			return <BiMessageSquare />;
-		}
-	};
+	useEffect(() => {
+		const fetchWords = async () => {
+			try {
+				const response = await getWords(userToken);
+				setWordList(response);
+				console.log(response);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		fetchWords();
+	}, []);
 
+	//단어 언어 확인
 	const checkLang = (word: string) => {
 		if (/[a-zA-Z]/g.test(word)) {
 			return true;
@@ -103,36 +45,59 @@ const WordListList = () => {
 		}
 	};
 
+	//단일 단어 체크
 	const onCheckedItem = useCallback(
-		(checked: boolean, item: number) => {
-			if (checked) {
-				setCheckedList(prev => [...prev, item]);
-				console.log(checkedList);
-			} else if (!checked) {
-				setCheckedList(checkedList.filter(el => el !== item));
-			}
+		(checked: boolean, item: string) => {
+			setCheckedList(prev => {
+				const newCheckedList = checked ? [...prev, item] : prev.filter((el) => el !== item);
+				//console.log(newCheckedList);
+				return newCheckedList;
+			})
 		},
 		[checkedList],
 	);
 
+	//모든 단어 체크
 	const onCheckedAllItems = useCallback(
 		(checked: boolean) => {
 			if (checked) {
-				const checekdListArray: number[] = [];
-				dummyList.forEach(list => checekdListArray.push(list.shortId));
+				const checekdListArray: string[] = [];
+				wordList.forEach((list: WordListItem) =>
+					checekdListArray.push(list.short_id)
+				);
 				setCheckedList(checekdListArray);
 			} else {
 				setCheckedList([]);
 			}
 		},
-		[dummyList],
+		[wordList],
 	);
+
+	//모든 단어가 체크됐는지 확인
+	useEffect(() => {
+		console.log(checkedList);
+	}, [checkedList]);
+
+	//날짜 형식 포맷팅 함수
+	function formatDate(str: string) {
+		const date = new Date(str);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	}
+
+	const handleEdit = () => {
+		nav('word/edit/{shortId}');
+	};
 
 	return (
 		<>
 			<div>
 				<div className={styles.listHeader}>
-					<div className={styles.count}>전체 {dummyList.length}</div>
+					<div className={styles.count}>전체 {wordList.length}</div>
 					<div className={styles.selectAll}>
 						<input
 							type='checkbox'
@@ -140,30 +105,33 @@ const WordListList = () => {
 							checked={
 								checkedList.length === 0
 									? false
-									: checkedList.length === dummyList.length
-									? true
-									: false
+									: checkedList.length === wordList.length
+										? true
+										: false
 							}
 						/>
 					</div>
 					<hr />
 				</div>
-				{dummyList.map(item => (
-					<div key={item.shortId} className={styles.box}>
+				{wordList.map((item: WordListItem) => (
+					<div key={item.short_id} className={styles.box}>
 						<div className={styles.menus}>
 							<div className={styles.list}>
 								<input
 									type='checkbox'
-									value={item.shortId}
+									value={item.short_id}
 									onChange={e => {
-										onCheckedItem(e.target.checked, Number(e.target.value));
+										onCheckedItem(e.target.checked, e.target.value);
 									}}
-									checked={checkedList.includes(item.shortId) ? true : false}
+									checked={checkedList.includes(item.short_id) ? true : false}
 								/>
 								&nbsp;
-								{item.shortId}. {item.createdAt}
+								{formatDate(item.createdAt)}
 							</div>
-							<div className={styles.status} onClick={handleStatus}>
+							<div className={styles.edit} onClick={handleEdit}>
+								<HiOutlinePencil />
+							</div>
+							<div className={styles.status}>
 								<ChangeStatus initialStatus={item.status} />
 							</div>
 							<Speaker

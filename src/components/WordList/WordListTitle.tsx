@@ -5,12 +5,13 @@ import { MdArrowBackIosNew } from 'react-icons/md';
 import { CiMenuKebab } from 'react-icons/ci';
 import { GiSettingsKnobs } from 'react-icons/gi';
 import WordListOptionsModal from './WordListOptionsModal';
-import WordListFilterModal from './WordListFilterModal';
-import Modal from '../../components/common/Modal/Modal';
 
-const WordListTitle = () => {
+interface Props {
+	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const WordListTitle = ({ setModalOpen }: Props) => {
 	const [optionsModalOpen, setOptionsModalOpen] = useState(false);
-	const [filterModalOpen, setFilterModalOpen] = useState(false);
 	const nav = useNavigate();
 
 	function handleBack() {
@@ -18,7 +19,7 @@ const WordListTitle = () => {
 	}
 
 	function handleFilter() {
-		setFilterModalOpen(true);
+		setModalOpen(true);
 	}
 
 	function handleOptions() {
@@ -35,9 +36,6 @@ const WordListTitle = () => {
 				<div className={styles.filter} onClick={handleFilter}>
 					<GiSettingsKnobs />
 				</div>
-				{filterModalOpen && (
-					<WordListFilterModal setModalOpen={setFilterModalOpen} />
-				)}
 				<div className={styles.options} onClick={handleOptions}>
 					<CiMenuKebab />
 				</div>
