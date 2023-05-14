@@ -24,3 +24,14 @@ export const loginUser = async (formData: LoginFormType) => {
 	return response;
 };
 //로그인 : End
+
+//회원 정보 조회 : Start
+export const infoUser = async (token: string) => {
+	const response = await axios.get(`${baseUrl}/users/me`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response;
+};
+//회원 정보 조회 : End
