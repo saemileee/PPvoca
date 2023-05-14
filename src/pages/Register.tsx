@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { AxiosError } from 'axios';
 import useUserValidator from '../hooks/useUserValidator';
+import { registerUser } from '../apis/user';
 import styles from '../components/User/Register.module.scss';
 import Logo from '../components/common/Logo/Logo';
 import UserInput from '../components/User/UserInput/UserInput';
 import UserButton from '../components/User/UserButton/UserButton';
 
 function Register() {
+	const navigate = useNavigate();
 	const logoStyle = {
 		transform: 'translateX(-10px)',
 		marginBottom: '5vh',
@@ -20,11 +24,45 @@ function Register() {
 
 	const [values, setValues] = useState(initValues);
 
-	const { errors, setErrors, userValidator, validationPass } =
-		useUserValidator(initValues);
+	const {
+		errors,
+		setErrors,
+		userValidator,
+		validationPass,
+		setValidationPass,
+	} = useUserValidator(initValues);
+
+	const handleSubmit = async () => {
+		try {
+			const data = {
+				userEmail: values.email,
+				password: values.password,
+				nickname: values.nickname,
+			};
+			const response = await registerUser(data);
+			if (response.status === 200) {
+				alert('회원가입에 성공하였습니다. 로그인해주세요.');
+				navigate('/login');
+			}
+		} catch (err: unknown) {
+			if (err instanceof AxiosError) {
+				if (err.response?.status === 409) {
+					const errMsg = err.response.data.reason;
+					return setErrors(prev => ({ ...prev, email: errMsg }));
+				}
+			}
+
+			//console.log(err);
+			alert('회원가입에 실패하였습니다.');
+		}
+	};
 
 	useEffect(() => {
-		if (validationPass) alert('유효성 검사 통과!!!');
+		if (validationPass) {
+			handleSubmit();
+			//유효성 검사 성공 여부 초기화
+			setValidationPass(false);
+		}
 	}, [validationPass]);
 
 	return (
