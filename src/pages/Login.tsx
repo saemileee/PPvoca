@@ -7,8 +7,8 @@ import { loginUser } from '../apis/user';
 import useUserValidator from '../hooks/useUserValidator';
 import styles from '../components/User/Login.module.scss';
 import Logo from '../components/common/Logo/Logo';
-import UserInput from '../components/User/UserInput/UserInput';
-import UserButton from '../components/User/UserButton/UserButton';
+import UserInput from '../components/common/UserInput/UserInput';
+import UserButton from '../components/common/UserButton/UserButton';
 
 function Login() {
 	const navigate = useNavigate();
@@ -97,8 +97,7 @@ function Login() {
 							onClick={e => {
 								e.preventDefault();
 								userValidator(values, true);
-							}}
-						>
+							}}>
 							로그인
 						</UserButton>
 					</li>

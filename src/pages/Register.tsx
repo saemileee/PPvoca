@@ -5,8 +5,8 @@ import useUserValidator from '../hooks/useUserValidator';
 import { registerUser } from '../apis/user';
 import styles from '../components/User/Register.module.scss';
 import Logo from '../components/common/Logo/Logo';
-import UserInput from '../components/User/UserInput/UserInput';
-import UserButton from '../components/User/UserButton/UserButton';
+import UserInput from '../components/common/UserInput/UserInput';
+import UserButton from '../components/common/UserButton/UserButton';
 
 function Register() {
 	const navigate = useNavigate();
@@ -114,8 +114,7 @@ function Register() {
 							onClick={e => {
 								e.preventDefault();
 								userValidator(values);
-							}}
-						>
+							}}>
 							가입하기
 						</UserButton>
 					</li>

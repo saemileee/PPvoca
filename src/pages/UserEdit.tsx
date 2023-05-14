@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import useUserValidator from '../hooks/useUserValidator';
 import styles from '../components/User/Register.module.scss';
 import Logo from '../components/common/Logo/Logo';
-import UserInput from '../components/User/UserInput/UserInput';
-import UserButton from '../components/User/UserButton/UserButton';
+import UserInput from '../components/common/UserInput/UserInput';
+import UserButton from '../components/common/UserButton/UserButton';
 
 type ValuesProps = {
 	nickname: string;
@@ -122,8 +122,7 @@ function UserEdit() {
 							onClick={e => {
 								e.preventDefault();
 								userValidator(values);
-							}}
-						>
+							}}>
 							수정하기
 						</UserButton>
 					</li>

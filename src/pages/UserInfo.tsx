@@ -6,7 +6,7 @@ import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
 import styles from '../components/User/UserInfo.module.scss';
 import Logo from '../components/common/Logo/Logo';
-import UserButton from '../components/User/UserButton/UserButton';
+import UserButton from '../components/common/UserButton/UserButton';
 import { SiRabbitmq } from 'react-icons/si';
 
 function UserInfo() {
