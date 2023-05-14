@@ -31,15 +31,15 @@ function WordListFilterModal({ setModalOpen }: Props) {
 	});
 
 	function handleFilterUnmark() {
-		alert("미분류 단어 필터링입니다.");
+		alert('미분류 단어 필터링입니다.');
 	}
 
 	function handleFilterCheck() {
-		alert("외운 단어 필터링입니다.");
+		alert('외운 단어 필터링입니다.');
 	}
 
 	function handleFilterUnknown() {
-		alert("헷갈린 단어 필터링입니다.");
+		alert('헷갈린 단어 필터링입니다.');
 	}
 
 	return (

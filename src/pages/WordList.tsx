@@ -10,7 +10,6 @@ import { userTokenState } from '../recoil/userState';
 function WordList() {
 	const [filterModal, setFilterModal] = useState<boolean>(false);
 
-
 	return (
 		<main>
 			<div className={styles.main}>

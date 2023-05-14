@@ -4,25 +4,25 @@ const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 //단어 가져오기
 export const getWords = async (token: string) => {
-    const response = await axios.get(`${baseUrl}/words`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    return response.data;
-}
+	const response = await axios.get(`${baseUrl}/words`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};
 //
 
 //선택 단어 삭제
 export const deleteWords = async (token: string, id: string) => {
-    const response = await axios.delete(`${baseUrl}/words/${id}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+	const response = await axios.delete(`${baseUrl}/words/${id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 
-    return response;
-}
+	return response;
+};
 //
 
 //patch
@@ -50,4 +50,3 @@ export const deleteWords = async (token: string, id: string) => {
 //헷갈린 단어 필터링
 
 //
-

@@ -15,7 +15,7 @@ type WordListItem = {
 	meanings: Array<string>;
 	status: number;
 	createdAt: string;
-}
+};
 
 const WordListList = () => {
 	const [checkedList, setCheckedList] = useState<Array<string>>([]);
@@ -49,10 +49,12 @@ const WordListList = () => {
 	const onCheckedItem = useCallback(
 		(checked: boolean, item: string) => {
 			setCheckedList(prev => {
-				const newCheckedList = checked ? [...prev, item] : prev.filter((el) => el !== item);
+				const newCheckedList = checked
+					? [...prev, item]
+					: prev.filter(el => el !== item);
 				//console.log(newCheckedList);
 				return newCheckedList;
-			})
+			});
 		},
 		[checkedList],
 	);
@@ -63,7 +65,7 @@ const WordListList = () => {
 			if (checked) {
 				const checekdListArray: string[] = [];
 				wordList.forEach((list: WordListItem) =>
-					checekdListArray.push(list.short_id)
+					checekdListArray.push(list.short_id),
 				);
 				setCheckedList(checekdListArray);
 			} else {
@@ -106,8 +108,8 @@ const WordListList = () => {
 								checkedList.length === 0
 									? false
 									: checkedList.length === wordList.length
-										? true
-										: false
+									? true
+									: false
 							}
 						/>
 					</div>
