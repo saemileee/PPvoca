@@ -22,13 +22,15 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const [wordCount, setWordCount] = useState(0);
+	const [memorizedWordCount, setMemorizedWordCount] = useState(0);
+	const [confusedWordCount, setConfusedWordCount] = useState(0);
 	const userToken = useRecoilValue(userTokenState);
 
 	useEffect(() => {
 		async function fetchWordCount() {
 			try {
 				const response = await axios.get(
-					`${baseUrl}/words?books=${book.short_id}`,
+					`${baseUrl}/words?bookId=${book.short_id}`,
 					{
 						headers: {
 							Authorization: `Bearer ${userToken}`,
@@ -36,6 +38,14 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 					},
 				);
 				setWordCount(response.data.length);
+				setMemorizedWordCount(
+					response.data.filter((word: { status: number }) => word.status === 1)
+						.length,
+				);
+				setConfusedWordCount(
+					response.data.filter((word: { status: number }) => word.status === 2)
+						.length,
+				);
 			} catch (error) {
 				console.log(error);
 			}
@@ -78,11 +88,13 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 					<BsFileEarmarkWord size={24} />
 					{wordCount}
 				</div>
-				<div>
-					<BiMessageSquareCheck size={24} />0
+				<div className={styles.memorizedWord}>
+					<BiMessageSquareCheck size={24} />
+					{memorizedWordCount}
 				</div>
-				<div>
-					<BiMessageSquareError size={24} />0
+				<div className={styles.confusedWord}>
+					<BiMessageSquareError size={24} />
+					{confusedWordCount}
 				</div>
 			</div>
 		</div>
