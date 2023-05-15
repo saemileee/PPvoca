@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
+import Cookies from 'js-cookie';
 import { userTokenState } from '../../recoil/userState';
 import { loginUser } from '../../apis/user';
 import useUserValidator from '../../hooks/useUserValidator';
@@ -37,7 +38,12 @@ function LoginForm() {
 			const response = await loginUser(data);
 			if (response.status === 200) {
 				const { token } = response.data;
+				const cookieOptions = {
+					expires: 1,
+					path: '/',
+				};
 				setUserToken(token);
+				Cookies.set('token', token, cookieOptions);
 				alert('로그인되었습니다.');
 				navigate('/user/info');
 			}

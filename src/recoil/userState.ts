@@ -1,13 +1,11 @@
 import { atom, selector } from 'recoil';
-import { recoilPersist } from 'recoil-persist';
+import Cookies from 'js-cookie';
 
-const { persistAtom } = recoilPersist({
-	key: 'persistUserToken',
-	storage: sessionStorage,
-});
+const getCookieToken = () => {
+	return Cookies.get('token');
+};
 
 export const userTokenState = atom({
 	key: 'userToken',
-	default: '',
-	effects_UNSTABLE: [persistAtom],
+	default: getCookieToken() || '',
 });
