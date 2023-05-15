@@ -19,12 +19,13 @@ function App() {
 				<Routes>
 					<Route path='/' element={<Navigate to='/book/list' />} />
 					<Route path='*' element={<Navigate to='/' />} />
-					<Route path='/book/edit' element={<BookForm />}></Route>
+					<Route path='/book/edit/:bookId' element={<BookForm />}></Route>
 					<Route path='/book/add' element={<BookForm />}></Route>
 					<Route path='/book/list' element={<BookList />}></Route>
-					<Route path='/word/edit' element={<WordForm />}></Route>
+					<Route path='/word/edit/:wordId' element={<WordForm />}></Route>
 					<Route path='/word/add' element={<WordForm />}></Route>
 					<Route path='/word/list' element={<WordList />}></Route>
+					<Route path='/word/list/:bookId' element={<WordList />}></Route>
 					<Route path='/calendar' element={<Calendar />}></Route>
 					<Route path='/login' element={<Login />}></Route>
 					<Route path='/register' element={<Register />}></Route>
