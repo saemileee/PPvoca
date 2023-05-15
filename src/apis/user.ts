@@ -35,3 +35,18 @@ export const infoUser = async (token: string) => {
 	return response;
 };
 //회원 정보 조회 : End
+
+//회원 정보 수정 : Start
+type UserEditFormType = {
+	password?: string;
+	nickname: string;
+};
+export const editUser = async (formData: UserEditFormType, token: string) => {
+	const response = await axios.put(`${baseUrl}/users/me`, formData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response;
+};
+//회원 정보 수정 : End
