@@ -34,6 +34,7 @@ function UserEditForm() {
 	} = useUserValidator(initValues);
 
 	const handleSubmit = async () => {
+		if (!userToken) return navigate('/login');
 		try {
 			const data: ValuesProps = {
 				nickname: values.nickname,
@@ -84,6 +85,7 @@ function UserEditForm() {
 	};
 
 	const getUserInfo = async () => {
+		if (!userToken) return navigate('/login');
 		try {
 			const response = await infoUser(userToken);
 			const { userEmail, nickname } = response.data;

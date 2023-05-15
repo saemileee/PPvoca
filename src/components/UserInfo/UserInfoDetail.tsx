@@ -15,6 +15,7 @@ function UserInfoDetail() {
 	});
 
 	const getUserInfo = async () => {
+		if (!userToken) return navigate('/login');
 		try {
 			const response = await infoUser(userToken);
 			const { userEmail, nickname } = response.data;
