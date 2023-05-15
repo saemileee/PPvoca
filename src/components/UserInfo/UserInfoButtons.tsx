@@ -1,7 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
+import Cookies from 'js-cookie';
 import UserButton from '../common/UserButton/UserButton';
 
 function UserInfoButtons() {
+	const navigate = useNavigate();
+	const setUserToken = useSetRecoilState(userTokenState);
+	const handleLogout = () => {
+		Cookies.remove('token');
+		setUserToken('');
+		alert('로그아웃 되었습니다.');
+		navigate('/login');
+	};
+
 	return (
 		<>
 			<li>
@@ -10,7 +23,7 @@ function UserInfoButtons() {
 				</UserButton>
 			</li>
 			<li>
-				<UserButton onClick={() => console.log('logout')}>로그아웃</UserButton>
+				<UserButton onClick={handleLogout}>로그아웃</UserButton>
 			</li>
 		</>
 	);
