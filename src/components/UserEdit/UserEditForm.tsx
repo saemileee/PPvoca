@@ -186,7 +186,8 @@ function UserEditForm() {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values);
-						}}>
+						}}
+					>
 						수정하기
 					</UserButton>
 				</li>
