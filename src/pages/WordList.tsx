@@ -1,5 +1,5 @@
 //React
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 //SCSS
@@ -16,6 +16,8 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import WordListFilterModal from '../components/WordList/WordListFilterModal';
 import WordListOptionsModal from '../components/WordList/WordListOptionModal';
 import AddButton from '../components/common/AddButton/AddButton';
+import ChangeStatus from '../components/common/Status/Status';
+import Speaker from '../components/common/Speaker/Speaker';
 
 //Recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -27,15 +29,15 @@ import {
 	getWords,
 	getWordsByBook,
 	getBookName,
-	deleteWords,
+	findWordById,
 } from '../apis/word';
-import ChangeStatus from '../components/common/Status/Status';
-import Speaker from '../components/common/Speaker/Speaker';
 
+//BookList에서 Params로 받아올 bookId
 type RouteParams = {
-	short_id: string;
+	bookId: string;
 };
 
+//단어 정보들에 대한 타입
 type WordListItem = {
 	short_id: string;
 	word: string;
@@ -53,26 +55,19 @@ function WordList() {
 	const [findWord, setFindWord] = useState({
 		findword: '',
 	});
+	const prevWordList = useRef([]);
 
 	const userToken = useRecoilValue(userTokenState);
-	//const { short_id } = useParams<RouteParams>();
-	const short_id = 'BI7_ntbf4E_7mNwYa1Ano';
+	//const { bookId } = useParams<RouteParams>();
+	const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
 	const nav = useNavigate();
-
-	const onChangeFindWord = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.preventDefault();
-		setFindWord({
-			...findWord,
-			[e.target.name]: e.target.value,
-		});
-	};
 
 	//단어장 이름
 	useEffect(() => {
-		if (short_id) {
+		if (book_id) {
 			const fetchTitle = async () => {
 				try {
-					const response = await getBookName(userToken, short_id);
+					const response = await getBookName(userToken, book_id);
 					const name = response.data[0].name;
 					setBooktitle(name);
 				} catch (err) {
@@ -81,16 +76,15 @@ function WordList() {
 			};
 			fetchTitle();
 		}
-	}, [short_id, userToken]);
+	}, [book_id, userToken]);
 
 	//단어장 리스트
 	useEffect(() => {
-		if (short_id) {
+		if (book_id) {
 			const fetchWords = async () => {
 				try {
-					const response = await getWords(userToken);
+					const response = await getWordsByBook(userToken, book_id);
 					setWordList(response.data);
-					console.log(response.data);
 				} catch (err) {
 					console.log(err);
 				}
@@ -162,9 +156,26 @@ function WordList() {
 		setOptionModal(true);
 	};
 
-	const handleFind = (word: string) => {
+	//Input창에 단어 검색
+	const onChangeFindWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		setFindWord({
+			...findWord,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	//Input 창에 검색어가 없을 경우 bookId의 전체 단어 리스트 렌더링
+	useEffect(() => {
+		if (!findWord.findword) {
+			getWordsByBook(userToken, book_id).then(res => setWordList(res.data));
+		}
+	}, [findWord, userToken]);
+
+	const handleFind = async (word: string) => {
 		if (word) {
-			alert(`${word} 검색중...`);
+			const response = await findWordById(userToken, word);
+			setWordList(response.data);
 		} else {
 			alert('검색어를 입력해주세요!');
 		}
@@ -173,6 +184,7 @@ function WordList() {
 	const handleEdit = (short_id: string) => {
 		nav(`/word/edit/${short_id}`);
 	};
+
 	return (
 		<main>
 			<div className={styles.container}>
@@ -201,7 +213,12 @@ function WordList() {
 						/>
 						<div
 							className={styles.find}
-							onClick={() => handleFind(findWord.findword)}
+							onClick={() => {
+								handleFind(findWord.findword);
+								if (!wordList.length) {
+									setWordList(prevWordList.current);
+								}
+							}}
 						>
 							<IoSearchOutline />
 						</div>
