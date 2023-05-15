@@ -4,7 +4,7 @@ import styles from './WordListStyle.module.scss';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import { CiMenuKebab } from 'react-icons/ci';
 import { GiSettingsKnobs } from 'react-icons/gi';
-import WordListOptionsModal from './WordListOptionsModal';
+import WordListOptionModal from './WordListOptionModal';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
 import { getBookName } from '../../apis/word';
@@ -30,7 +30,7 @@ const WordListTitle = ({ setModalOpen }: Props) => {
 			const fetchTitle = async () => {
 				try {
 					const response = await getBookName(userToken, short_id);
-					const name = response[0].name;
+					const name = response.data[0].name;
 					setBookTitle(name);
 				} catch (e) {
 					console.log(e);
@@ -66,7 +66,7 @@ const WordListTitle = ({ setModalOpen }: Props) => {
 					<CiMenuKebab />
 				</div>
 				{optionsModalOpen && (
-					<WordListOptionsModal setModalOpen={setOptionsModalOpen} />
+					<WordListOptionModal setModalOpen={setOptionsModalOpen} />
 				)}
 			</div>
 		</>

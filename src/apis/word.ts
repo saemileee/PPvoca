@@ -9,7 +9,7 @@ export const getWords = async (token: string) => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-	return response.data;
+	return response;
 };
 //
 
@@ -20,7 +20,9 @@ export const getWordsByBook = async (token: string, id: string) => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-	return response.data;
+	console.log(id);
+	console.log(response);
+	return response;
 };
 //
 
@@ -31,7 +33,18 @@ export const getBookName = async (token: string, id: string) => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-	return response.data;
+	return response;
+};
+//
+
+//단어 검색
+export const findWordById = async (token: string, word: string) => {
+	const response = await axios.get(`${baseUrl}/search/words?word=${word}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response;
 };
 //
 

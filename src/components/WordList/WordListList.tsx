@@ -6,8 +6,9 @@ import AddButton from '../common/AddButton/AddButton';
 import ChangeStatus from '../common/Status/Status';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { getWords } from '../../apis/word';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
+import checkedWordList from '../../recoil/checkedWordList';
 
 type WordListItem = {
 	short_id: string;
@@ -22,9 +23,10 @@ type RouteParams = {
 };
 
 const WordListList = () => {
-	const [checkedList, setCheckedList] = useState<Array<string>>([]);
+	const [checkedList, setCheckedList] = useRecoilState(checkedWordList);
 	const [wordList, setWordList] = useState<any>([]);
 	const userToken = useRecoilValue(userTokenState);
+
 	const nav = useNavigate();
 
 	useEffect(() => {
@@ -32,13 +34,14 @@ const WordListList = () => {
 			try {
 				//쿼리 스트링이 있는지 없는지 조건문 설정할 것 all은 다
 				const response = await getWords(userToken);
-				setWordList(response);
-				console.log(response);
+				setWordList(response.data);
+				console.log(wordList);
 			} catch (e) {
 				console.log(e);
 			}
 		};
 		fetchWords();
+		setCheckedList([]);
 	}, []);
 
 	//단어 언어 확인
@@ -96,8 +99,8 @@ const WordListList = () => {
 		return `${year}-${month}-${day} ${hours}:${minutes}`;
 	}
 
-	const handleEdit = () => {
-		nav('word/edit/{shortId}');
+	const handleEdit = (short_id: string) => {
+		nav(`word/edit/${short_id}`);
 	};
 
 	return (
@@ -118,7 +121,6 @@ const WordListList = () => {
 							}
 						/>
 					</div>
-					<hr />
 				</div>
 				{wordList.map((item: WordListItem) => (
 					<div key={item.short_id} className={styles.box}>
@@ -135,7 +137,10 @@ const WordListList = () => {
 								&nbsp;
 								{formatDate(item.createdAt)}
 							</div>
-							<div className={styles.edit} onClick={handleEdit}>
+							<div
+								className={styles.edit}
+								onClick={() => handleEdit(item.short_id)}
+							>
 								<HiOutlinePencil />
 							</div>
 							<div className={styles.status}>

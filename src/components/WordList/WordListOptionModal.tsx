@@ -6,12 +6,19 @@ import {
 	BiMessageSquareError,
 } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
+import { useRecoilValue } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
+import { deleteWords } from '../../apis/word';
+import checkedWordList from '../../recoil/checkedWordList';
 
-interface Props {
+type Props = {
 	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 function WordListOptionsModal({ setModalOpen }: Props) {
+	const userToken = useRecoilValue(userTokenState);
+	const checkedList = useRecoilValue(checkedWordList);
+
 	const modalRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		const handler = (event: MouseEvent) => {
@@ -29,21 +36,38 @@ function WordListOptionsModal({ setModalOpen }: Props) {
 	});
 
 	//선택목록 삭제
-	const handleDelete = () => {
-		alert('삭제되었습니다.');
+	const handleDelete = async () => {
+		if (checkedList.length === 0) {
+			alert('삭제할 단어를 선택해주세요!');
+			return;
+		} else {
+			for (let i = 0; i < checkedList.length; i++) {
+				await deleteWords(userToken, checkedList[i]);
+			}
+			alert('삭제되었습니다.');
+			location.reload();
+		}
 	};
+
 	//전체 미분류로
 	const handleAllUnmark = () => {
 		alert('미분류 처리되었습니다.');
 	};
+
 	//전체 외운 단어로
 	const handleAllCheck = () => {
 		alert('외운 단어로 처리되었습니다.');
 	};
+
 	//전체 헷갈리는 단어로
 	const handleAllUnknown = () => {
 		alert('헷갈리는 단어로 처리되었습니다.');
 	};
+
+	//모든 단어가 체크됐는지 확인
+	useEffect(() => {
+		console.log(checkedList);
+	}, [checkedList]);
 
 	return (
 		<div>

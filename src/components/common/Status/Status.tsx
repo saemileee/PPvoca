@@ -18,6 +18,7 @@ function ChangeStatus({ initialStatus }: { initialStatus: number }) {
 				return <BiMessageSquare />;
 		}
 	}
+	//저장하는 axios도 가져와야 함
 	return (
 		<div onClick={() => setStatus((status + 1) % 3)}>{getStatusIcon()}</div>
 	);
