@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../components/User/UserInfo.module.scss';
+import styles from '../components/UserInfo/UserInfo.module.scss';
 import Logo from '../components/common/Logo/Logo';
 import UserInfoDetail from '../components/UserInfo/UserInfoDetail';
 import UserInfoButtons from '../components/UserInfo/UserInfoButtons';
