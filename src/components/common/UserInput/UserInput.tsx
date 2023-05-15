@@ -43,6 +43,13 @@ function UserInput<T>({
 	const [value, handleChange] = useInput('');
 
 	useEffect(() => {
+		//초기값 value 셋팅
+		if (defaultValue) {
+			setValues && setValues(prev => ({ ...prev, [name]: defaultValue }));
+		}
+	}, [defaultValue]);
+
+	useEffect(() => {
 		setValues && setValues(prev => ({ ...prev, [name]: value }));
 	}, [value]);
 
@@ -79,7 +86,8 @@ function UserInput<T>({
 					style={style}
 					name={name}
 					id={name}
-					value={value}
+					//value={value}
+					defaultValue={defaultValue}
 					onChange={handleChange}
 					className={styles.input}
 					placeholder={placeholder}
