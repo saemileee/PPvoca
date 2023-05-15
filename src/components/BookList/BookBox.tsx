@@ -28,7 +28,7 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 		async function fetchWordCount() {
 			try {
 				const response = await axios.get(
-					`${baseUrl}/word/list/${book.short_id}`,
+					`${baseUrl}/words?books=${book.short_id}`,
 					{
 						headers: {
 							Authorization: `Bearer ${userToken}`,
