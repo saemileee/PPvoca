@@ -7,7 +7,7 @@ function WordSearch() {
 	const navigate = useNavigate();
 
 	function handleSearchClick() {
-		navigate('/word/all');
+		navigate('/word/list');
 	}
 
 	return (
