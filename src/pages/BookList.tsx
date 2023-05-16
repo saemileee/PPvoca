@@ -31,10 +31,10 @@ function BookList() {
 		}
 
 		fetchBooks();
-	}, []);
+	}, [userToken]);
 
 	const handleEdit = (bookShortId: string) => {
-		// 수정 기능 추가 예정
+		navigate(`/book/edit/${bookShortId}`);
 	};
 
 	const handleDelete = async (bookShortId: string) => {
