@@ -52,7 +52,7 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 		}
 
 		fetchWordCount();
-	}, [book]);
+	}, [book, userToken]);
 
 	const handleMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
 		event.stopPropagation();
