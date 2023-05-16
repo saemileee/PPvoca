@@ -9,7 +9,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
-import Header from './components/common/Header/Header';
 
 function App() {
 	return (
