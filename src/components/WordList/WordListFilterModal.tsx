@@ -21,7 +21,7 @@ type Props = {
 	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	wordList: WordListItem[];
 	setWordList: React.Dispatch<React.SetStateAction<WordListItem[]>>;
-}
+};
 
 function WordListFilterModal({ setModalOpen, wordList, setWordList }: Props) {
 	const modalRef = useRef<HTMLDivElement>(null);
@@ -49,17 +49,17 @@ function WordListFilterModal({ setModalOpen, wordList, setWordList }: Props) {
 	}
 
 	function handleFilterUnmark() {
-		const filteredList = originalList.filter((list) => list.status === 0);
+		const filteredList = originalList.filter(list => list.status === 0);
 		setWordList(filteredList);
 	}
 
 	function handleFilterCheck() {
-		const filteredList = originalList.filter((list) => list.status === 1);
+		const filteredList = originalList.filter(list => list.status === 1);
 		setWordList(filteredList);
 	}
 
 	function handleFilterUnknown() {
-		const filteredList = originalList.filter((list) => list.status === 2);
+		const filteredList = originalList.filter(list => list.status === 2);
 		setWordList(filteredList);
 	}
 

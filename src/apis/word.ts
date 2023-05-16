@@ -80,15 +80,15 @@ export const deleteWords = async (token: string, id: string) => {
 
 //get
 //단어 필터링
-export const filterByStatus = async(token: string, status: number) => {
+export const filterByStatus = async (token: string, status: number) => {
 	const response = await axios.get(`${baseUrl}/words/status/${status}`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
-		}
+		},
 	});
 
 	return response;
-}
+};
 //
 
 //외운 단어 필터링

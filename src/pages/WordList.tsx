@@ -43,7 +43,7 @@ type States = {
 	setWordList: React.Dispatch<React.SetStateAction<string[]>>;
 	checkedList: string[];
 	setCheckedList: React.Dispatch<React.SetStateAction<string[]>>;
-}
+};
 
 //단어 정보들에 대한 타입
 type WordListItem = {
@@ -108,7 +108,7 @@ function WordList() {
 			setCheckedList(prev => {
 				const newCheckedList = checked
 					? [...prev, item]
-					: prev.filter((el) => el !== item);
+					: prev.filter(el => el !== item);
 				return newCheckedList;
 			});
 		},
@@ -121,7 +121,7 @@ function WordList() {
 			if (checked) {
 				const checekdListArray: string[] = [];
 				wordList.forEach((list: WordListItem) =>
-					checekdListArray.push(list.short_id)
+					checekdListArray.push(list.short_id),
 				);
 				setCheckedList(checekdListArray);
 			} else {
@@ -211,7 +211,8 @@ function WordList() {
 							<WordListOptionsModal
 								setModalOpen={setOptionModal}
 								wordList={wordList}
-								setWordList={setWordList} />
+								setWordList={setWordList}
+							/>
 						)}
 					</div>
 					<div className={styles.search}>
@@ -245,8 +246,8 @@ function WordList() {
 									checkedList.length === 0
 										? false
 										: checkedList.length === wordList.length
-											? true
-											: false
+										? true
+										: false
 								}
 							/>
 						</div>
@@ -296,7 +297,13 @@ function WordList() {
 					))}
 					<AddButton url='/word/add' />
 				</div>
-				{filterModal && <WordListFilterModal setModalOpen={setFilterModal} wordList={wordList} setWordList={setWordList} />}
+				{filterModal && (
+					<WordListFilterModal
+						setModalOpen={setFilterModal}
+						wordList={wordList}
+						setWordList={setWordList}
+					/>
+				)}
 			</div>
 		</main>
 	);

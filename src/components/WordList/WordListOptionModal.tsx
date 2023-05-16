@@ -24,7 +24,7 @@ type Props = {
 	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	wordList: WordListItem[];
 	setWordList: React.Dispatch<React.SetStateAction<WordListItem[]>>;
-}
+};
 
 function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 	const userToken = useRecoilValue(userTokenState);
