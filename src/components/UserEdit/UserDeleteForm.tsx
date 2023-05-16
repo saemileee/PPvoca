@@ -44,7 +44,8 @@ function UserDeleteForm({ setEnableDelete }: PropsTypes) {
 							color: '#7353ea',
 							borderColor: '#7353ea',
 						}}
-						onClick={deleteAccount}>
+						onClick={deleteAccount}
+					>
 						탈퇴하기
 					</UserButton>
 				</li>
