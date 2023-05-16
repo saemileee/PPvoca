@@ -15,7 +15,6 @@ function App() {
 	return (
 		<BrowserRouter>
 			<React.Fragment>
-				<Header />
 				<Routes>
 					<Route path='/' element={<Navigate to='/book/list' />} />
 					<Route path='*' element={<Navigate to='/' />} />
