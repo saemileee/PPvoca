@@ -1,10 +1,14 @@
 import React from 'react';
+import Header from '../components/common/Header/Header';
 
 function Calendar() {
 	return (
-		<main>
-			<h1>Calendar</h1>
-		</main>
+		<>
+			<Header />
+			<main>
+				<h1>Calendar</h1>
+			</main>
+		</>
 	);
 }
 
