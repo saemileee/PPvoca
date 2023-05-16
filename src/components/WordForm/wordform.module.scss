@@ -71,8 +71,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		height: 100%; /* 부모 요소의 높이에 맞추기 위해 추가 */
-		flex-direction: column; /* 수직 정렬을 위해 추가 */
+		height: 100%;
+		flex-direction: column;
 	}
 
 	.bookTitle > div {
@@ -80,6 +80,9 @@
 		height: 24px;
 		position: absolute;
 		right: -30%;
+	}
+	.bookSelect {
+		width: 100%;
 	}
 }
 
@@ -125,7 +128,7 @@
 	}
 
 	.errorCaption {
-		font-size: 13px;
+		font-size: 15px;
 		color: var(--color-pink);
 	}
 
@@ -152,27 +155,7 @@
 			align-items: center;
 			right: 0;
 			margin: 0 5px;
-
-			// &:first-child {
-			// 	margin-right: 35px;
-			// }
 		}
-	}
-}
-
-.bookBtn {
-	display: flex;
-	justify-content: right;
-	padding-top: 20px;
-
-	.bookBtn_circle {
-		border: 1px solid #000;
-		border-radius: 50%;
-		width: 40px;
-		height: 40px;
-		position: absolute;
-		background-color: #fff;
-		box-shadow: 0 0 7px -2px var(--color-grey);
 	}
 }
 

@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, ChangeEvent, MouseEvent } from 'react';
+import React, { KeyboardEvent, ChangeEvent, MouseEvent, FC } from 'react';
 import styles from './wordform.module.scss';
 import { IoSearchOutline } from 'react-icons/io5';
 
@@ -6,18 +6,20 @@ interface WordInputProps {
 	value: string;
 	placeholder: string;
 	className?: string;
+	errorCaption?: string;
 	onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const WordInput: React.FC<WordInputProps> = ({
+const WordInput: FC<WordInputProps> = ({
 	value,
 	onKeyDown,
 	onChange,
 	placeholder,
 	onClick,
 	className,
+	errorCaption,
 }) => {
 	return (
 		<div>
@@ -35,6 +37,7 @@ const WordInput: React.FC<WordInputProps> = ({
 					</button>
 				)}
 			</div>
+			{errorCaption && <p className={styles.errorCaption}>{errorCaption}</p>}
 		</div>
 	);
 };
