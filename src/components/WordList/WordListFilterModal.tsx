@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from '../WordList/WordListStyle.module.scss';
 import {
 	BiMessageSquare,
@@ -7,12 +7,26 @@ import {
 } from 'react-icons/bi';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
-interface Props {
+//단어 정보들에 대한 타입
+type WordListItem = {
+	short_id: string;
+	word: string;
+	meanings: Array<string>;
+	status: number;
+	createdAt: string;
+};
+
+//상위 컴포넌트(WordList)에서 받아온 props 타입
+type Props = {
 	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	wordList: WordListItem[];
+	setWordList: React.Dispatch<React.SetStateAction<WordListItem[]>>;
 }
 
-function WordListFilterModal({ setModalOpen }: Props) {
+function WordListFilterModal({ setModalOpen, wordList, setWordList }: Props) {
 	const modalRef = useRef<HTMLDivElement>(null);
+	//원래 wordList를 변경하지 않고 filter용 wordList 생성
+	const [originalList, setOriginalList] = useState(wordList);
 
 	useEffect(() => {
 		const handler = (event: MouseEvent) => {
@@ -30,16 +44,23 @@ function WordListFilterModal({ setModalOpen }: Props) {
 		};
 	});
 
+	function handleFilterReset() {
+		setWordList(originalList);
+	}
+
 	function handleFilterUnmark() {
-		alert('미분류 단어 필터링입니다.');
+		const filteredList = originalList.filter((list) => list.status === 0);
+		setWordList(filteredList);
 	}
 
 	function handleFilterCheck() {
-		alert('외운 단어 필터링입니다.');
+		const filteredList = originalList.filter((list) => list.status === 1);
+		setWordList(filteredList);
 	}
 
 	function handleFilterUnknown() {
-		alert('헷갈린 단어 필터링입니다.');
+		const filteredList = originalList.filter((list) => list.status === 2);
+		setWordList(filteredList);
 	}
 
 	return (
@@ -52,6 +73,9 @@ function WordListFilterModal({ setModalOpen }: Props) {
 					</div>
 				</div>
 				<div className={styles.content}>
+					<div className={styles.reset} onClick={handleFilterReset}>
+						초기화
+					</div>
 					<div className={styles.mark} onClick={handleFilterUnmark}>
 						<div className={styles.markIcon}>
 							<BiMessageSquare />

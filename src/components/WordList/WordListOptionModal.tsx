@@ -11,11 +11,22 @@ import { userTokenState } from '../../recoil/userState';
 import { deleteWords } from '../../apis/word';
 import checkedWordList from '../../recoil/checkedWordList';
 
-type Props = {
-	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+//단어 정보들에 대한 타입
+type WordListItem = {
+	short_id: string;
+	word: string;
+	meanings: Array<string>;
+	status: number;
+	createdAt: string;
 };
 
-function WordListOptionsModal({ setModalOpen }: Props) {
+type Props = {
+	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	wordList: WordListItem[];
+	setWordList: React.Dispatch<React.SetStateAction<WordListItem[]>>;
+}
+
+function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 	const userToken = useRecoilValue(userTokenState);
 	const checkedList = useRecoilValue(checkedWordList);
 
