@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import { userTokenState } from '../../recoil/userState';
 import useUserValidator from '../../hooks/useUserValidator';
 import { editUser, infoUser } from '../../apis/user';
-import styles from '../Register/Register.module.scss';
+import styles from './UserEdit.module.scss';
 import UserInput from '../common/UserInput/UserInput';
 import UserButton from '../common/UserButton/UserButton';
 
@@ -16,7 +16,11 @@ type ValuesProps = {
 	passwordConfirm?: string;
 };
 
-function UserEditForm() {
+type PropsTypes = {
+	setEnableDelete: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function UserEditForm({ setEnableDelete }: PropsTypes) {
 	const navigate = useNavigate();
 	const userToken = useRecoilValue(userTokenState);
 	const initValues = {
@@ -186,10 +190,16 @@ function UserEditForm() {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values);
-						}}
-					>
+						}}>
 						수정하기
 					</UserButton>
+				</li>
+				<li>
+					<span
+						className={styles.deleteButton}
+						onClick={() => setEnableDelete(true)}>
+						탈퇴하기
+					</span>
 				</li>
 			</ul>
 		</form>
