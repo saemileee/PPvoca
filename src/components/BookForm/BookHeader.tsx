@@ -5,12 +5,20 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	title: string;
-	buttonText: string;
+	addPage: boolean;
+	editPage: boolean;
 	onButtonClick: () => void;
+	className: string;
 }
 
 // FC(Functional Component)
-const BookHeader: FC<Props> = ({ title, buttonText, onButtonClick }) => {
+const BookHeader: FC<Props> = ({
+	addPage,
+	editPage,
+	title,
+	onButtonClick,
+	className,
+}) => {
 	const navigate = useNavigate();
 
 	// 뒤로가기
@@ -23,8 +31,11 @@ const BookHeader: FC<Props> = ({ title, buttonText, onButtonClick }) => {
 				<MdArrowBackIosNew className={styles.icon} />
 			</button>
 			<h1>{title}</h1>
-			<div className={styles.submitBtn} onClick={onButtonClick}>
-				{buttonText}
+			<div
+				className={`${styles.submitBtn} ${className}`}
+				onClick={onButtonClick}
+			>
+				{addPage ? '생성' : editPage ? '수정' : null}
 			</div>
 		</div>
 	);
