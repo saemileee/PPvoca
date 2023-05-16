@@ -65,18 +65,21 @@ export const deleteWords = async (token: string, id: string) => {
 };
 //
 
-//patch
-//모든 단어 미분류
+//put
+//단어 상태 설정
+export const updateStatus = async (token: string, id: string) => {
+	const response = await axios.put(
+		`${baseUrl}/words/${id}`,
+		{},
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		},
+	);
 
-//
-
-//모든 단어 외움
-
-//
-
-//모든 단어 헷갈림
-
-//
+	return response;
+};
 
 //get
 //단어 필터링

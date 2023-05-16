@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from '../WordList/WordListStyle.module.scss';
 import {
 	BiMessageSquare,
@@ -6,9 +6,9 @@ import {
 	BiMessageSquareError,
 } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
-import { deleteWords } from '../../apis/word';
+import { deleteWords, updateStatus } from '../../apis/word';
 import checkedWordList from '../../recoil/checkedWordList';
 
 //단어 정보들에 대한 타입
@@ -29,6 +29,7 @@ type Props = {
 function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 	const userToken = useRecoilValue(userTokenState);
 	const checkedList = useRecoilValue(checkedWordList);
+	const setCheckedList = useRecoilState(checkedWordList);
 
 	const modalRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -55,14 +56,20 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 			for (let i = 0; i < checkedList.length; i++) {
 				await deleteWords(userToken, checkedList[i]);
 			}
+			const newList = wordList.filter(
+				list => !checkedList.includes(list.short_id),
+			);
+			setWordList(newList);
 			alert('삭제되었습니다.');
-			location.reload();
 		}
 	};
 
 	//전체 미분류로
-	const handleAllUnmark = () => {
-		alert('미분류 처리되었습니다.');
+	const handleAllUnmark = async () => {
+		console.log(wordList);
+		// for (let i = 0; i < wordList.length; i++) {
+		// 	await updateStatus(userToken, wordList[i].short_id);
+		// }
 	};
 
 	//전체 외운 단어로
