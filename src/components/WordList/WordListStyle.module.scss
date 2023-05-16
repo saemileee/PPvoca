@@ -3,31 +3,32 @@
 	top: 0;
 	background-color: white;
 	border-bottom: 2px solid #dddddd;
-	z-index: 1;
+	z-index: 2;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 }
 
 //Title
-.head {
+.title {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+
+	margin: 8px;
 	padding: 5px;
-	margin: 8px auto 5px;
 
 	.back {
-		padding-top: 8px;
 		width: 24px;
 		height: 24px;
+		padding-top: 8px;
 		margin-right: 10px;
 	}
 
-	.title {
+	.bookName {
 		width: 70%;
 		height: 24px;
-		font-size: 28px;
+		font-size: 25px;
 		margin-right: 50px;
 	}
 
@@ -35,37 +36,39 @@
 		padding-top: 8px;
 		width: 24px;
 		height: 24px;
-		margin-left: 20px;
 	}
 
-	.options {
+	.option {
 		padding-top: 8px;
 		width: 24px;
 		height: 24px;
-		margin-left: 20px;
-	}
-
-	.plus {
-		margin-left: 20px;
-		margin-right: 5px;
+		padding-left: 12px;
 	}
 }
 
 //Search
-.input {
-	width: 90%;
-	height: 35px;
-	margin-top: 3px;
-	margin-left: 5px;
-	margin-right: 13px;
-	border-radius: 3px;
-	border-color: #dddddd;
-	font-size: 23px;
+.search {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding-bottom: 10px;
 
-	.search {
-		width: 24px;
+	.input {
+		width: 90%;
+		height: 35px;
+		margin-top: 3px;
+		margin-left: 5px;
+		margin-right: 13px;
+		padding: 5px;
+		border-radius: 3px;
+		border-color: #dddddd;
+		font-size: 23px;
+	}
+
+	.find {
+		align-items: center;
+		width: 5%;
 		height: 24px;
-		margin-right: 5px;
 	}
 }
 
@@ -85,13 +88,14 @@
 .box {
 	padding: 5px 8px 8px;
 	border-bottom: 1px solid #dddddd;
+	z-index: 1;
 
 	.menus {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 
-		.list {
+		.listInfo {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
@@ -99,11 +103,18 @@
 			padding-bottom: 5px;
 		}
 
+		.edit {
+			font-size: 22px;
+			padding-right: 20px;
+		}
+
 		.status {
+			font-size: 22px;
 			padding-right: 20px;
 		}
 
 		.speaker {
+			font-size: 22px;
 			padding-right: 5px;
 		}
 	}
@@ -116,16 +127,26 @@
 
 	.meanings {
 		font-size: 20px;
-		text-align: center;
+		text-align: left;
 		display: inline-block;
-		padding: 5px;
-		border: 1px solid #dddddd;
 		border-radius: 3px;
+
+		.meaningBlock {
+			display: inline-block;
+			margin-right: 5px;
+			background-color: #f0e1ff;
+			margin: 3px;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #000000;
+			font-size: 15px;
+		}
 	}
 }
 
 //Options Modal
 .optionscontainer {
+	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -133,7 +154,7 @@
 
 	width: 180px;
 	height: 220px;
-	z-index: 999;
+	z-index: 2;
 
 	position: absolute;
 	top: 150px;
@@ -159,7 +180,7 @@
 		text-align: center;
 	}
 
-	.remember {
+	.check {
 		flex-grow: 1;
 		width: 100%;
 		text-align: center;
@@ -173,27 +194,99 @@
 }
 
 //Filter Modal
-.modalWrapper {
-	.modal {
-		.header {
-			.title {
-			}
+.modalBack {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 2;
+}
 
-			.close {
-			}
+.modal {
+	position: absolute;
+	width: 100%;
+	height: 60%;
+	background-color: #fff;
+	bottom: 0;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	overflow-y: auto;
+	z-index: 2;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: sticky;
+		top: 0;
+		width: 100%;
+		padding: 10px;
+		z-index: 2;
+		background-color: #fff;
+		border-bottom: 1px solid #ddd;
+
+		.title {
+			font-size: 18px;
+			text-align: center;
+			margin: 0 auto;
+			padding: 5px 0;
+			font-weight: bold;
 		}
 
-		.content {
-			.mark {
-				.markText {
-				}
-
-				.markIcon {
-				}
-			}
+		.close {
+			position: absolute;
+			right: 0;
+			width: 24px;
+			height: 24px;
+			margin-top: 10px;
+			margin-right: 10px;
 		}
 	}
 
-	.backdrop {
+	.content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.reset {
+			font-size: 18px;
+			width: 100%;
+			padding: 15px;
+			text-align: center;
+			border-bottom: 1px solid #000000;
+		}
+
+		.mark {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			width: 100%;
+			padding: 15px;
+
+			font-size: 18px;
+			border-bottom: 1px solid #000000;
+
+			.markIcon {
+				float: left;
+			}
+
+			.markText {
+				float: right;
+			}
+		}
 	}
 }
