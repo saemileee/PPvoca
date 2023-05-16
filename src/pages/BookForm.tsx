@@ -1,116 +1,152 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import BookHeader from '../components/BookForm/BookHeader';
 import styles from '../components/BookForm/bookform.module.scss';
 import { BsJournalBookmark } from 'react-icons/bs';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BsArrowDownUp } from 'react-icons/bs';
+import { useRecoilValue } from 'recoil';
+import { infoUser } from '../apis/user';
+import { userTokenState } from '../recoil/userState';
 
-// 더미 데이터
-const mockData = {
-	description: '단어장 설명입니다',
-	end_lang: 'English',
-	name: '영단어',
-	start_lang: 'Korean',
-};
-
-const editPage = location.pathname === '/book/edit';
-const addPage = location.pathname === '/book/add';
+import { addedBook, selectedBook, updatedBook } from '../apis/book';
 
 function BookForm() {
+	const userToken = useRecoilValue(userTokenState);
 	const navigate = useNavigate();
-
 	const [buttonText, setButtonText] = useState('');
-	const [bookName, setBookName] = useState('');
-	const [bookDescription, setBookDescription] = useState('');
-	const [bookLanguage, setBookLanguage] = useState({
-		word: 'English',
-		meaning: 'Korean',
+	const [bookInfo, setBookInfo] = useState({
+		bookDescription: '',
+		bookName: '',
+		word: 'english',
+		meaning: 'korean',
 	});
 
-	// 생성, 수정 버튼 글자 바꾸기, 수정페이지면 데이터 가져오기
-	useEffect(() => {
-		if (addPage) {
-			setButtonText('생성');
-		} else if (editPage) {
-			setButtonText('수정');
-			setBookName(mockData.name);
-			setBookDescription(mockData.description);
-			setBookLanguage({
-				word: mockData.start_lang,
-				meaning: mockData.end_lang,
-			});
-		}
-	}, []);
+	const { bookId } = useParams();
+	const location = useLocation();
+	const editPage = location.pathname === `/book/edit/${bookId}`;
+	const addPage = location.pathname === '/book/add';
 
-	// add, edit 다르게 처리
-	function handleSubmit() {
-		if (!bookName) {
-			return;
-		}
-		const bookData = {
-			name: bookName,
-			description: bookDescription,
-			start_lang: bookLanguage.word,
-			end_lang: bookLanguage.meaning,
-		};
+	/** 핸들링 함수 */
 
-		if (editPage) {
-			if (
-				bookData.name === mockData.name &&
-				bookData.description === mockData.description &&
-				bookData.start_lang === mockData.start_lang &&
-				bookData.end_lang === mockData.end_lang
-			) {
+	// 단어장 이름 변경
+	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setBookInfo(prevBookInfo => ({
+			...prevBookInfo,
+			bookName: event.target.value,
+		}));
+	};
+
+	// 단어장 설명 변경
+	const handleDescChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+		setBookInfo(prevBookInfo => ({
+			...prevBookInfo,
+			bookDescription: event.target.value,
+		}));
+	};
+
+	// start_lang 변경
+	const handleToggleLanguage = () => {
+		setBookInfo(prevBookInfo => ({
+			...prevBookInfo,
+			word: prevBookInfo.meaning,
+			meaning: prevBookInfo.word,
+		}));
+	};
+
+	/** API 연결 */
+	let bookData: BookData = {
+		name: '',
+		description: '',
+		start_lang: '',
+		end_lang: '',
+	};
+	interface BookData {
+		name: string;
+		description: string;
+		start_lang: string;
+		end_lang: string;
+	}
+	// 단어장 가져오기
+	const getBookList = async () => {
+		try {
+			if (!bookId) {
 				return;
 			}
+			const response = await selectedBook(bookId, userToken);
+			bookData = response.data[0];
+			if (response.status === 200) {
+				setBookInfo({
+					bookDescription: bookData.description,
+					bookName: bookData.name,
+					word: bookData.start_lang,
+					meaning: bookData.end_lang,
+				});
+			}
+		} catch (err) {
+			console.log(err);
+			alert('단어장 정보를 불러오는데 실패하였습니다.');
 		}
-		console.log(bookData);
+	};
+
+	// 단어장 생성 및 수정
+	const handleSubmit = async () => {
+		if (!bookInfo.bookName) {
+			return;
+		}
+		const data = {
+			name: bookInfo.bookName,
+			description: bookInfo.bookDescription,
+			start_lang: bookInfo.word,
+			end_lang: bookInfo.meaning,
+		};
+
+		if (addPage) {
+			try {
+				const response = await addedBook(userToken, data);
+				if (response.status === 201) {
+					alert(`[${bookInfo.bookName}] 생성 완료`);
+					navigate('/book/list');
+				}
+			} catch (err) {
+				console.log(err);
+				alert('단어장 생성 실패');
+			}
+		} else if (editPage) {
+			try {
+				if (!bookId) {
+					return;
+				}
+				const response = await updatedBook(bookId, userToken, data);
+				if (response.status === 200) {
+					alert(`[${bookInfo.bookName}] 수정 완료`);
+					navigate('/book/list');
+				}
+			} catch (err) {
+				console.log(err);
+				alert('단어장 수정 실패');
+			}
+		}
+	};
+
+	useEffect(() => {
 		if (editPage) {
-			alert(`${bookName} 수정 완료`);
-		} else if (addPage) {
-			alert(`${bookName} 생성 완료`);
+			getBookList();
 		}
-		navigate('/book/list');
-	}
-
-	// if (addPage) {
-	// 	axios.post('/api/books', bookData)
-	// 		.then((response) => {
-	// 		})
-	// 		.catch((error) => {
-	// 		});
-	// } else if (editPage) {
-	// 	axios.put(`/api/books/`, bookData)
-	// 		.then((response) => {
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error(error);
-	// 		});
-	// }
-
-	// 단어장
-	function handleNameChange(event: ChangeEvent<HTMLInputElement>) {
-		setBookName(event.target.value);
-	}
-
-	// 설명
-	function handleDescChange(event: ChangeEvent<HTMLTextAreaElement>) {
-		setBookDescription(event.target.value);
-	}
-
-	// 언어 토글
-	function handleToggleLanguage() {
-		setBookLanguage({ word: bookLanguage.meaning, meaning: bookLanguage.word });
-	}
+	}, []);
 
 	return (
 		<main>
 			<div className={styles.container}>
 				<BookHeader
+					addPage={addPage}
+					editPage={editPage}
 					title='단어장'
-					buttonText={buttonText}
+					className={
+						bookInfo.bookName
+							? `${styles.active} ${styles.className}`
+							: styles.className
+					}
 					onButtonClick={handleSubmit}
 				/>
 				<form className={styles.bookForm}>
@@ -121,12 +157,12 @@ function BookForm() {
 					<input
 						type='text'
 						placeholder='단어장 이름을 입력해 주세요!'
-						value={bookName}
+						value={bookInfo.bookName || ''}
 						onChange={handleNameChange}
 					/>
 					<textarea
 						placeholder='단어장 설명을 입력해 주세요! (선택)'
-						value={bookDescription}
+						value={bookInfo.bookDescription}
 						onChange={handleDescChange}
 					/>
 					<p>
@@ -137,7 +173,7 @@ function BookForm() {
 						<tbody>
 							<tr>
 								<td>단어</td>
-								<td className={styles.language}>{bookLanguage.word}</td>
+								<td className={styles.language}>{bookInfo.word}</td>
 							</tr>
 							<tr>
 								<td>
@@ -153,7 +189,7 @@ function BookForm() {
 							</tr>
 							<tr>
 								<td>의미</td>
-								<td className={styles.language}>{bookLanguage.meaning}</td>
+								<td className={styles.language}>{bookInfo.meaning}</td>
 							</tr>
 						</tbody>
 					</table>

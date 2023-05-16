@@ -50,6 +50,11 @@
 	.submitBtn {
 		cursor: pointer;
 		font-size: var(--font-size);
+		color: var(--color-grey);
+	}
+
+	.active {
+		color: var(--color-pink);
 	}
 }
 

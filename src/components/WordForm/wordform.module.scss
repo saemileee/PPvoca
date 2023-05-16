@@ -36,6 +36,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
 	height: 70px;
 	position: relative;
 
@@ -58,18 +59,45 @@
 		color: #b9b9b9;
 	}
 
+	.modalArrow {
+		width: 100%;
+		position: relative;
+	}
+
 	.bookTitle {
 		font-size: var(--font-size);
 		color: #000;
 		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		flex-direction: column;
 	}
 
-	.submitBtn {
-		font-size: var(--font-size);
+	.bookTitle > div {
+		width: 24px;
+		height: 24px;
 		position: absolute;
-		right: 0;
-		cursor: pointer;
-		padding: 10px 0 10px 10px;
+		right: -30%;
+	}
+	.bookSelect {
+		width: 100%;
+	}
+}
+
+.submitBtn {
+	font-size: var(--font-size);
+	color: var(--color-grey);
+	position: absolute;
+	right: 0;
+	cursor: pointer;
+	padding: 10px 0;
+	line-height: 1;
+	height: 40px;
+
+	&.active {
+		color: var(--color-pink);
 	}
 }
 
@@ -85,7 +113,7 @@
 		width: 100%;
 	}
 
-	.margin {
+	.wordInputWrap {
 		margin-bottom: 20px;
 	}
 
@@ -97,6 +125,11 @@
 		button {
 			margin-left: 10px;
 		}
+	}
+
+	.errorCaption {
+		font-size: 15px;
+		color: var(--color-pink);
 	}
 
 	.meanItem {
@@ -122,26 +155,36 @@
 			align-items: center;
 			right: 0;
 			margin: 0 5px;
-
-			&:first-child {
-				margin-right: 35px;
-			}
 		}
 	}
 }
 
-.bookBtn {
-	display: flex;
-	justify-content: right;
-	padding-top: 20px;
+.modalBookList {
+	width: 100%;
+	.modalBookItem {
+		display: flex;
+		align-items: center;
 
-	.bookBtn_circle {
-		border: 1px solid #000;
-		border-radius: 50%;
-		width: 40px;
-		height: 40px;
-		position: absolute;
-		background-color: #fff;
-		box-shadow: 0 0 7px -2px var(--color-grey);
+		padding: 10px;
+		border-bottom: 1px solid #ddd;
+		cursor: pointer;
+		font-size: var(--font-size);
+
+		div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			margin-right: 10px;
+			.icon {
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+
+	.selected {
+		color: var(--color-pink);
 	}
 }
