@@ -1,78 +1,70 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from '../components/BookList/Style.module.scss';
 import AddButton from '../components/common/AddButton/AddButton';
-import Modal from '../components/BookList/BookListModal';
-import { BsFileEarmarkWord } from 'react-icons/bs';
-import { BiMessageSquareCheck, BiMessageSquareError } from 'react-icons/bi';
-import { CiMenuKebab } from 'react-icons/ci';
-import { IoSearchOutline } from 'react-icons/io5';
+import WordSearch from '../components/BookList/WordSearch';
+import BookBox from '../components/BookList/BookBox';
+import { useRecoilValue } from 'recoil';
+import { userTokenState } from '../recoil/userState';
+import { useNavigate } from 'react-router-dom';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function BookList() {
+	const userToken = useRecoilValue(userTokenState);
 	const navigate = useNavigate();
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [books, setBooks] = useState<any[]>([]);
 
-	const handleMenuClick = (event: React.MouseEvent<HTMLDivElement>) => {
-		event.stopPropagation();
-		event.preventDefault();
-		setIsModalOpen(true);
+	useEffect(() => {
+		async function fetchBooks() {
+			try {
+				const response = await axios.get(`${baseUrl}/books`, {
+					headers: {
+						Authorization: `Bearer ${userToken}`,
+					},
+				});
+				const booksData = response.data;
+				setBooks(booksData);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
+		fetchBooks();
+	}, [userToken]);
+
+	const handleEdit = (bookShortId: string) => {
+		navigate(`/book/edit/${bookShortId}`);
 	};
 
-	const handleCloseModal = () => {
-		setIsModalOpen(false);
+	const handleDelete = async (bookShortId: string) => {
+		if (window.confirm('단어장을 삭제 하시겠습니까?')) {
+			try {
+				await axios.delete(`${baseUrl}/books/${bookShortId}`, {
+					headers: {
+						Authorization: `Bearer ${userToken}`,
+					},
+				});
+				setBooks(books.filter(book => book.short_id !== bookShortId));
+				navigate('/book/list');
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	};
-
-	function handleBoxClick() {
-		navigate('/word/list');
-	}
-
-	function handleEdit() {
-		// 수정 기능 추가 예정
-		handleCloseModal();
-	}
-
-	function handleDelete() {
-		// 삭제 기능 추가 예정
-		handleCloseModal();
-	}
 
 	return (
 		<main>
-			<div
-				className={styles.inputContainer}
-				onClick={() => navigate('/word/all')}
-			>
-				<div className={styles.input}>단어 검색</div>
-				<div className={styles.searchIcon}>
-					<IoSearchOutline size={24} />
-				</div>
-			</div>
+			<WordSearch />
 			<div className={styles.boxContainer}>
-				<div onClick={handleBoxClick} className={styles.box}>
-					<div className={styles.wordTitle}>영어</div>
-					<div className={styles.subContent}>English / Korean</div>
-					<div onClick={handleMenuClick} className={styles.modalButton}>
-						<CiMenuKebab size={24} />
-					</div>
-					<Modal
-						isOpen={isModalOpen}
-						onClose={handleCloseModal}
-						onEdit={handleEdit}
-						onDelete={handleDelete}
+				{books.map(book => (
+					<BookBox
+						key={book.short_id}
+						book={book}
+						handleEdit={() => handleEdit(book.short_id)}
+						handleDelete={() => handleDelete(book.short_id)}
 					/>
-					<div className={styles.wordButton}>
-						<div className={styles.totalWord}>
-							<BsFileEarmarkWord size={24} />
-							10
-						</div>
-						<div>
-							<BiMessageSquareCheck size={24} />0
-						</div>
-						<div>
-							<BiMessageSquareError size={24} />0
-						</div>
-					</div>
-				</div>
+				))}
 			</div>
 			<AddButton url={'/book/add'} />
 		</main>

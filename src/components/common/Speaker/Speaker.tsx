@@ -11,7 +11,7 @@ const Speaker = ({ text, lang }: Props) => {
 	const speak = () => {
 		const message = new SpeechSynthesisUtterance();
 		message.text = text;
-		message.rate = 1.2;
+		message.rate = 1.0;
 		if (lang === 'korean') {
 			message.voice = window.speechSynthesis
 				.getVoices()
@@ -20,7 +20,7 @@ const Speaker = ({ text, lang }: Props) => {
 			message.voice = window.speechSynthesis
 				.getVoices()
 				.find(
-					voice => voice.name === 'Google UK English Female',
+					voice => voice.name === 'Google US English',
 				) as SpeechSynthesisVoice;
 		}
 		window.speechSynthesis.speak(message);
