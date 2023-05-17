@@ -249,8 +249,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-												? true
-												: false
+											? true
+											: false
 									}
 								/>
 							</div>
@@ -265,7 +265,9 @@ function WordList() {
 											onChange={e => {
 												onCheckedItem(e.target.checked, e.target.value);
 											}}
-											checked={checkedList.includes(item.short_id) ? true : false}
+											checked={
+												checkedList.includes(item.short_id) ? true : false
+											}
 										/>
 										&nbsp;
 										{formatDate(item.createdAt)}
