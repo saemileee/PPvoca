@@ -22,35 +22,3 @@ body {
 	font-family: 'Nanum Gothic', sans-serif;
 }
 /* 공통 폰트 적용 : End */
-
-/* 전체 레이아웃 위치 및 크기 설정 : Start */
-#root {
-	position: relative;
-	width: 100%;
-	max-width: 425px;
-	min-width: 275px;
-	height: 100vh;
-	margin: 0 auto;
-	border: 1px solid #ddd;
-}
-/* 전체 레이아웃 위치 및 크기 설정 : End */
-
-/* 스크롤바 설정 : Start  */
-main {
-	width: 100%;
-	height: calc(100vh - 60px);
-	/* 60px = header의 높이값 */
-	overflow: scroll;
-}
-
-/* 스크롤바 숨기기 */
-main::-webkit-scrollbar {
-	display: none;
-	/*  Chrome, Safari, Opera, Edge */
-}
-
-main {
-	-ms-overflow-style: none; /* IE */
-	scrollbar-width: none; /* FireFox */
-}
-/* 스크롤바 설정 : End  */
