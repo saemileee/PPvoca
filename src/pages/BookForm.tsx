@@ -10,6 +10,7 @@ import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
 
 import { addedBook, selectedBook, updatedBook } from '../apis/book';
+import Header from '../components/common/Header/Header';
 
 function BookForm() {
 	const userToken = useRecoilValue(userTokenState);
@@ -136,66 +137,69 @@ function BookForm() {
 	}, []);
 
 	return (
-		<main>
-			<div className={styles.container}>
-				<BookHeader
-					addPage={addPage}
-					editPage={editPage}
-					title='단어장'
-					className={
-						bookInfo.bookName
-							? `${styles.active} ${styles.className}`
-							: styles.className
-					}
-					onButtonClick={handleSubmit}
-				/>
-				<form className={styles.bookForm}>
-					<p>
-						<BsJournalBookmark className={styles.icon} />
-						이름 & 설명
-					</p>
-					<input
-						type='text'
-						placeholder='단어장 이름을 입력해 주세요!'
-						value={bookInfo.bookName || ''}
-						onChange={handleNameChange}
+		<>
+			<Header></Header>
+			<main>
+				<div className={styles.container}>
+					<BookHeader
+						addPage={addPage}
+						editPage={editPage}
+						title='단어장'
+						className={
+							bookInfo.bookName
+								? `${styles.active} ${styles.className}`
+								: styles.className
+						}
+						onButtonClick={handleSubmit}
 					/>
-					<textarea
-						placeholder='단어장 설명을 입력해 주세요! (선택)'
-						value={bookInfo.bookDescription}
-						onChange={handleDescChange}
-					/>
-					<p>
-						<IoLanguageOutline className={styles.icon} />
-						언어
-					</p>
-					<table className={styles.bookLanguage}>
-						<tbody>
-							<tr>
-								<td>단어</td>
-								<td className={styles.language}>{bookInfo.word}</td>
-							</tr>
-							<tr>
-								<td>
-									<button
-										onClick={e => {
-											e.preventDefault();
-											handleToggleLanguage();
-										}}
-									>
-										<BsArrowDownUp className={styles.icon} />
-									</button>
-								</td>
-							</tr>
-							<tr>
-								<td>의미</td>
-								<td className={styles.language}>{bookInfo.meaning}</td>
-							</tr>
-						</tbody>
-					</table>
-				</form>
-			</div>
-		</main>
+					<form className={styles.bookForm}>
+						<p>
+							<BsJournalBookmark className={styles.icon} />
+							이름 & 설명
+						</p>
+						<input
+							type='text'
+							placeholder='단어장 이름을 입력해 주세요!'
+							value={bookInfo.bookName || ''}
+							onChange={handleNameChange}
+						/>
+						<textarea
+							placeholder='단어장 설명을 입력해 주세요! (선택)'
+							value={bookInfo.bookDescription}
+							onChange={handleDescChange}
+						/>
+						<p>
+							<IoLanguageOutline className={styles.icon} />
+							언어
+						</p>
+						<table className={styles.bookLanguage}>
+							<tbody>
+								<tr>
+									<td>단어</td>
+									<td className={styles.language}>{bookInfo.word}</td>
+								</tr>
+								<tr>
+									<td>
+										<button
+											onClick={e => {
+												e.preventDefault();
+												handleToggleLanguage();
+											}}
+										>
+											<BsArrowDownUp className={styles.icon} />
+										</button>
+									</td>
+								</tr>
+								<tr>
+									<td>의미</td>
+									<td className={styles.language}>{bookInfo.meaning}</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</main>
+		</>
 	);
 }
 

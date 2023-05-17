@@ -20,6 +20,7 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { useRecoilValue } from 'recoil';
 import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
+import Header from '../components/common/Header/Header';
 
 function WordForm() {
 	const userToken = useRecoilValue(userTokenState);
@@ -243,124 +244,126 @@ function WordForm() {
 	};
 
 	return (
-		<main>
-			<div className={styles.container}>
-				<WordHeader
-					addPage={addPage}
-					editPage={editPage}
-					navigate={navigate}
-					bookInfo={bookInfo}
-					setShowModal={setShowModal}
-					word={word}
-					currMeaning={currMeaning}
-					meaning={meaning}
-					handleSubmit={handleSubmit}
-					buttonText={buttonText}
-				/>
+		<>
+			<Header></Header>
+			<main>
+				<div className={styles.container}>
+					<WordHeader
+						addPage={addPage}
+						editPage={editPage}
+						navigate={navigate}
+						bookInfo={bookInfo}
+						setShowModal={setShowModal}
+						word={word}
+						currMeaning={currMeaning}
+						meaning={meaning}
+						handleSubmit={handleSubmit}
+						buttonText={buttonText}
+					/>
 
-				<form className={styles.wordForm} onSubmit={e => e.preventDefault()}>
-					<div className={styles.wordInputWrap}>
-						<label htmlFor='word'>{bookInfo.startLang}</label>
-						<WordInput
-							value={word}
-							onKeyDown={e => {
-								if (e.key === 'Enter') {
-									handleSearch();
-								}
-							}}
-							onChange={e => {
-								const inputValue = e.target.value;
-								const errorCaption = validateInput(
-									inputValue,
-									bookInfo.startLang,
-								);
-								setErrorCaption(errorCaption);
-								setWord(inputValue);
-							}}
-							placeholder='단어를 입력해 주세요 (필수)'
-							onClick={handleSearch}
-							errorCaption={errorCaption}
-						/>
-					</div>
-					<div className={styles.wordInputWrap}>
-						<label htmlFor='meaning' className={styles.margin}>
-							{bookInfo.endLang}
-						</label>
-						<input
-							type='text'
-							placeholder='의미를 입력해 주세요 (필수)'
-							value={meaning}
-							ref={inputRef}
-							onChange={handleMeaningChange}
-							onKeyPress={e => {
-								if (e.key === 'Enter') {
-									e.preventDefault();
-									handleAddMeaning();
-								}
-							}}
-						/>
+					<form className={styles.wordForm} onSubmit={e => e.preventDefault()}>
+						<div className={styles.wordInputWrap}>
+							<label htmlFor='word'>{bookInfo.startLang}</label>
+							<WordInput
+								value={word}
+								onKeyDown={e => {
+									if (e.key === 'Enter') {
+										handleSearch();
+									}
+								}}
+								onChange={e => {
+									const inputValue = e.target.value;
+									const errorCaption = validateInput(
+										inputValue,
+										bookInfo.startLang,
+									);
+									setErrorCaption(errorCaption);
+									setWord(inputValue);
+								}}
+								placeholder='단어를 입력해 주세요 (필수)'
+								onClick={handleSearch}
+								errorCaption={errorCaption}
+							/>
+						</div>
+						<div className={styles.wordInputWrap}>
+							<label htmlFor='meaning' className={styles.margin}>
+								{bookInfo.endLang}
+							</label>
+							<input
+								type='text'
+								placeholder='의미를 입력해 주세요 (필수)'
+								value={meaning}
+								ref={inputRef}
+								onChange={handleMeaningChange}
+								onKeyPress={e => {
+									if (e.key === 'Enter') {
+										e.preventDefault();
+										handleAddMeaning();
+									}
+								}}
+							/>
 
-						<ul className={styles.meanList}>
-							{currMeaning.map((word, index) => (
-								<li key={index} className={styles.meanItem}>
-									<p>{word}</p>
+							<ul className={styles.meanList}>
+								{currMeaning.map((word, index) => (
+									<li key={index} className={styles.meanItem}>
+										<p>{word}</p>
 
-									<div>
-										{/* <button
+										<div>
+											{/* <button
 										>
 											<HiOutlinePencil className={styles.icon} />
 										</button> */}
-										<button
-											className={styles.cancelBtn}
-											onClick={() => handleDeleteMeaning(index)}
-										>
-											<IoIosCloseCircleOutline className={styles.icon} />
-										</button>
-									</div>
-								</li>
-							))}
-						</ul>
-					</div>
-				</form>
-
-				{addPage && (
-					<div className={styles.bookBtn}>
-						<Modal
-							showModal={showModal}
-							setShowModal={setShowModal}
-							title='단어장 선택'
-						>
-							<ul className={styles.modalBookList}>
-								{bookList.map(
-									({ name, start_lang, end_lang, short_id }, index) => (
-										<li
-											key={index}
-											className={`${styles.modalBookItem} ${
-												short_id === bookInfo.short_id ? styles.selected : ''
-											}`}
-											onClick={() => {
-												setShowModal(false);
-												setBookInfo({
-													bookName: name,
-													startLang: start_lang,
-													endLang: end_lang,
-													short_id: short_id,
-												});
-											}}
-										>
-											<div>
-												<BsJournalBookmark className={styles.icon} />
-											</div>
-											{name}
-										</li>
-									),
-								)}
+											<button
+												className={styles.cancelBtn}
+												onClick={() => handleDeleteMeaning(index)}
+											>
+												<IoIosCloseCircleOutline className={styles.icon} />
+											</button>
+										</div>
+									</li>
+								))}
 							</ul>
-						</Modal>
-					</div>
-				)}
-			</div>
-		</main>
+						</div>
+					</form>
+				</div>
+			</main>
+			{addPage && (
+				<div className={styles.bookBtn}>
+					<Modal
+						showModal={showModal}
+						setShowModal={setShowModal}
+						title='단어장 선택'
+					>
+						<ul className={styles.modalBookList}>
+							{bookList.map(
+								({ name, start_lang, end_lang, short_id }, index) => (
+									<li
+										key={index}
+										className={`${styles.modalBookItem} ${
+											short_id === bookInfo.short_id ? styles.selected : ''
+										}`}
+										onClick={() => {
+											setShowModal(false);
+											setBookInfo({
+												bookName: name,
+												startLang: start_lang,
+												endLang: end_lang,
+												short_id: short_id,
+											});
+										}}
+									>
+										<div>
+											<BsJournalBookmark className={styles.icon} />
+										</div>
+										{name}
+									</li>
+								),
+							)}
+						</ul>
+					</Modal>
+				</div>
+			)}
+		</>
 	);
 }
 
