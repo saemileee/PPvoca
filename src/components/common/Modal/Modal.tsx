@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import styles from './modal.module.scss';
+// import styles from './modal.module.scss';
+import styles from './modal2.module.scss';
 import { RiCloseLine } from 'react-icons/ri';
 import { relative } from 'path';
 
@@ -20,8 +21,7 @@ function Modal({ showModal, setShowModal, title, children }: ModalProps) {
 							<span className={styles.title}>{title}</span>
 							<button
 								className={styles.closeBtn}
-								onClick={() => setShowModal(false)}
-							>
+								onClick={() => setShowModal(false)}>
 								<RiCloseLine className={styles.icon} />
 							</button>
 						</div>
