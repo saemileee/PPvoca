@@ -31,10 +31,11 @@ import {
 	getBookName,
 	findWordById,
 } from '../apis/word';
+import Header from '../components/common/Header/Header';
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
-	bookId: string;
+	bookId: string | undefined;
 };
 
 //Props로 넘겨줄 state 값 타입 설정
@@ -66,16 +67,16 @@ function WordList() {
 	const prevWordList = useRef([]);
 
 	const userToken = useRecoilValue(userTokenState);
-	//const { bookId } = useParams<RouteParams>();
-	const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
+	const { bookId } = useParams<RouteParams>();
+	//const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
 	const nav = useNavigate();
 
 	//단어장 이름
 	useEffect(() => {
-		if (book_id) {
+		if (bookId) {
 			const fetchTitle = async () => {
 				try {
-					const response = await getBookName(userToken, book_id);
+					const response = await getBookName(userToken, bookId);
 					const name = response.data[0].name;
 					setBooktitle(name);
 				} catch (err) {
@@ -84,14 +85,14 @@ function WordList() {
 			};
 			fetchTitle();
 		}
-	}, [book_id, userToken]);
+	}, [bookId, userToken]);
 
 	//단어장 리스트
 	useEffect(() => {
-		if (book_id) {
+		if (bookId) {
 			const fetchWords = async () => {
 				try {
-					const response = await getWordsByBook(userToken, book_id);
+					const response = await getWordsByBook(userToken, bookId);
 					setWordList(response.data);
 				} catch (err) {
 					console.log(err);
@@ -174,8 +175,8 @@ function WordList() {
 
 	//Input 창에 검색어가 없을 경우 bookId의 전체 단어 리스트 렌더링
 	useEffect(() => {
-		if (!findWord.findword) {
-			getWordsByBook(userToken, book_id).then(res => setWordList(res.data));
+		if (!findWord.findword && bookId) {
+			getWordsByBook(userToken, bookId).then(res => setWordList(res.data));
 		}
 	}, [findWord, userToken]);
 
@@ -193,119 +194,127 @@ function WordList() {
 	};
 
 	return (
-		<main>
-			<div className={styles.container}>
-				<div className={styles.fixed}>
-					<div className={styles.title}>
-						<div className={styles.back} onClick={handleBack}>
-							<MdArrowBackIosNew />
+		<>
+			<Header />
+			<main>
+				<div className={styles.container}>
+					<div className={styles.fixed}>
+						<div className={styles.title}>
+							<div className={styles.back} onClick={handleBack}>
+								<MdArrowBackIosNew />
+							</div>
+							<div className={styles.bookName}>{booktitle}</div>
+							<div className={styles.filter} onClick={handleFilter}>
+								<GiSettingsKnobs />
+							</div>
+							<div className={styles.option} onClick={handleOption}>
+								<CiMenuKebab />
+							</div>
+							{optionModal && (
+								<WordListOptionsModal
+									setModalOpen={setOptionModal}
+									wordList={wordList}
+									setWordList={setWordList}
+								/>
+							)}
 						</div>
-						<div className={styles.bookName}>{booktitle}</div>
-						<div className={styles.filter} onClick={handleFilter}>
-							<GiSettingsKnobs />
-						</div>
-						<div className={styles.option} onClick={handleOption}>
-							<CiMenuKebab />
-						</div>
-						{optionModal && (
-							<WordListOptionsModal
-								setModalOpen={setOptionModal}
-								wordList={wordList}
-								setWordList={setWordList}
-							/>
-						)}
-					</div>
-					<div className={styles.search}>
-						<input
-							className={styles.input}
-							name='findword'
-							placeholder='검색어를 입력해 주세요!'
-							onChange={onChangeFindWord}
-						/>
-						<div
-							className={styles.find}
-							onClick={() => {
-								handleFind(findWord.findword);
-								if (!wordList.length) {
-									setWordList(prevWordList.current);
-								}
-							}}
-						>
-							<IoSearchOutline />
-						</div>
-					</div>
-				</div>
-				<div className={styles.list}>
-					<div className={styles.listHeader}>
-						<div className={styles.count}>전체 {wordList.length}</div>
-						<div className={styles.selectAll}>
+						<div className={styles.search}>
 							<input
-								type='checkbox'
-								onChange={e => onCheckedAllItems(e.target.checked)}
-								checked={
-									checkedList.length === 0
-										? false
-										: checkedList.length === wordList.length
-										? true
-										: false
-								}
+								className={styles.input}
+								name='findword'
+								placeholder='검색어를 입력해 주세요!'
+								onChange={onChangeFindWord}
 							/>
+							<div
+								className={styles.find}
+								onClick={() => {
+									handleFind(findWord.findword);
+									if (!wordList.length) {
+										setWordList(prevWordList.current);
+									}
+								}}
+							>
+								<IoSearchOutline />
+							</div>
 						</div>
 					</div>
-					{wordList.map((item: WordListItem) => (
-						<div key={item.short_id} className={styles.box}>
-							<div className={styles.menus}>
-								<div className={styles.listInfo}>
-									<input
-										type='checkbox'
-										value={item.short_id}
-										onChange={e => {
-											onCheckedItem(e.target.checked, e.target.value);
-										}}
-										checked={checkedList.includes(item.short_id) ? true : false}
-									/>
-									&nbsp;
-									{formatDate(item.createdAt)}
-								</div>
-								<div
-									className={styles.edit}
-									onClick={() => handleEdit(item.short_id)}
-								>
-									<HiOutlinePencil />
-								</div>
-								<div className={styles.status}>
-									<ChangeStatus initialStatus={item.status} />
-								</div>
-								<div className={styles.speaker}>
-									<Speaker
-										text={item.word}
-										lang={checkLang(item.word) ? 'english' : 'korean'}
-									/>
-								</div>
-							</div>
-							<div className={styles.word}>{item.word}</div>
-							<div className={styles.meanings}>
-								{item.meanings.map((meaning, index) => {
-									return (
-										<div className={styles.meaningBlock} key={index}>
-											{meaning}
-										</div>
-									);
-								})}
+					<div className={styles.list}>
+						<div className={styles.listHeader}>
+							<div className={styles.count}>전체 {wordList.length}</div>
+							<div className={styles.selectAll}>
+								<input
+									type='checkbox'
+									onChange={e => onCheckedAllItems(e.target.checked)}
+									checked={
+										checkedList.length === 0
+											? false
+											: checkedList.length === wordList.length
+											? true
+											: false
+									}
+								/>
 							</div>
 						</div>
-					))}
-					<AddButton url='/word/add' />
+						{wordList.map((item: WordListItem) => (
+							<div key={item.short_id} className={styles.box}>
+								<div className={styles.menus}>
+									<div className={styles.listInfo}>
+										<input
+											type='checkbox'
+											value={item.short_id}
+											onChange={e => {
+												onCheckedItem(e.target.checked, e.target.value);
+											}}
+											checked={
+												checkedList.includes(item.short_id) ? true : false
+											}
+										/>
+										&nbsp;
+										{formatDate(item.createdAt)}
+									</div>
+									<div
+										className={styles.edit}
+										onClick={() => handleEdit(item.short_id)}
+									>
+										<HiOutlinePencil />
+									</div>
+									<div className={styles.status}>
+										<ChangeStatus
+											id={item.short_id}
+											initialStatus={item.status}
+										/>
+									</div>
+									<div className={styles.speaker}>
+										<Speaker
+											text={item.word}
+											lang={checkLang(item.word) ? 'english' : 'korean'}
+										/>
+									</div>
+								</div>
+								<div className={styles.word}>{item.word}</div>
+								<div className={styles.meanings}>
+									{item.meanings.map((meaning, index) => {
+										return (
+											<div className={styles.meaningBlock} key={index}>
+												{meaning}
+											</div>
+										);
+									})}
+								</div>
+							</div>
+						))}
+						<AddButton url='/word/add' />
+					</div>
+					{filterModal && (
+						<WordListFilterModal
+							setModalOpen={setFilterModal}
+							wordList={wordList}
+							setWordList={setWordList}
+						/>
+					)}
 				</div>
-				{filterModal && (
-					<WordListFilterModal
-						setModalOpen={setFilterModal}
-						wordList={wordList}
-						setWordList={setWordList}
-					/>
-				)}
-			</div>
-		</main>
+			</main>
+		</>
 	);
 }
 
