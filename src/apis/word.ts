@@ -124,7 +124,7 @@ export const updatedWord = async (
 	token: string,
 	formData: WordFormType,
 ) => {
-	const response = await axios.put(`${baseUrl}/words/${id}`, formData, {
+	const response = await axios.patch(`${baseUrl}/words/${id}`, formData, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},

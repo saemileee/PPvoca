@@ -135,11 +135,11 @@
 	.meanItem {
 		position: relative;
 		padding: 8px;
+		margin-right: 20px;
 		border: 1px solid var(--color-grey);
 		border-radius: 10px;
 		box-sizing: border-box;
 		margin: 5px 0;
-
 		display: flex;
 		align-items: center;
 
@@ -148,13 +148,28 @@
 			height: 20px;
 		}
 
-		button {
-			position: absolute;
+		div {
+			position: relative;
 			display: flex;
-			justify-content: center;
+			justify-content: flex-end;
 			align-items: center;
-			right: 0;
-			margin: 0 5px;
+			flex-grow: 1;
+			height: 100%;
+			margin-left: 10px;
+		}
+
+		button {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			position: relative;
+			left: 0;
+			width: 24px;
+			height: 24px;
+
+			// &:first-child {
+			// 	margin-right: 10px;
+			// }
 		}
 	}
 }
