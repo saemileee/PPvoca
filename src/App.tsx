@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
+import QuizList from './pages/QuizList';
 import Header from './components/common/Header/Header';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
 					<Route path='/register' element={<Register />}></Route>
 					<Route path='/user/info' element={<UserInfo />}></Route>
 					<Route path='/user/edit' element={<UserEdit />}></Route>
+					<Route path='/quiz/list' element={<QuizList />}></Route>
 				</Routes>
 			</React.Fragment>
 		</BrowserRouter>
