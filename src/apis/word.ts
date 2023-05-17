@@ -67,7 +67,11 @@ export const deleteWords = async (token: string, id: string) => {
 
 //patch
 //단어 상태 설정
-export const updateStatus = async (token: string, id: string, status: number) => {
+export const updateStatus = async (
+	token: string,
+	id: string,
+	status: number,
+) => {
 	const response = await axios.patch(
 		`${baseUrl}/words/${id}`,
 		{ status: `${status}` },

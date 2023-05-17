@@ -11,7 +11,7 @@ import { userTokenState } from '../../../recoil/userState';
 type ChangeStatusProps = {
 	initialStatus: number;
 	id: string;
-}
+};
 
 function ChangeStatus({ initialStatus, id }: ChangeStatusProps): ReactElement {
 	const [status, setStatus] = useState<number>(initialStatus);
@@ -25,7 +25,7 @@ function ChangeStatus({ initialStatus, id }: ChangeStatusProps): ReactElement {
 		} catch (err) {
 			console.log(err);
 		}
-	}
+	};
 
 	function getStatusIcon() {
 		switch (status) {
@@ -37,9 +37,7 @@ function ChangeStatus({ initialStatus, id }: ChangeStatusProps): ReactElement {
 				return <BiMessageSquare />;
 		}
 	}
-	return (
-		<div onClick={handleChangeStatus}>{getStatusIcon()}</div>
-	);
+	return <div onClick={handleChangeStatus}>{getStatusIcon()}</div>;
 }
 
 export default ChangeStatus;

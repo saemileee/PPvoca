@@ -70,7 +70,7 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 			for (let i = 0; i < wordList.length; i++) {
 				await updateStatus(userToken, wordList[i].short_id, 0);
 			}
-			alert("미분류 단어로 처리했습니다.");
+			alert('미분류 단어로 처리했습니다.');
 			// const newList = wordList.filter(
 			// 	list => !checkedList.includes(list.short_id),
 			// );
@@ -88,7 +88,7 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 			for (let i = 0; i < wordList.length; i++) {
 				await updateStatus(userToken, wordList[i].short_id, 1);
 			}
-			alert("외운 단어로 처리했습니다.");
+			alert('외운 단어로 처리했습니다.');
 			location.reload();
 		} catch (err) {
 			console.log(err);
@@ -102,7 +102,7 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 			for (let i = 0; i < wordList.length; i++) {
 				await updateStatus(userToken, wordList[i].short_id, 2);
 			}
-			alert("헷갈리는 단어로 처리했습니다.");
+			alert('헷갈리는 단어로 처리했습니다.');
 			location.reload();
 		} catch (err) {
 			console.log(err);
