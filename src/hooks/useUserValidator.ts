@@ -105,13 +105,17 @@ function useUserValidator(values: ValuesProps) {
 		createErrMsg(type, '');
 	};
 
-	const userValidator = (userValues: ValuesProps, isLogin = false) => {
+	const userValidator = (
+		userValues: ValuesProps,
+		isLogin = false,
+		isDelete = false,
+	) => {
 		const { email, nickname, password, passwordConfirm } = userValues;
 
 		if (userValues) checkEmptyValues(userValues);
 		if (email) validateEmail(email);
 		if (nickname) validateNickname(nickname);
-		if (password && !isLogin) validatePassword(password);
+		if (password && !isLogin && !isDelete) validatePassword(password);
 		if (password && passwordConfirm)
 			validatePasswordConfirm(password, passwordConfirm);
 

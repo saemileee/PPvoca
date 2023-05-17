@@ -6,6 +6,7 @@ import styles from '../components/QuizList/QuizList.module.scss';
 import Logo from '../components/common/Logo/Logo';
 import RegisterForm from '../components/Register/RegisterForm';
 import List, { Quiz } from '../components/QuizList/List';
+import Header from '../components/common/Header/Header';
 
 const quizList: Quiz[] = [
 	{
@@ -24,14 +25,17 @@ const quizList: Quiz[] = [
 
 function QuizList() {
 	return (
-		<main className={styles.container}>
-			<header>퀴즈</header>
-			<main>
-				{quizList.map(quiz => (
-					<List key={quiz.id} quizInfo={quiz} />
-				))}
+		<>
+			<Header />
+			<main className={styles.container}>
+				<header>퀴즈</header>
+				<main>
+					{quizList.map(quiz => (
+						<List key={quiz.id} quizInfo={quiz} />
+					))}
+				</main>
 			</main>
-		</main>
+		</>
 	);
 }
 
