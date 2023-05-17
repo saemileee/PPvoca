@@ -217,6 +217,7 @@ function WordForm() {
 				if (!wordId) {
 					return;
 				}
+				console.log(wordId);
 				const response = await updatedWord(wordId, userToken, editData);
 				if (response.status === 200) {
 					alert(`[${word}] 단어 수정 완료`);

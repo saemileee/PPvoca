@@ -100,7 +100,7 @@ export const filterByStatus = async (token: string, status: number) => {
 type WordFormType = {
 	word: string;
 	meanings: string[];
-	bookId?: string;
+	//bookId?: string;
 };
 
 // 단어 추가
@@ -134,6 +134,7 @@ export const updatedWord = async (
 			Authorization: `Bearer ${token}`,
 		},
 	});
+	console.log(response);
 	return response;
 };
 
