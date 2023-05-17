@@ -9,13 +9,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
-import Header from './components/common/Header/Header';
 
 function App() {
 	return (
 		<BrowserRouter>
 			<React.Fragment>
-				<Header />
 				<Routes>
 					<Route path='/' element={<Navigate to='/book/list' />} />
 					<Route path='*' element={<Navigate to='/' />} />

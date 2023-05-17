@@ -1,18 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
 import Cookies from 'js-cookie';
 import UserButton from '../common/UserButton/UserButton';
 
 function UserInfoButtons() {
-	const navigate = useNavigate();
 	const setUserToken = useSetRecoilState(userTokenState);
 	const handleLogout = () => {
 		Cookies.remove('token');
 		setUserToken('');
 		alert('로그아웃 되었습니다.');
-		navigate('/login');
+		window.location.reload();
 	};
 
 	return (

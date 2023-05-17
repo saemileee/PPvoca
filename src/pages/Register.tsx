@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import styles from '../components/Register/Register.module.scss';
+import Header from '../components/common/Header/Header';
 import Logo from '../components/common/Logo/Logo';
 import RegisterForm from '../components/Register/RegisterForm';
 
@@ -19,10 +20,13 @@ function Register() {
 	}, []);
 
 	return (
-		<main className={styles.container}>
-			<Logo style={logoStyle} />
-			<RegisterForm />
-		</main>
+		<>
+			<Header />
+			<main className={styles.container}>
+				<Logo style={logoStyle} />
+				<RegisterForm />
+			</main>
+		</>
 	);
 }
 
