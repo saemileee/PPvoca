@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
+import { useRecoilState } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
+import { deleteUser } from '../../apis/user';
+import useUserValidator from '../../hooks/useUserValidator';
 import styles from './UserEdit.module.scss';
 import UserInput from '../common/UserInput/UserInput';
 import UserButton from '../common/UserButton/UserButton';
@@ -7,21 +13,62 @@ type ValueType = {
 	password: string;
 };
 
+type FormDataType = {
+	typedPassword: string;
+};
+
 type PropsTypes = {
 	setEnableDelete: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function UserDeleteForm({ setEnableDelete }: PropsTypes) {
+	const [userToken, setUserToken] = useRecoilState(userTokenState);
 	const initValue = {
 		password: '',
 	};
 	const [value, setValue] = useState<ValueType>(initValue);
-	const [error, setError] = useState<ValueType>(initValue);
-	const deleteAccount = () => {
+	const {
+		errors,
+		setErrors,
+		userValidator,
+		validationPass,
+		setValidationPass,
+	} = useUserValidator(initValue);
+
+	const handleSubmit = async () => {
 		if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
-			console.log('힝');
+			try {
+				const data: FormDataType = {
+					typedPassword: value.password,
+				};
+				const response = await deleteUser(data, userToken);
+				if (response.status === 204) {
+					alert('탈퇴 완료되었습니다.');
+					Cookies.remove('token');
+					setUserToken('');
+					window.location.reload();
+				}
+			} catch (err: unknown) {
+				if (err instanceof AxiosError) {
+					if (err.response?.status === 401) {
+						const errMsg = err.response.data.reason;
+						return setErrors(prev => ({ ...prev, password: errMsg }));
+					}
+				}
+
+				//console.log(err);
+				alert('회원 탈퇴에 실패하였습니다.');
+			}
 		}
 	};
+
+	useEffect(() => {
+		if (validationPass) {
+			handleSubmit();
+			//유효성 검사 성공 여부 초기화
+			setValidationPass(false);
+		}
+	}, [validationPass]);
 
 	return (
 		<form className={styles.form}>
@@ -32,7 +79,7 @@ function UserDeleteForm({ setEnableDelete }: PropsTypes) {
 						name='password'
 						label='비밀번호 확인'
 						setValues={setValue}
-						error={error.password}
+						error={errors.password}
 					/>
 				</li>
 				<li style={{ marginBottom: '10px' }}>
@@ -44,8 +91,11 @@ function UserDeleteForm({ setEnableDelete }: PropsTypes) {
 							color: '#7353ea',
 							borderColor: '#7353ea',
 						}}
-						onClick={deleteAccount}
-					>
+						type='submit'
+						onClick={e => {
+							e.preventDefault();
+							userValidator(value, false, true);
+						}}>
 						탈퇴하기
 					</UserButton>
 				</li>
