@@ -34,7 +34,7 @@ import {
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
-	bookId: string;
+	bookId: string | undefined;
 };
 
 //Props로 넘겨줄 state 값 타입 설정
@@ -66,16 +66,16 @@ function WordList() {
 	const prevWordList = useRef([]);
 
 	const userToken = useRecoilValue(userTokenState);
-	//const { bookId } = useParams<RouteParams>();
-	const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
+	const { bookId } = useParams<RouteParams>();
+	//const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
 	const nav = useNavigate();
 
 	//단어장 이름
 	useEffect(() => {
-		if (book_id) {
+		if (bookId) {
 			const fetchTitle = async () => {
 				try {
-					const response = await getBookName(userToken, book_id);
+					const response = await getBookName(userToken, bookId);
 					const name = response.data[0].name;
 					setBooktitle(name);
 				} catch (err) {
@@ -84,14 +84,14 @@ function WordList() {
 			};
 			fetchTitle();
 		}
-	}, [book_id, userToken]);
+	}, [bookId, userToken]);
 
 	//단어장 리스트
 	useEffect(() => {
-		if (book_id) {
+		if (bookId) {
 			const fetchWords = async () => {
 				try {
-					const response = await getWordsByBook(userToken, book_id);
+					const response = await getWordsByBook(userToken, bookId);
 					setWordList(response.data);
 				} catch (err) {
 					console.log(err);
@@ -174,8 +174,8 @@ function WordList() {
 
 	//Input 창에 검색어가 없을 경우 bookId의 전체 단어 리스트 렌더링
 	useEffect(() => {
-		if (!findWord.findword) {
-			getWordsByBook(userToken, book_id).then(res => setWordList(res.data));
+		if (!findWord.findword && bookId) {
+			getWordsByBook(userToken, bookId).then(res => setWordList(res.data));
 		}
 	}, [findWord, userToken]);
 
@@ -274,7 +274,7 @@ function WordList() {
 									<HiOutlinePencil />
 								</div>
 								<div className={styles.status}>
-									<ChangeStatus initialStatus={item.status} />
+									<ChangeStatus id={item.short_id} initialStatus={item.status} />
 								</div>
 								<div className={styles.speaker}>
 									<Speaker

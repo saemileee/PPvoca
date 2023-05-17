@@ -29,7 +29,6 @@ type Props = {
 function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 	const userToken = useRecoilValue(userTokenState);
 	const checkedList = useRecoilValue(checkedWordList);
-	const setCheckedList = useRecoilState(checkedWordList);
 
 	const modalRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -67,19 +66,47 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 	//전체 미분류로
 	const handleAllUnmark = async () => {
 		console.log(wordList);
-		// for (let i = 0; i < wordList.length; i++) {
-		// 	await updateStatus(userToken, wordList[i].short_id);
-		// }
+		try {
+			for (let i = 0; i < wordList.length; i++) {
+				await updateStatus(userToken, wordList[i].short_id, 0);
+			}
+			alert("미분류 단어로 처리했습니다.");
+			// const newList = wordList.filter(
+			// 	list => !checkedList.includes(list.short_id),
+			// );
+			// setWordList(newList);
+			location.reload();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	//전체 외운 단어로
-	const handleAllCheck = () => {
-		alert('외운 단어로 처리되었습니다.');
+	const handleAllCheck = async () => {
+		console.log(wordList);
+		try {
+			for (let i = 0; i < wordList.length; i++) {
+				await updateStatus(userToken, wordList[i].short_id, 1);
+			}
+			alert("외운 단어로 처리했습니다.");
+			location.reload();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	//전체 헷갈리는 단어로
-	const handleAllUnknown = () => {
-		alert('헷갈리는 단어로 처리되었습니다.');
+	const handleAllUnknown = async () => {
+		console.log(wordList);
+		try {
+			for (let i = 0; i < wordList.length; i++) {
+				await updateStatus(userToken, wordList[i].short_id, 2);
+			}
+			alert("헷갈리는 단어로 처리했습니다.");
+			location.reload();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	//모든 단어가 체크됐는지 확인
@@ -97,15 +124,15 @@ function WordListOptionsModal({ setModalOpen, wordList, setWordList }: Props) {
 					</div>
 					<div className={styles.unmark} onClick={handleAllUnmark}>
 						<BiMessageSquare />
-						&nbsp;&nbsp;마크 해제
+						&nbsp;&nbsp;전체 마크 해제
 					</div>
 					<div className={styles.check} onClick={handleAllCheck}>
 						<BiMessageSquareCheck />
-						&nbsp;&nbsp;외운 단어 마크
+						&nbsp;&nbsp;전체 외운 단어 마크
 					</div>
 					<div className={styles.unknown} onClick={handleAllUnknown}>
 						<BiMessageSquareError />
-						&nbsp;&nbsp;헷갈리는 단어 마크
+						&nbsp;&nbsp;전체 헷갈리는 단어 마크
 					</div>
 				</div>
 			</div>
