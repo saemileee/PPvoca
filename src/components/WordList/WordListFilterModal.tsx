@@ -44,23 +44,27 @@ function WordListFilterModal({ setModalOpen, wordList, setWordList }: Props) {
 		};
 	});
 
+	useEffect(() => {
+		setOriginalList(wordList);
+	}, [wordList]);
+
 	function handleFilterReset() {
-		setWordList(originalList);
+		setOriginalList(wordList);
 	}
 
 	function handleFilterUnmark() {
-		const filteredList = originalList.filter(list => list.status === 0);
-		setWordList(filteredList);
+		const filteredList = wordList.filter(list => list.status === 0);
+		setOriginalList(filteredList);
 	}
 
 	function handleFilterCheck() {
-		const filteredList = originalList.filter(list => list.status === 1);
-		setWordList(filteredList);
+		const filteredList = wordList.filter(list => list.status === 1);
+		setOriginalList(filteredList);
 	}
 
 	function handleFilterUnknown() {
-		const filteredList = originalList.filter(list => list.status === 2);
-		setWordList(filteredList);
+		const filteredList = wordList.filter(list => list.status === 2);
+		setOriginalList(filteredList);
 	}
 
 	return (

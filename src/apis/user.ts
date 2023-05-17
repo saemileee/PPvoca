@@ -50,3 +50,20 @@ export const editUser = async (formData: UserEditFormType, token: string) => {
 	return response;
 };
 //회원 정보 수정 : End
+
+//회원 탈퇴 : Start
+type UserDeleteFormType = {
+	typedPassword: string;
+};
+export const deleteUser = async (
+	formData: UserDeleteFormType,
+	token: string,
+) => {
+	const response = await axios.post(`${baseUrl}/users/me`, formData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response;
+};
+//회원 탈퇴 : End

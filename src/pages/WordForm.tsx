@@ -15,10 +15,12 @@ import styles from '../components/WordForm/wordform.module.scss';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { BsJournalBookmark } from 'react-icons/bs';
+import { HiOutlinePencil } from 'react-icons/hi';
 
 import { useRecoilValue } from 'recoil';
 import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
+import Header from '../components/common/Header/Header';
 
 function WordForm() {
 	const userToken = useRecoilValue(userTokenState);
@@ -30,6 +32,12 @@ function WordForm() {
 	const [currMeaning, setCurrMeaning] = useState<string[]>([]);
 	const [word, setWord] = useState('');
 	const [bookList, setBookList] = useState([]);
+
+	const [words, setWords] = useState({
+		meaning: '',
+		currMeaning: [],
+		word: '',
+	});
 
 	// 기존 단어장 목록 불러오기 (모달)
 	const [bookInfo, setBookInfo] = useState({
@@ -131,26 +139,8 @@ function WordForm() {
 		try {
 			const response = await bookListAll(userToken);
 			if (response.status === 200) {
-				const bookList = response.data.map(
-					({
-						name,
-						start_lang,
-						end_lang,
-						short_id,
-					}: {
-						name: string;
-						start_lang: string;
-						end_lang: string;
-						short_id: string;
-					}) => ({
-						name,
-						start_lang,
-						end_lang,
-						short_id,
-					}),
-				);
+				const bookList = response.data;
 				setBookList(bookList);
-
 				if (bookList.length > 0) {
 					const { name, start_lang, end_lang, short_id } = bookList[0];
 					setBookInfo({
@@ -167,17 +157,6 @@ function WordForm() {
 		}
 	};
 
-	// 타입 지정
-	let wordData: WordData = {
-		word: '',
-		meanings: [],
-	};
-
-	interface WordData {
-		word: string;
-		meanings: string[];
-	}
-
 	// 단어 불러오기
 	const getWords = async () => {
 		try {
@@ -185,16 +164,14 @@ function WordForm() {
 				return;
 			}
 			const response = await selectedWord(wordId, userToken);
-			wordData = response.data;
-			const { word, meanings } = wordData;
-			console.log(wordData);
+			const { word, meanings } = response.data;
 			if (response.status === 200) {
 				setWord(word);
 				setCurrMeaning(meanings);
 			}
 		} catch (err) {
 			console.log(err);
-			alert('단어를 불러올 수 없습니다.');
+			// alert('단어를 불러올 수 없습니다.');
 		}
 	};
 
@@ -207,13 +184,13 @@ function WordForm() {
 		if (meaning) {
 			meanings = [meaning, ...currMeaning];
 		}
-		const adddata = {
+		const addData = {
 			word: word,
 			meanings: meanings,
 			bookId: bookInfo.short_id,
 		};
 
-		const editdata = {
+		const editData = {
 			word: word,
 			meanings: meanings,
 		};
@@ -224,7 +201,7 @@ function WordForm() {
 					alert('단어장을 선택해주세요.');
 					return;
 				}
-				const response = await addedWord(userToken, adddata);
+				const response = await addedWord(userToken, addData);
 				if (response.status === 200) {
 					alert(`[${word}] 단어 추가 완료`);
 					setWord('');
@@ -240,10 +217,11 @@ function WordForm() {
 				if (!wordId) {
 					return;
 				}
-				const response = await updatedWord(wordId, userToken, editdata);
+				console.log(wordId);
+				const response = await updatedWord(wordId, userToken, editData);
 				if (response.status === 200) {
 					alert(`[${word}] 단어 수정 완료`);
-					// history.back();
+					history.back();
 				}
 			} catch (err) {
 				console.log(err);
@@ -254,122 +232,139 @@ function WordForm() {
 	useEffect(() => {
 		if (editPage) {
 			getWords();
+		} else {
+			clearData();
 		}
 		getBookList();
-	}, []);
+	}, [editPage]);
+
+	// editPage에서 벗어날때 데이터 초기화
+	const clearData = () => {
+		setWord('');
+		setCurrMeaning([]);
+	};
 
 	return (
-		<main>
-			<div className={styles.container}>
-				<WordHeader
-					addPage={addPage}
-					editPage={editPage}
-					navigate={navigate}
-					bookInfo={bookInfo}
-					setShowModal={setShowModal}
-					word={word}
-					currMeaning={currMeaning}
-					meaning={meaning}
-					handleSubmit={handleSubmit}
-					buttonText={buttonText}
-				/>
+		<>
+			<Header></Header>
+			<main>
+				<div className={styles.container}>
+					<WordHeader
+						addPage={addPage}
+						editPage={editPage}
+						navigate={navigate}
+						bookInfo={bookInfo}
+						setShowModal={setShowModal}
+						word={word}
+						currMeaning={currMeaning}
+						meaning={meaning}
+						handleSubmit={handleSubmit}
+						buttonText={buttonText}
+					/>
 
-				<form className={styles.wordForm} onSubmit={e => e.preventDefault()}>
-					<div className={styles.wordInputWrap}>
-						<label htmlFor='word'>{bookInfo.startLang}</label>
-						<WordInput
-							value={word}
-							onKeyDown={e => {
-								if (e.key === 'Enter') {
-									handleSearch();
-								}
-							}}
-							onChange={e => {
-								const inputValue = e.target.value;
-								const errorCaption = validateInput(
-									inputValue,
-									bookInfo.startLang,
-								);
-								setErrorCaption(errorCaption);
-								setWord(inputValue);
-							}}
-							placeholder='단어를 입력해 주세요 (필수)'
-							onClick={handleSearch}
-							errorCaption={errorCaption}
-						/>
-					</div>
-					<div className={styles.wordInputWrap}>
-						<label htmlFor='meaning' className={styles.margin}>
-							{bookInfo.endLang}
-						</label>
-						<input
-							type='text'
-							placeholder='의미를 입력해 주세요 (필수)'
-							value={meaning}
-							ref={inputRef}
-							onChange={handleMeaningChange}
-							onKeyPress={e => {
-								if (e.key === 'Enter') {
-									e.preventDefault();
-									handleAddMeaning();
-								}
-							}}
-						/>
+					<form className={styles.wordForm} onSubmit={e => e.preventDefault()}>
+						<div className={styles.wordInputWrap}>
+							<label htmlFor='word'>{bookInfo.startLang}</label>
+							<WordInput
+								value={word}
+								onKeyDown={e => {
+									if (e.key === 'Enter') {
+										handleSearch();
+									}
+								}}
+								onChange={e => {
+									const inputValue = e.target.value;
+									const errorCaption = validateInput(
+										inputValue,
+										bookInfo.startLang,
+									);
+									setErrorCaption(errorCaption);
+									setWord(inputValue);
+								}}
+								placeholder='단어를 입력해 주세요 (필수)'
+								onClick={handleSearch}
+								errorCaption={errorCaption}
+							/>
+						</div>
+						<div className={styles.wordInputWrap}>
+							<label htmlFor='meaning' className={styles.margin}>
+								{bookInfo.endLang}
+							</label>
+							<input
+								type='text'
+								placeholder='의미를 입력해 주세요 (필수)'
+								value={meaning}
+								ref={inputRef}
+								onChange={handleMeaningChange}
+								onKeyPress={e => {
+									if (e.key === 'Enter') {
+										e.preventDefault();
+										handleAddMeaning();
+									}
+								}}
+							/>
 
-						<ul className={styles.meanList}>
-							{currMeaning.map((word, index) => (
-								<li key={index} className={styles.meanItem}>
-									{word}
-									<button
-										className={styles.cancelBtn}
-										onClick={() => handleDeleteMeaning(index)}
-									>
-										<IoIosCloseCircleOutline className={styles.icon} />
-									</button>
-								</li>
-							))}
-						</ul>
-					</div>
-				</form>
+							<ul className={styles.meanList}>
+								{currMeaning.map((word, index) => (
+									<li key={index} className={styles.meanItem}>
+										<p>{word}</p>
 
-				{addPage && (
-					<div className={styles.bookBtn}>
-						<Modal
-							showModal={showModal}
-							setShowModal={setShowModal}
-							title='단어장 선택'
-						>
-							<ul className={styles.modalBookList}>
-								{bookList.map(
-									({ name, start_lang, end_lang, short_id }, index) => (
-										<li
-											key={index}
-											className={`${styles.modalBookItem} ${
-												short_id === bookInfo.short_id ? styles.selected : ''
-											}`}
-											onClick={() => {
-												setShowModal(false);
-												setBookInfo({
-													bookName: name,
-													startLang: start_lang,
-													endLang: end_lang,
-													short_id: short_id,
-												});
-											}}
+										<div>
+											{/* <button
 										>
-											<div>
-												<BsJournalBookmark className={styles.icon} />
-											</div>
-											{name}
-										</li>
-									),
-								)}
+											<HiOutlinePencil className={styles.icon} />
+										</button> */}
+											<button
+												className={styles.cancelBtn}
+												onClick={() => handleDeleteMeaning(index)}
+											>
+												<IoIosCloseCircleOutline className={styles.icon} />
+											</button>
+										</div>
+									</li>
+								))}
 							</ul>
-						</Modal>
-					</div>
-				)}
-			</div>
-		</main>
+						</div>
+					</form>
+				</div>
+			</main>
+			{addPage && (
+				<div className={styles.bookBtn}>
+					<Modal
+						showModal={showModal}
+						setShowModal={setShowModal}
+						title='단어장 선택'
+					>
+						<ul className={styles.modalBookList}>
+							{bookList.map(
+								({ name, start_lang, end_lang, short_id }, index) => (
+									<li
+										key={index}
+										className={`${styles.modalBookItem} ${
+											short_id === bookInfo.short_id ? styles.selected : ''
+										}`}
+										onClick={() => {
+											setShowModal(false);
+											setBookInfo({
+												bookName: name,
+												startLang: start_lang,
+												endLang: end_lang,
+												short_id: short_id,
+											});
+										}}
+									>
+										<div>
+											<BsJournalBookmark className={styles.icon} />
+										</div>
+										{name}
+									</li>
+								),
+							)}
+						</ul>
+					</Modal>
+				</div>
+			)}
+		</>
 	);
 }
 
