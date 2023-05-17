@@ -4,6 +4,8 @@ import styles from '../components/BookList/Style.module.scss';
 import AddButton from '../components/common/AddButton/AddButton';
 import WordSearch from '../components/BookList/WordSearch';
 import BookBox from '../components/BookList/BookBox';
+import ConfirmModal from '../components/BookList/ConfirmModal';
+import AlertModal from '../components/BookList/AlertModal';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +16,9 @@ function BookList() {
 	const userToken = useRecoilValue(userTokenState);
 	const navigate = useNavigate();
 	const [books, setBooks] = useState<any[]>([]);
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [bookToDelete, setBookToDelete] = useState('');
+	const [alertModalOpen, setAlertModalOpen] = useState(false);
 
 	useEffect(() => {
 		async function fetchBooks() {
@@ -37,19 +42,23 @@ function BookList() {
 		navigate(`/book/edit/${bookShortId}`);
 	};
 
-	const handleDelete = async (bookShortId: string) => {
-		if (window.confirm('단어장을 삭제 하시겠습니까?')) {
-			try {
-				await axios.delete(`${baseUrl}/books/${bookShortId}`, {
-					headers: {
-						Authorization: `Bearer ${userToken}`,
-					},
-				});
-				setBooks(books.filter(book => book.short_id !== bookShortId));
-				navigate('/book/list');
-			} catch (error) {
-				console.log(error);
-			}
+	const handleDeleteRequest = (bookShortId: string) => {
+		setBookToDelete(bookShortId);
+		setDeleteModalOpen(true);
+	};
+
+	const handleDeleteConfirm = async () => {
+		try {
+			await axios.delete(`${baseUrl}/books/${bookToDelete}`, {
+				headers: {
+					Authorization: `Bearer ${userToken}`,
+				},
+			});
+			setBooks(books.filter(book => book.short_id !== bookToDelete));
+			setDeleteModalOpen(false);
+			setAlertModalOpen(true);
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -62,11 +71,21 @@ function BookList() {
 						key={book.short_id}
 						book={book}
 						handleEdit={() => handleEdit(book.short_id)}
-						handleDelete={() => handleDelete(book.short_id)}
+						handleDelete={() => handleDeleteRequest(book.short_id)}
 					/>
 				))}
 			</div>
 			<AddButton url={'/book/add'} />
+			<ConfirmModal
+				isOpen={deleteModalOpen}
+				onClose={() => setDeleteModalOpen(false)}
+				onConfirm={handleDeleteConfirm}
+			/>
+			<AlertModal
+				isOpen={alertModalOpen}
+				onClose={() => setAlertModalOpen(false)}
+				message='삭제가 완료되었습니다.'
+			/>
 		</main>
 	);
 }
