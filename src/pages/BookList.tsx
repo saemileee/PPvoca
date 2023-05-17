@@ -9,6 +9,7 @@ import AlertModal from '../components/BookList/AlertModal';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/common/Header/Header';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -63,30 +64,33 @@ function BookList() {
 	};
 
 	return (
-		<main>
-			<WordSearch />
-			<div className={styles.boxContainer}>
-				{books.map(book => (
-					<BookBox
-						key={book.short_id}
-						book={book}
-						handleEdit={() => handleEdit(book.short_id)}
-						handleDelete={() => handleDeleteRequest(book.short_id)}
-					/>
-				))}
-			</div>
-			<AddButton url={'/book/add'} />
-			<ConfirmModal
-				isOpen={deleteModalOpen}
-				onClose={() => setDeleteModalOpen(false)}
-				onConfirm={handleDeleteConfirm}
-			/>
-			<AlertModal
-				isOpen={alertModalOpen}
-				onClose={() => setAlertModalOpen(false)}
-				message='삭제가 완료되었습니다.'
-			/>
-		</main>
+		<>
+			<Header />
+			<main>
+				<WordSearch />
+				<div className={styles.boxContainer}>
+					{books.map(book => (
+						<BookBox
+							key={book.short_id}
+							book={book}
+							handleEdit={() => handleEdit(book.short_id)}
+							handleDelete={() => handleDeleteRequest(book.short_id)}
+						/>
+					))}
+				</div>
+				<AddButton url={'/book/add'} />
+				<ConfirmModal
+					isOpen={deleteModalOpen}
+					onClose={() => setDeleteModalOpen(false)}
+					onConfirm={handleDeleteConfirm}
+				/>
+				<AlertModal
+					isOpen={alertModalOpen}
+					onClose={() => setAlertModalOpen(false)}
+					message='삭제가 완료되었습니다.'
+				/>
+			</main>
+		</>
 	);
 }
 

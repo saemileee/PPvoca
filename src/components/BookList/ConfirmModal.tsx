@@ -17,8 +17,8 @@ function ConfirmModal({ isOpen, onClose, onConfirm }: ConfirmModalProps) {
 			<div className={styles.overlay} onClick={onClose} />
 			<div className={styles.modal}>
 				<p>단어장을 삭제 하시겠습니까?</p>
-				<button onClick={onConfirm}>네, 삭제합니다</button>
-				<button onClick={onClose}>아니오, 삭제하지 않습니다</button>
+				<button onClick={onConfirm}>네</button>
+				<button onClick={onClose}>아니오</button>
 			</div>
 		</>
 	);
