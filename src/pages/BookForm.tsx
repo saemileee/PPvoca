@@ -15,7 +15,6 @@ import Header from '../components/common/Header/Header';
 function BookForm() {
 	const userToken = useRecoilValue(userTokenState);
 	const navigate = useNavigate();
-	const [buttonText, setButtonText] = useState('');
 	const [bookInfo, setBookInfo] = useState({
 		bookDescription: '',
 		bookName: '',
