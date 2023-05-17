@@ -5,7 +5,7 @@ import AddButton from '../components/common/AddButton/AddButton';
 import WordSearch from '../components/BookList/WordSearch';
 import BookBox from '../components/BookList/BookBox';
 import ConfirmModal from '../components/BookList/ConfirmModal';
-import AlertModal from '../components/BookList/AlertModal';
+import AlertModal from '../components/common/AlertModal/AlertModal';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import { useNavigate } from 'react-router-dom';
