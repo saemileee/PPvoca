@@ -95,7 +95,8 @@ function UserDeleteForm({ setEnableDelete }: PropsTypes) {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(value, false, true);
-						}}>
+						}}
+					>
 						탈퇴하기
 					</UserButton>
 				</li>
