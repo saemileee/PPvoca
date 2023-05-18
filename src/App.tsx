@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
 import QuizList from './pages/QuizList';
+import FourProngQuiz from './components/QuizList/FourProngQuiz';
 import Header from './components/common/Header/Header';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
 					<Route path='/user/info' element={<UserInfo />}></Route>
 					<Route path='/user/edit' element={<UserEdit />}></Route>
 					<Route path='/quiz/list' element={<QuizList />}></Route>
+					<Route path='/quiz/four-prong' element={<FourProngQuiz />}></Route>
 				</Routes>
 			</React.Fragment>
 		</BrowserRouter>
