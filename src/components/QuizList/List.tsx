@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
 import styles from './QuizList.module.scss';
 import Modal from '../common/Modal/Modal';
 import {
@@ -9,6 +10,7 @@ import {
 	TypeOption,
 	WordStatusOption,
 } from './QuizOptions';
+import { bookListAll } from '../../apis/book';
 
 export interface Quiz {
 	id: string;
@@ -20,23 +22,86 @@ export interface Quiz {
 interface ListProps {
 	quizInfo: Quiz;
 }
+type BookListProps = { short_id: string; name: string };
 
 function List({ quizInfo }: ListProps) {
-	const [showModal, setShowModal] = useState(false);
+	const userToken = useRecoilValue(userTokenState);
+
+	const [showOptionModal, setShowOptionModal] = useState(false);
+	const [showBookSelectModal, setShowBookSelectModal] = useState(false);
+
 	const { id, title, description, img } = quizInfo;
-	const [quizType, setQuizType] = useState('word'); // quizType 상태값
 
-	const handleQuizTypeChange = (type: string) => {
-		setQuizType(type); // quizType 상태값 변경
-	};
-
+	const [bookList, setBookList] = useState<BookListProps[]>([]);
+	const [bookOption, setBookOption] = useState<BookListProps[] | any>([]);
+	const [typeOption, setTypeOption] = useState<string>('word');
+	const [numberOption, setNumberOption] = useState<number>(5);
+	const [wordStatusOption, setWordStatusOption] = useState<number[]>([0, 1, 2]);
 	const handleStartQuiz = () => {
-		console.log(quizType);
+		console.log(bookOption);
+		console.log(typeOption);
+		console.log(numberOption);
+		console.log(wordStatusOption);
 	};
+
+	const handleBookSelectButtonClick = () => {
+		setShowBookSelectModal(true);
+	};
+
+	const handleBookCheckBoxChange = (bookId: string, bookName: string) => {
+		// if (bookOption[bookId]) {
+		// 	setBookOption(prev => {
+		// 		const newBookOption = { ...prev };
+		// 		delete newBookOption.bookId;
+		// 		return newBookOption;
+		// 	});
+		// } else {
+		// 	setBookOption(prev => {
+		// 		const newBookOption = { ...prev };
+		// 		newBookOption[bookId] = bookName;
+		// 		return newBookOption;
+		// 	});
+		// }
+	};
+
+	const handleTypeInputChange = (value: string) => {
+		setTypeOption(() => {
+			return value;
+		});
+	};
+
+	const handleNumberInputChange = (value: number) => {
+		setNumberOption(() => {
+			return value;
+		});
+	};
+
+	const handleWordStatusInputChange = (value: number[]) => {
+		setWordStatusOption(() => {
+			return value;
+		});
+	};
+
+	useEffect(() => {
+		bookListAll(userToken).then(res => {
+			const newBookList = res.data.reduce(
+				(acc: BookListProps[], current: BookListProps) => {
+					return [...acc, { [current.short_id]: current.name }];
+				},
+				[],
+			);
+			setBookList(newBookList);
+			setBookOption(newBookList);
+		});
+	}, [userToken]);
+
+	// useEffect(() => {
+	// 	setBookOption(() => bookList);
+	// }, [bookList]);
 
 	return (
 		<>
-			<div className={styles.list} onClick={() => setShowModal(true)}>
+			<div className={styles.list} onClick={() => setShowOptionModal(true)}>
 				<div className={styles['img-container']}>
 					<img src={img}></img>
 				</div>
@@ -46,15 +111,22 @@ function List({ quizInfo }: ListProps) {
 				</div>
 			</div>
 			<Modal
-				showModal={showModal}
-				setShowModal={setShowModal}
+				showModal={showOptionModal}
+				setShowModal={setShowOptionModal}
 				title='퀴즈 옵션 설정'>
 				<ul className={styles.optionContainer}>
 					{/* 컴포넌트화 필요 */}
-					<BookOption />
-					<TypeOption onQuizTypeChange={handleQuizTypeChange} />
-					<NumberOption />
-					<WordStatusOption />
+					<BookOption onClick={handleBookSelectButtonClick} />
+					<TypeOption value={typeOption} onChange={handleTypeInputChange} />
+					<NumberOption
+						value={numberOption}
+						onChange={handleNumberInputChange}
+					/>
+
+					<WordStatusOption
+						value={wordStatusOption}
+						onChange={handleWordStatusInputChange}
+					/>
 				</ul>
 				<div>
 					{/* 클릭하면 옵션의 세팅과 퀴즈 id에 따라 알맞은 방법으로 api 호출 */}
@@ -62,6 +134,27 @@ function List({ quizInfo }: ListProps) {
 						퀴즈 시작
 					</button>
 				</div>
+			</Modal>
+			<Modal
+				showModal={showBookSelectModal}
+				setShowModal={setShowBookSelectModal}
+				title='단어장 선택'>
+				<ul>
+					{bookOption ? (
+						bookOption.map((book: { [x: string]: string }) => {
+							const bookId = Object.keys(book)[0];
+							const bookName = book[bookId];
+							return (
+								<li key={bookId}>
+									{bookName}
+									<input type='checkbox' />
+								</li>
+							);
+						})
+					) : (
+						<li>단어장을 만들어주세요.</li>
+					)}
+				</ul>
 			</Modal>
 		</>
 	);
