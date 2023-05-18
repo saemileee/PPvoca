@@ -11,6 +11,59 @@ export function BookOption({ onClick }: TypeBookOptionProps) {
 	);
 }
 
+type TypeBookList = { id: string; name: string };
+
+type TypeBookSelectOptionProps = {
+	bookList: TypeBookList[];
+	value: TypeBookList[];
+	onChange: (value: TypeBookList[]) => void;
+};
+export function BookSelectOption({
+	bookList,
+	value,
+	onChange,
+}: TypeBookSelectOptionProps) {
+	const handleCheckboxChange = (e: {
+		target: { id: string; value: string };
+	}) => {
+		const inputId = e.target.id;
+		const inputValue = e.target.value;
+		if (value.find(option => option.id === inputId)) {
+			const newTypeOption = value.filter(option => option.id !== inputId);
+			onChange(newTypeOption);
+		} else {
+			const newTypeOption = [...value, { id: inputId, name: inputValue }];
+			onChange(newTypeOption);
+		}
+	};
+
+	return (
+		<ul>
+			{bookList ? (
+				bookList.map((book: TypeBookList) => (
+					<li key={book.id}>
+						{book.name}
+						<input
+							id={book.id}
+							value={book.name}
+							name='book'
+							type='checkbox'
+							checked={
+								value.find((option: TypeBookList) => option.id === book.id)
+									? true
+									: false
+							}
+							onChange={e => handleCheckboxChange(e)}
+						/>
+					</li>
+				))
+			) : (
+				<li>단어장을 만들어주세요.</li>
+			)}
+		</ul>
+	);
+}
+
 type TypeOptionProps = { value: string; onChange: (value: string) => void };
 export function TypeOption({ value, onChange }: TypeOptionProps) {
 	return (
