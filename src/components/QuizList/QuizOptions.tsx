@@ -1,21 +1,18 @@
+import { type } from '@testing-library/user-event/dist/type';
 import React, { useEffect, useState } from 'react';
 
-export function BookOption() {
+type TypeBookOptionProps = { onClick: () => void };
+export function BookOption({ onClick }: TypeBookOptionProps) {
 	return (
 		<li>
 			<p>문제 범위</p>
-			<button>단어장 전체</button>
+			<button onClick={onClick}>{/* {selectedBookNames} */}선택</button>
 		</li>
 	);
 }
 
-export function TypeOption({ onQuizTypeChange }: any) {
-	const handleRadioChange = (e: {
-		target: { value: React.SetStateAction<string> };
-	}) => {
-		onQuizTypeChange(e.target.value);
-	};
-
+type TypeOptionProps = { value: string; onChange: (value: string) => void };
+export function TypeOption({ value, onChange }: TypeOptionProps) {
 	return (
 		<li>
 			<p>문제 타입</p>
@@ -26,8 +23,10 @@ export function TypeOption({ onQuizTypeChange }: any) {
 					id='word-type'
 					name='type'
 					value='word'
-					checked
-					onChange={handleRadioChange}
+					checked={value === 'word'}
+					onChange={e => {
+						onChange(e.target.value);
+					}}
 				/>
 			</label>
 			<label>
@@ -37,29 +36,51 @@ export function TypeOption({ onQuizTypeChange }: any) {
 					id='meaning-type'
 					name='type'
 					value='meaning'
-					onChange={handleRadioChange}
+					checked={value === 'meaning'}
+					onChange={e => {
+						onChange(e.target.value);
+					}}
 				/>
 			</label>
 		</li>
 	);
 }
 
-export function NumberOption() {
+type NumberOptionProps = {
+	value: number;
+	onChange: (value: number) => void;
+};
+export function NumberOption({ value, onChange }: NumberOptionProps) {
 	return (
 		<li>
 			<p>문제 개수</p>
-			<input type='number' step={5} min={5} max={50}></input>
+			<input
+				type='number'
+				step={5}
+				min={5}
+				max={50}
+				value={value}
+				onChange={e => {
+					onChange(Number(e.target.value));
+				}}></input>
 		</li>
 	);
 }
 
-export function WordStatusOption() {
-	const [wordStatus, setWordStatus] = useState([true, true, true]);
-
-	const handleCheckboxChange = (index: number) => {
-		const newWordStatus = [...wordStatus];
-		newWordStatus[index] = !newWordStatus[index];
-		setWordStatus(newWordStatus);
+type WordStatusOptionProps = {
+	value: number[];
+	onChange: (value: number[]) => void;
+};
+export function WordStatusOption({ value, onChange }: WordStatusOptionProps) {
+	const handleCheckboxChange = (e: { target: { value: string } }) => {
+		const inputValue = Number(e.target.value);
+		if (value.includes(inputValue)) {
+			const newTypeOption = value.filter(state => state !== inputValue);
+			onChange(newTypeOption);
+		} else {
+			const newTypeOption = [...value, inputValue];
+			onChange(newTypeOption);
+		}
 	};
 
 	return (
@@ -72,8 +93,8 @@ export function WordStatusOption() {
 					type='checkbox'
 					name='type'
 					value='0'
-					checked={wordStatus[0]}
-					onChange={() => handleCheckboxChange(0)}
+					checked={value.includes(0)}
+					onChange={e => handleCheckboxChange(e)}
 				/>
 			</label>
 			<label>
@@ -83,8 +104,8 @@ export function WordStatusOption() {
 					type='checkbox'
 					name='type'
 					value='1'
-					checked={wordStatus[1]}
-					onChange={() => handleCheckboxChange(1)}
+					checked={value.includes(1)}
+					onChange={e => handleCheckboxChange(e)}
 				/>
 			</label>
 			<label>
@@ -94,8 +115,8 @@ export function WordStatusOption() {
 					type='checkbox'
 					name='type'
 					value='2'
-					checked={wordStatus[2]}
-					onChange={() => handleCheckboxChange(2)}
+					checked={value.includes(2)}
+					onChange={e => handleCheckboxChange(e)}
 				/>
 			</label>
 		</li>
