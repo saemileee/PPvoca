@@ -1,0 +1,122 @@
+:root {
+	--color-pink: #db6387;
+	--color-grey: #dddddd;
+	--font-size: 18px;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	padding: 10px 15px;
+
+	input,
+	textarea {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid var(--color-grey);
+		border-radius: 3px;
+		font-size: 18px;
+		font-family: 'Nanum Gothic', sans-serif;
+	}
+	button {
+		background: inherit;
+		border: none;
+		cursor: pointer;
+
+		width: 24px;
+		height: 24px;
+	}
+
+	.icon {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.bookHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 70px;
+
+	button {
+		display: flex;
+	}
+
+	h1 {
+		font-size: 20px;
+	}
+
+	.submitBtn {
+		cursor: pointer;
+		font-size: var(--font-size);
+		color: var(--color-grey);
+	}
+
+	.active {
+		color: var(--color-pink);
+	}
+}
+
+.bookForm {
+	& > * {
+		margin-top: 30px;
+	}
+	p {
+		font-size: 20px;
+		display: flex;
+		align-items: center;
+
+		.icon {
+			margin-right: 10px;
+		}
+	}
+	textarea {
+		height: 200px;
+		resize: none;
+	}
+}
+
+.bookLanguage {
+	width: 100%;
+	text-align: left;
+	padding: 0 10px;
+	font-size: 20px;
+	text-align: left;
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
+
+	td {
+		width: 50%;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		text-align: left;
+		margin: 10px 5px;
+		color: var(--color-pink);
+
+		.icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	.language {
+		color: var(--color-pink);
+	}
+
+	.inputWithValue {
+		color: var(--color-pink);
+	}
+
+	.inputWithoutValue {
+		color: var(--color-grey);
+	}
+}

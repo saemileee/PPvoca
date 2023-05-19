@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Nanum+Gothic:wght@400;700;800');
+
+/* CSS 초기화 : Start */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+/* CSS 초기화 : End */
+
+/* 공통 폰트 적용 : Start */
+body {
+	font-family: 'Nanum Gothic', sans-serif;
+}
+/* 공통 폰트 적용 : End */
