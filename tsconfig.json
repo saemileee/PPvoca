@@ -14,7 +14,8 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"noEmitOnError": false // 에러메시지 꺼진다 함
 	},
 	"include": ["src"]
 }
