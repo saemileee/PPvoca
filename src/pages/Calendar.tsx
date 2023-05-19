@@ -9,16 +9,29 @@ import Header from '../components/common/Header/Header';
 import { calenderGetAll } from '../apis/calendar';
 import moment from 'moment';
 
+interface Word {
+	bookId: string;
+	createdAt: string;
+	meanings: string[];
+	ownerEmail: string;
+	short_id: string;
+	status: number;
+	updatedAt: string;
+	word: string;
+	__v: number;
+	_id: string;
+}
+
 function CalendarPage() {
-	const [wordsList, setWordsList] = useState([]);
+	const [wordsList, setWordsList] = useState<Word[]>([]);
 	const userToken = useRecoilValue(userTokenState);
 
 	/**못생긴 데이터 가공하기 */
-	function joinMeanings(array) {
-		return array.join(', ');
+	function joinMeanings(meanings: string[]): string {
+		return meanings.join(', ');
 	}
 
-	function prettyDate(uglyDate) {
+	function prettyDate(uglyDate: string): string {
 		const originalDate = uglyDate;
 		const formattedDate = moment(originalDate).format('YYYY-MM-DD');
 		return formattedDate;
@@ -26,28 +39,26 @@ function CalendarPage() {
 
 	/**useEffect */
 	useEffect(() => {
-		async function fetchData() {
+		const fetchData = async () => {
 			try {
-				const 데이터 = await calenderGetAll(userToken);
-				console.log(Array.isArray(데이터));
+				const 데이터: Word[] = await calenderGetAll(userToken);
 				setWordsList(() => {
 					return 데이터;
 				});
 			} catch (error) {
 				console.error(error);
 			}
-		}
-
-		// 1초 후에 fetchData 함수 실행
-		setTimeout(fetchData, 1000);
+		};
+		fetchData();
 	}, []);
 
 	/**useState */
+	// http://localhost:3000/calendar?year=2023&month=5
 	const [value, onChange] = useState<Date>(new Date());
-	const day = moment(value).format('YYYY-MM-DD');
-	const currDate = new Date();
-	const currDateTime = moment(currDate).format('MM-DD');
-	const mark = [
+	const day: string = moment(value).format('YYYY-MM-DD');
+	const currDate: Date = new Date();
+	const currDateTime: string = moment(currDate).format('MM-DD');
+	const mark: string[] = [
 		'2023-05-10',
 		'2023-05-11',
 		'2023-05-13',
@@ -55,7 +66,7 @@ function CalendarPage() {
 		'2023-05-20',
 		'2023-05-21',
 	];
-	//http://localhost:3000/calendar?year=2023&month=5
+
 	return (
 		<>
 			<Header />
@@ -71,7 +82,7 @@ function CalendarPage() {
 					tileContent={({ date, view }) => {
 						// 날짜 타일에 컨텐츠 추가하기 (html 태그)
 						// 추가할 html 태그를 변수 초기화
-						const html = [];
+						const html: JSX.Element[] = [];
 						// 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
 						if (mark.find(x => x === moment(date).format('YYYY-MM-DD'))) {
 							html.push(<div className='dot'>{10}</div>);
