@@ -16,5 +16,11 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src"]
+	"include": ["src"],
+	"exclude": [
+		"node_modules",
+		"./src/components/QuizList/FourProngQuiz.tsx",
+		"./src/pages/QuizList.tsx",
+		"./src/pages/Calendar.tsx"
+	]
 }
