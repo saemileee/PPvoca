@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { fourProngProblems } from './quiz-mock';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
+import QuizResult from '../../pages/QuizResult';
 
 type TypeAnswer = {
 	wordId: string;
@@ -34,7 +35,6 @@ const FourProngQuiz = () => {
 	}, []);
 
 	const addCorrectAnswers = (isCorrect: boolean, wordId: string) => {
-		console.log(isCorrect);
 		if (isCorrect) {
 			setCorrectAnswers((prev: string[]) => {
 				return [...prev, wordId];
@@ -45,6 +45,7 @@ const FourProngQuiz = () => {
 			});
 		}
 	};
+	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
 
 	return (
 		<div className={styles.quizContainer}>
@@ -80,10 +81,11 @@ const FourProngQuiz = () => {
 					</button>
 				</div>
 			</div>
-			<Result
+			<QuizResult
 				correctAnswers={correctAnswers}
 				incorrectAnswers={incorrectAnswers}
 				style={!isDone ? { display: 'none' } : undefined}
+				isDone={isDone}
 			/>
 		</div>
 	);
@@ -193,30 +195,6 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 						</li>
 					))}
 				</ul>
-			</div>
-		</div>
-	);
-}
-
-type TypeResultProps = {
-	correctAnswers: string[];
-	incorrectAnswers: string[];
-	style: any;
-};
-function Result({ correctAnswers, incorrectAnswers, style }: TypeResultProps) {
-	const numberOfCorrects = correctAnswers.length;
-	const numberOfAll = correctAnswers.length + incorrectAnswers.length;
-	return (
-		<div style={style}>
-			<div>
-				<span>{numberOfCorrects}</span>
-				<span>
-					{numberOfCorrects}/{numberOfAll}
-				</span>
-			</div>
-			<div>
-				<button>퀴즈 정답보기</button>
-				<button>다시하기</button>
 			</div>
 		</div>
 	);

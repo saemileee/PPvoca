@@ -19,7 +19,7 @@
 	"include": ["src"],
 	"exclude": [
 		"node_modules",
-		"./src/components/QuizList/FourProngQuiz.tsx",
+		"src/components/Quiz/FourProngQuiz.tsx",
 		"./src/pages/QuizList.tsx",
 		"./src/pages/Calendar.tsx"
 	]
