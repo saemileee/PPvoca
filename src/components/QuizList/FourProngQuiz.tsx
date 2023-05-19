@@ -49,7 +49,6 @@ type TypeQuizProps = {
 	problemData: TypeProblem;
 	page: { currentPage: number; allPages: number };
 };
-
 function Quiz({ problemData, page }: TypeQuizProps) {
 	const { answer, selections } = problemData;
 
