@@ -25,10 +25,22 @@ type TypeProblem = {
 const FourProngQuiz = () => {
 	const [problems, setProblems] = useState<TypeProblem[]>([]);
 	const [currentQuiz, setCurrentQuiz] = useState<number>(0);
+	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
 
 	useEffect(() => {
 		setProblems(fourProngProblems);
 	}, []);
+
+	useEffect(() => {
+		console.log(correctAnswers);
+	}, [correctAnswers]);
+
+	const addCorrectAnswers = (wordId: string) => {
+		setCorrectAnswers((prev: string[]) => {
+			return [...prev, wordId];
+		});
+	};
+
 	return (
 		<div className={styles.quizContainer}>
 			<header>사지선다</header>
@@ -39,6 +51,9 @@ const FourProngQuiz = () => {
 							key={`quiz-${index}`}
 							page={{ currentPage: index + 1, allPages: problems.length }}
 							problemData={problem}
+							onAnswerClick={() => {
+								addCorrectAnswers;
+							}}
 						/>
 				  ))
 				: '생성 된 문제가 없습니다.'}
@@ -61,13 +76,13 @@ type TypeQuizProps = {
 	problemData: TypeProblem;
 	page: { currentPage: number; allPages: number };
 	style: { display: string } | undefined;
+	onAnswerClick: any;
 };
-function Quiz({ problemData, page, style }: TypeQuizProps) {
+function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 	const { answer, selections } = problemData;
 
 	const [isSelected, setIsSelected] = useState(false);
 	const [isShowAnswer, setIsShowAnswer] = useState(false);
-	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
 	const [isShowMeaning, setIsShowMeaning] = useState([]);
 	const [selectedSelections, setSelectedSelections] = useState<number[]>([]);
 	const [fourSelections, setFourSelections] = useState<TypeSelection[]>([]);
@@ -97,13 +112,8 @@ function Quiz({ problemData, page, style }: TypeQuizProps) {
 
 		// 최초 클릭 한 답이 정답일 경우 맞춘 배열에 넣기
 		if (!isSelected) {
-			setIsSelected(true);
 			// 이건 더 상위에서 관리되어야 함
-			isCorrect
-				? setCorrectAnswers((prev: string[]) => {
-						return [...prev, answer.wordId];
-				  })
-				: null;
+			isCorrect ? onAnswerClick(answer.wordId) : null;
 		}
 	};
 
