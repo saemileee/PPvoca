@@ -1,5 +1,8 @@
-main {
+.quizContainer {
 	padding: 0 16px 0 16px;
+}
+
+.contentsContainer {
 }
 
 .topContainer {
@@ -8,7 +11,7 @@ main {
 }
 
 .problemContainer {
-	height: 50%;
+	height: 380px;
 	margin: 0 32px 0 32px;
 	text-align: center;
 	p {
