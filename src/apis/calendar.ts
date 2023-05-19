@@ -9,5 +9,5 @@ export const calenderGetAll = async (token: string) => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-	return response;
+	return response.data;
 };

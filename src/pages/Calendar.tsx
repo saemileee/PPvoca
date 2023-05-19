@@ -10,11 +10,39 @@ import { calenderGetAll } from '../apis/calendar';
 import moment from 'moment';
 
 function CalendarPage() {
+	const [wordsList, setWordsList] = useState([]);
 	const userToken = useRecoilValue(userTokenState);
+
+	/**못생긴 데이터 가공하기 */
+	function joinMeanings(array) {
+		return array.join(', ');
+	}
+
+	function prettyDate(uglyDate) {
+		const originalDate = uglyDate;
+		const formattedDate = moment(originalDate).format('YYYY-MM-DD');
+		return formattedDate;
+	}
+
+	/**useEffect */
 	useEffect(() => {
-		calenderGetAll(userToken);
+		async function fetchData() {
+			try {
+				const 데이터 = await calenderGetAll(userToken);
+				console.log(Array.isArray(데이터));
+				setWordsList(() => {
+					return 데이터;
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		// 1초 후에 fetchData 함수 실행
+		setTimeout(fetchData, 1000);
 	}, []);
 
+	/**useState */
 	const [value, onChange] = useState<Date>(new Date());
 	const day = moment(value).format('YYYY-MM-DD');
 	const currDate = new Date();
@@ -58,6 +86,18 @@ function CalendarPage() {
 						);
 					}}
 				/>
+				<ul>
+					{wordsList.map((word, index) => {
+						return (
+							<li key={index}>
+								<h3>{word.word}</h3>
+								<div>{joinMeanings(word.meanings)}</div>
+								<div>{prettyDate(word.createdAt)}</div>
+								<div>{word.status}</div>
+							</li>
+						);
+					})}
+				</ul>
 			</main>
 		</>
 	);
