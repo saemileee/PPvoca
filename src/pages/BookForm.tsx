@@ -190,7 +190,8 @@ function BookForm() {
 											onClick={e => {
 												e.preventDefault();
 												handleToggleLanguage();
-											}}>
+											}}
+										>
 											<BsArrowDownUp className={styles.icon} />
 										</button>
 									</td>

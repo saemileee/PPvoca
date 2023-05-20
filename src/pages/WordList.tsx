@@ -232,7 +232,8 @@ function WordList() {
 									if (!wordList.length) {
 										setWordList(prevWordList.current);
 									}
-								}}>
+								}}
+							>
 								<IoSearchOutline />
 							</div>
 						</div>
@@ -273,7 +274,8 @@ function WordList() {
 									</div>
 									<div
 										className={styles.edit}
-										onClick={() => handleEdit(item.short_id)}>
+										onClick={() => handleEdit(item.short_id)}
+									>
 										<HiOutlinePencil />
 									</div>
 									<div className={styles.status}>
