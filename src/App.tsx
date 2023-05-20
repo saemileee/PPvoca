@@ -11,7 +11,7 @@ import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
 import QuizList from './pages/QuizList';
 import FourProngQuiz from './components/Quiz/FourProngQuiz';
-import Header from './components/common/Navigation/Navigation';
+import Navigation from './components/common/Navigation/Navigation';
 import QuizResult from './pages/QuizResult';
 
 function App() {

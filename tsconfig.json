@@ -14,13 +14,9 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"noEmitOnError": false
 	},
 	"include": ["src"],
-	"exclude": [
-		"node_modules",
-		"src/components/Quiz/FourProngQuiz.tsx",
-		"./src/pages/QuizList.tsx",
-		"./src/pages/Calendar.tsx"
-	]
+	"exclude": ["node_modules"]
 }
