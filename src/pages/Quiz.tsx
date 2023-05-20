@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import styles from '../components/Quiz/QuizList.module.scss';
-import List, { Quiz } from '../components/Quiz/List';
+import QuizList, { InterfaceQuiz } from '../components/Quiz/QuizList';
 import Navigation from '../components/common/Navigation/Navigation';
 import Header from '../components/common/Header/Header';
 
-const quizList: Quiz[] = [
+const quizList: InterfaceQuiz[] = [
 	{
 		id: 'four-prong',
 		title: '사지선다',
@@ -22,13 +22,13 @@ const quizList: Quiz[] = [
 	},
 ];
 
-function QuizList() {
+function Quiz() {
 	return (
 		<>
 			<Header title={'퀴즈'} />
 			<main className={styles.container}>
 				{quizList.map(quiz => (
-					<List key={quiz.id} quizInfo={quiz} />
+					<QuizList key={quiz.id} quizInfo={quiz} />
 				))}
 			</main>
 			<Navigation />
@@ -36,4 +36,4 @@ function QuizList() {
 	);
 }
 
-export default QuizList;
+export default Quiz;
