@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
-import { fourProngProblems } from './quiz-mock';
 import { useLocation } from 'react-router-dom';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
@@ -8,7 +7,7 @@ import QuizResult from './QuizResult';
 import Header from '../common/Header/Header';
 
 type TypeAnswer = {
-	wordId: string;
+	short_id: string;
 	word: string;
 	meanings: string[];
 	status: number;
@@ -55,14 +54,14 @@ const FourProngQuiz = () => {
 		});
 	}, [isRestartButtonClick]);
 
-	const addCorrectAnswers = (isCorrect: boolean, wordId: string) => {
+	const addCorrectAnswers = (isCorrect: boolean, short_id: string) => {
 		if (isCorrect) {
 			setCorrectAnswers((prev: string[]) => {
-				return [...prev, wordId];
+				return [...prev, short_id];
 			});
 		} else {
 			setIncorrectAnswers((prev: string[]) => {
-				return [...prev, wordId];
+				return [...prev, short_id];
 			});
 		}
 	};
@@ -89,8 +88,8 @@ const FourProngQuiz = () => {
 									key={`quiz-${index}`}
 									page={{ currentPage: index + 1, allPages: problems.length }}
 									problemData={problem}
-									onAnswerClick={(isCorrect: boolean, wordId: string) => {
-										addCorrectAnswers(isCorrect, wordId);
+									onAnswerClick={(isCorrect: boolean, short_id: string) => {
+										addCorrectAnswers(isCorrect, short_id);
 									}}
 									isRestartButtonClick={isRestartButtonClick}
 								/>
@@ -100,8 +99,7 @@ const FourProngQuiz = () => {
 						<button
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-							}}
-						>
+							}}>
 							prev
 						</button>
 						<button
@@ -109,8 +107,7 @@ const FourProngQuiz = () => {
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
 									: setIsDone(true)
-							}
-						>
+							}>
 							next
 						</button>
 					</div>
@@ -183,8 +180,8 @@ function Quiz({
 		// 최초 클릭 한 답이 정답일 경우 맞춘 배열에 넣기
 		if (!isSelected) {
 			isCorrect
-				? onAnswerClick(true, answer.wordId)
-				: onAnswerClick(false, answer.wordId);
+				? onAnswerClick(true, answer.short_id)
+				: onAnswerClick(false, answer.short_id);
 		}
 
 		//최초 답 선택 후 상태 변경
@@ -197,7 +194,7 @@ function Quiz({
 				<span className={styles.page}>
 					{page.currentPage}/{page.allPages}
 				</span>
-				<ChangeStatus id={answer.wordId} initialStatus={answer.status} />
+				<ChangeStatus id={answer.short_id} initialStatus={answer.status} />
 				{/* <span className={styles.status}>status</span> */}
 			</div>
 			<div className={styles.problemContainer}>
@@ -227,8 +224,7 @@ function Quiz({
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}
-						>
+							}}>
 							<span>
 								{selection.meanings.map((meaning: string) => (
 									<span className={styles.selectionMeaning}>{meaning}</span>
@@ -240,8 +236,7 @@ function Quiz({
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}
-							>
+								className={styles.selectionWord}>
 								{selection.word}
 							</span>
 						</li>
