@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { fourProngProblems } from './quiz-mock';
+import { useLocation } from 'react-router-dom';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
 import QuizResult from './QuizResult';
@@ -25,6 +26,7 @@ type TypeProblem = {
 };
 
 const FourProngQuiz = () => {
+	const location = useLocation();
 	const [problems, setProblems] = useState<TypeProblem[]>([]);
 	const [currentQuiz, setCurrentQuiz] = useState<number>(0);
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
@@ -33,7 +35,8 @@ const FourProngQuiz = () => {
 	const [isRestartButtonClick, setIsRestartButtonClick] = useState<number>(0);
 
 	useEffect(() => {
-		setProblems(fourProngProblems);
+		const myState = location.state;
+		setProblems(myState);
 	}, []);
 
 	//리스타트 시 문제 순서 랜덤 변경
