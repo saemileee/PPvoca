@@ -34,7 +34,6 @@ function QuizAnswerModal({
 							}`}
 						>
 							<span>{index + 1}.</span>
-							{/* <span>{answer.isCorrect ? 'O' : 'X'}</span> */}
 							<span className={styles.word}>{answer.word}</span>
 							<ChangeStatus id={answer.wordId} initialStatus={answer.status} />
 						</div>

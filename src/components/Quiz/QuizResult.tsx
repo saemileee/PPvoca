@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { quizAnswers } from '../components/Quiz/quiz-mock';
-import QuizAnswerModal from '../components/Quiz/QuizAnswerModal';
-import styles from '../components/Quiz/QuizResult.module.scss';
+import { quizAnswers } from './quiz-mock';
+import QuizAnswerModal from './QuizAnswerModal';
+import styles from './QuizResult.module.scss';
 
 type TypeResultProps = {
 	correctAnswers: string[];
