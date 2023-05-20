@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
-// import styles from './modal.module.scss';
-import styles from './modal2.module.scss';
+import styles from './modal.module.scss';
 import { RiCloseLine } from 'react-icons/ri';
 import { relative } from 'path';
 

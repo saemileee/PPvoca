@@ -18,9 +18,5 @@
 		"noEmitOnError": false
 	},
 	"include": ["src"],
-	"exclude": [
-		"node_modules",
-		"./src/components/QuizList/FourProngQuiz.tsx",
-		"./src/pages/QuizList.tsx"
-	]
+	"exclude": ["node_modules"]
 }

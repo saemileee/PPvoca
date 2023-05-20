@@ -9,7 +9,7 @@ import AlertModal from '../components/common/AlertModal/AlertModal';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/common/Header/Header';
+import Navigation from '../components/common/Navigation/Navigation';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -65,7 +65,7 @@ function BookList() {
 
 	return (
 		<>
-			<Header />
+			<Navigation />
 			<main>
 				<WordSearch />
 				<div className={styles.boxContainer}>

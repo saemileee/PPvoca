@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { fourProngProblems } from './quiz-mock';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
+import QuizResult from '../../pages/QuizResult';
 
 type TypeAnswer = {
 	wordId: string;
@@ -26,46 +27,66 @@ const FourProngQuiz = () => {
 	const [problems, setProblems] = useState<TypeProblem[]>([]);
 	const [currentQuiz, setCurrentQuiz] = useState<number>(0);
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
+	const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
+	const [isDone, setIsDone] = useState(false);
 
 	useEffect(() => {
 		setProblems(fourProngProblems);
 	}, []);
 
-	useEffect(() => {
-		console.log(correctAnswers);
-	}, [correctAnswers]);
-
-	const addCorrectAnswers = (wordId: string) => {
-		setCorrectAnswers((prev: string[]) => {
-			return [...prev, wordId];
-		});
+	const addCorrectAnswers = (isCorrect: boolean, wordId: string) => {
+		if (isCorrect) {
+			setCorrectAnswers((prev: string[]) => {
+				return [...prev, wordId];
+			});
+		} else {
+			setIncorrectAnswers((prev: string[]) => {
+				return [...prev, wordId];
+			});
+		}
 	};
+	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
 
 	return (
 		<div className={styles.quizContainer}>
 			<header>사지선다</header>
-			{problems
-				? problems.map((problem, index) => (
-						<Quiz
-							style={currentQuiz !== index ? { display: 'none' } : undefined}
-							key={`quiz-${index}`}
-							page={{ currentPage: index + 1, allPages: problems.length }}
-							problemData={problem}
-							onAnswerClick={() => {
-								addCorrectAnswers;
-							}}
-						/>
-				  ))
-				: '생성 된 문제가 없습니다.'}
-			<div className={styles.buttonContainer}>
-				<button
-					onClick={() => {
-						currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-					}}>
-					prev
-				</button>
-				<button onClick={() => setCurrentQuiz(prev => prev + 1)}>next</button>
+			<div style={isDone ? { display: 'none' } : undefined}>
+				{problems
+					? problems.map((problem, index) => (
+							<Quiz
+								style={currentQuiz !== index ? { display: 'none' } : undefined}
+								key={`quiz-${index}`}
+								page={{ currentPage: index + 1, allPages: problems.length }}
+								problemData={problem}
+								onAnswerClick={(isCorrect: boolean, wordId: string) => {
+									addCorrectAnswers(isCorrect, wordId);
+								}}
+							/>
+					  ))
+					: '생성 된 문제가 없습니다.'}
+				<div className={styles.buttonContainer}>
+					<button
+						onClick={() => {
+							currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
+						}}>
+						prev
+					</button>
+					<button
+						onClick={() =>
+							currentQuiz !== problems.length - 1
+								? setCurrentQuiz(prev => prev + 1)
+								: setIsDone(true)
+						}>
+						next
+					</button>
+				</div>
 			</div>
+			<QuizResult
+				correctAnswers={correctAnswers}
+				incorrectAnswers={incorrectAnswers}
+				style={!isDone ? { display: 'none' } : undefined}
+				isDone={isDone}
+			/>
 		</div>
 	);
 };
@@ -83,7 +104,6 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 
 	const [isSelected, setIsSelected] = useState(false);
 	const [isShowAnswer, setIsShowAnswer] = useState(false);
-	const [isShowMeaning, setIsShowMeaning] = useState([]);
 	const [selectedSelections, setSelectedSelections] = useState<number[]>([]);
 	const [fourSelections, setFourSelections] = useState<TypeSelection[]>([]);
 
@@ -112,9 +132,13 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 
 		// 최초 클릭 한 답이 정답일 경우 맞춘 배열에 넣기
 		if (!isSelected) {
-			// 이건 더 상위에서 관리되어야 함
-			isCorrect ? onAnswerClick(answer.wordId) : null;
+			isCorrect
+				? onAnswerClick(true, answer.wordId)
+				: onAnswerClick(false, answer.wordId);
 		}
+
+		//최초 답 선택 후 상태 변경
+		setIsSelected(true);
 	};
 
 	return (

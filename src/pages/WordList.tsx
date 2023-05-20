@@ -31,7 +31,7 @@ import {
 	getBookName,
 	findWordById,
 } from '../apis/word';
-import Header from '../components/common/Header/Header';
+import Navigation from '../components/common/Navigation/Navigation';
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
@@ -195,7 +195,7 @@ function WordList() {
 
 	return (
 		<>
-			<Header />
+			<Navigation />
 			<main>
 				<div className={styles.container}>
 					<div className={styles.fixed}>
@@ -232,8 +232,7 @@ function WordList() {
 									if (!wordList.length) {
 										setWordList(prevWordList.current);
 									}
-								}}
-							>
+								}}>
 								<IoSearchOutline />
 							</div>
 						</div>
@@ -274,8 +273,7 @@ function WordList() {
 									</div>
 									<div
 										className={styles.edit}
-										onClick={() => handleEdit(item.short_id)}
-									>
+										onClick={() => handleEdit(item.short_id)}>
 										<HiOutlinePencil />
 									</div>
 									<div className={styles.status}>

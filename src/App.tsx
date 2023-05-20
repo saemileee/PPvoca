@@ -10,8 +10,9 @@ import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
 import QuizList from './pages/QuizList';
-import FourProngQuiz from './components/QuizList/FourProngQuiz';
-import Header from './components/common/Header/Header';
+import FourProngQuiz from './components/Quiz/FourProngQuiz';
+import Navigation from './components/common/Navigation/Navigation';
+import QuizResult from './pages/QuizResult';
 
 function App() {
 	return (
