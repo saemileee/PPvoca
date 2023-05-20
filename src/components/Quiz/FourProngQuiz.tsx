@@ -4,6 +4,7 @@ import { fourProngProblems } from './quiz-mock';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
 import QuizResult from '../../pages/QuizResult';
+import Header from '../common/Header/Header';
 
 type TypeAnswer = {
 	wordId: string;
@@ -48,37 +49,41 @@ const FourProngQuiz = () => {
 	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
 
 	return (
-		<div className={styles.quizContainer}>
-			<header>사지선다</header>
-			<div style={isDone ? { display: 'none' } : undefined}>
-				{problems
-					? problems.map((problem, index) => (
-							<Quiz
-								style={currentQuiz !== index ? { display: 'none' } : undefined}
-								key={`quiz-${index}`}
-								page={{ currentPage: index + 1, allPages: problems.length }}
-								problemData={problem}
-								onAnswerClick={(isCorrect: boolean, wordId: string) => {
-									addCorrectAnswers(isCorrect, wordId);
-								}}
-							/>
-					  ))
-					: '생성 된 문제가 없습니다.'}
-				<div className={styles.buttonContainer}>
-					<button
-						onClick={() => {
-							currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-						}}>
-						prev
-					</button>
-					<button
-						onClick={() =>
-							currentQuiz !== problems.length - 1
-								? setCurrentQuiz(prev => prev + 1)
-								: setIsDone(true)
-						}>
-						next
-					</button>
+		<>
+			<Header title={'사지선다'}></Header>
+			<div className={styles.quizContainer}>
+				<div style={isDone ? { display: 'none' } : undefined}>
+					{problems
+						? problems.map((problem, index) => (
+								<Quiz
+									style={
+										currentQuiz !== index ? { display: 'none' } : undefined
+									}
+									key={`quiz-${index}`}
+									page={{ currentPage: index + 1, allPages: problems.length }}
+									problemData={problem}
+									onAnswerClick={(isCorrect: boolean, wordId: string) => {
+										addCorrectAnswers(isCorrect, wordId);
+									}}
+								/>
+						  ))
+						: '생성 된 문제가 없습니다.'}
+					<div className={styles.buttonContainer}>
+						<button
+							onClick={() => {
+								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
+							}}>
+							prev
+						</button>
+						<button
+							onClick={() =>
+								currentQuiz !== problems.length - 1
+									? setCurrentQuiz(prev => prev + 1)
+									: setIsDone(true)
+							}>
+							next
+						</button>
+					</div>
 				</div>
 			</div>
 			<QuizResult
@@ -87,7 +92,7 @@ const FourProngQuiz = () => {
 				style={!isDone ? { display: 'none' } : undefined}
 				isDone={isDone}
 			/>
-		</div>
+		</>
 	);
 };
 
