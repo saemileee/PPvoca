@@ -29,14 +29,17 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 	useEffect(() => {
 		async function fetchWordCount() {
 			try {
-				const response = await axios.get(
-					`${baseUrl}/words?bookId=${book.short_id}`,
-					{
-						headers: {
-							Authorization: `Bearer ${userToken}`,
-						},
-					},
-				);
+				let url = `${baseUrl}/words/sample?bookId=${book.short_id}`;
+				let headers = {};
+
+				if (userToken) {
+					url = `${baseUrl}/words?bookId=${book.short_id}`;
+					headers = {
+						Authorization: `Bearer ${userToken}`,
+					};
+				}
+
+				const response = await axios.get(url, { headers });
 				setWordCount(response.data.length);
 				setMemorizedWordCount(
 					response.data.filter((word: { status: number }) => word.status === 1)
