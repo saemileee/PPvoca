@@ -30,10 +30,27 @@ const FourProngQuiz = () => {
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
 	const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([]);
 	const [isDone, setIsDone] = useState(false);
+	const [isRestartButtonClick, setIsRestartButtonClick] = useState<number>(0);
 
 	useEffect(() => {
 		setProblems(fourProngProblems);
 	}, []);
+
+	//리스타트 시 문제 순서 랜덤 변경
+	function shuffleArray(array: TypeProblem[]) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return array;
+	}
+
+	useEffect(() => {
+		setProblems(current => {
+			const newProblems = shuffleArray([...current]);
+			return newProblems;
+		});
+	}, [isRestartButtonClick]);
 
 	const addCorrectAnswers = (isCorrect: boolean, wordId: string) => {
 		if (isCorrect) {
@@ -47,6 +64,13 @@ const FourProngQuiz = () => {
 		}
 	};
 	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
+	const handleQuizRestartButtonClick = () => {
+		setIsRestartButtonClick(prev => prev + 1);
+		setCurrentQuiz(0);
+		setIsDone(false);
+		setCorrectAnswers([]);
+		setIncorrectAnswers([]);
+	};
 
 	return (
 		<>
@@ -65,6 +89,7 @@ const FourProngQuiz = () => {
 									onAnswerClick={(isCorrect: boolean, wordId: string) => {
 										addCorrectAnswers(isCorrect, wordId);
 									}}
+									isRestartButtonClick={isRestartButtonClick}
 								/>
 						  ))
 						: '생성 된 문제가 없습니다.'}
@@ -72,7 +97,8 @@ const FourProngQuiz = () => {
 						<button
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-							}}>
+							}}
+						>
 							prev
 						</button>
 						<button
@@ -80,7 +106,8 @@ const FourProngQuiz = () => {
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
 									: setIsDone(true)
-							}>
+							}
+						>
 							next
 						</button>
 					</div>
@@ -91,6 +118,7 @@ const FourProngQuiz = () => {
 				incorrectAnswers={incorrectAnswers}
 				style={!isDone ? { display: 'none' } : undefined}
 				isDone={isDone}
+				onClickQuizRestart={() => handleQuizRestartButtonClick}
 			/>
 		</>
 	);
@@ -99,12 +127,20 @@ const FourProngQuiz = () => {
 export default FourProngQuiz;
 
 type TypeQuizProps = {
+	isRestartButtonClick: number;
 	problemData: TypeProblem;
 	page: { currentPage: number; allPages: number };
 	style: { display: string } | undefined;
 	onAnswerClick: any;
 };
-function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
+
+function Quiz({
+	isRestartButtonClick,
+	problemData,
+	page,
+	style,
+	onAnswerClick,
+}: TypeQuizProps) {
 	const { answer, selections } = problemData;
 
 	const [isSelected, setIsSelected] = useState(false);
@@ -123,7 +159,13 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 		];
 		fourSelections.sort(() => Math.random() - 0.4);
 		setFourSelections(fourSelections);
-	}, [selections]);
+	}, [selections, isRestartButtonClick]);
+
+	useEffect(() => {
+		setIsSelected(false);
+		setIsShowAnswer(false);
+		setSelectedSelections([]);
+	}, [isRestartButtonClick]);
 
 	const handleSelectionClick = (correct: string, index: string) => {
 		const isCorrect = JSON.parse(correct);
@@ -182,7 +224,8 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}>
+							}}
+						>
 							<span>
 								{selection.meanings.map((meaning: string) => (
 									<span className={styles.selectionMeaning}>{meaning}</span>
@@ -194,7 +237,8 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}>
+								className={styles.selectionWord}
+							>
 								{selection.word}
 							</span>
 						</li>

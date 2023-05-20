@@ -23,14 +23,16 @@ function QuizAnswerModal({
 		<Modal
 			showModal={showModal}
 			setShowModal={setShowModal}
-			title='퀴즈 정답 보기'>
+			title='퀴즈 정답 보기'
+		>
 			<ul className={styles.listContainer}>
 				{answerList.map((answer, index) => (
 					<li key={answer.wordId} className={styles.answerList}>
 						<div
 							className={`${styles.answerContainer} ${
 								answer.isCorrect ? styles.correct : styles.incorrect
-							}`}>
+							}`}
+						>
 							<span>{index + 1}.</span>
 							{/* <span>{answer.isCorrect ? 'O' : 'X'}</span> */}
 							<span className={styles.word}>{answer.word}</span>

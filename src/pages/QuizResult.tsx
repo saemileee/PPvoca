@@ -9,6 +9,7 @@ type TypeResultProps = {
 	incorrectAnswers: string[];
 	style: { display: string } | undefined;
 	isDone: boolean;
+	onClickQuizRestart: any;
 };
 type TypeAnswer = {
 	isCorrect?: boolean;
@@ -22,6 +23,7 @@ function QuizResult({
 	incorrectAnswers,
 	style,
 	isDone,
+	onClickQuizRestart,
 }: TypeResultProps) {
 	const numberOfCorrects = correctAnswers.length;
 	const numberOfAll = correctAnswers.length + incorrectAnswers.length;
@@ -32,7 +34,7 @@ function QuizResult({
 	const remainingLength = circumference - progressLength;
 	const navigate = useNavigate();
 
-	const [isShowQuizAnswers, setIsShowQuizAnswers] = useState(true);
+	const [isShowQuizAnswers, setIsShowQuizAnswers] = useState(false);
 
 	// 문제들 api 보내기
 	// 문제 답 + 뜻 + 정오답 여부 mapping
@@ -52,18 +54,6 @@ function QuizResult({
 		});
 		setAnswerList(newAnswerList);
 	}, [isDone]);
-
-	// setAnswerList(() => {
-	// 	return answerList.map((answer: TypeAnswer) => {
-	// 		if (correctAnswers.includes(answer.wordId)) {
-	// 			answer.isCorrect = true;
-	// 			return answer;
-	// 		} else {
-	// 			answer.isCorrect = false;
-	// 			return answer;
-	// 		}
-	// 	});
-	// });
 
 	return (
 		<div style={style} className={styles.resultContainer}>
@@ -87,11 +77,12 @@ function QuizResult({
 				<button onClick={() => setIsShowQuizAnswers(true)}>
 					퀴즈 정답보기
 				</button>
-				<button>다시하기</button>
+				<button onClick={onClickQuizRestart()}>다시하기</button>
 				<button
 					onClick={() => {
 						navigate('/quiz/list');
-					}}>
+					}}
+				>
 					다른 퀴즈 풀기
 				</button>
 			</div>
