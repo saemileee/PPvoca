@@ -79,4 +79,26 @@ const fourProngProblems = [
 	},
 ];
 
-export { fourProngProblems };
+const quizAnswers = [
+	{ wordId: '123wadfas', word: 'it', meanings: ['그것', '아기'], status: 0 },
+	{
+		wordId: '135dfas',
+		word: 'animal',
+		meanings: ['짐승', '동물', '동물적'],
+		status: 0,
+	},
+	{
+		wordId: '125wadfas',
+		word: 'quick',
+		meanings: ['빠른', '빨리', '속살'],
+		status: 1,
+	},
+	{
+		wordId: '113wadfas',
+		word: 'desk',
+		meanings: ['책상', '프런트', '데스크'],
+		status: 1,
+	},
+];
+
+export { fourProngProblems, quizAnswers };
