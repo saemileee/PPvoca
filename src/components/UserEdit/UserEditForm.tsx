@@ -193,14 +193,16 @@ function UserEditForm({ setEnableDelete, openAlert }: PropsTypes) {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values);
-						}}>
+						}}
+					>
 						수정하기
 					</UserButton>
 				</li>
 				<li>
 					<span
 						className={styles.deleteButton}
-						onClick={() => setEnableDelete(true)}>
+						onClick={() => setEnableDelete(true)}
+					>
 						탈퇴하기
 					</span>
 				</li>

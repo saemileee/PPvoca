@@ -109,7 +109,8 @@ function RegisterForm({ openAlert }: PropsTypes) {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values);
-						}}>
+						}}
+					>
 						가입하기
 					</UserButton>
 				</li>

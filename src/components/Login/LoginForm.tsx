@@ -110,7 +110,8 @@ function LoginForm({ openAlert }: PropsTypes) {
 						onClick={e => {
 							e.preventDefault();
 							userValidator(values, true);
-						}}>
+						}}
+					>
 						로그인
 					</UserButton>
 				</li>
