@@ -18,6 +18,7 @@ import WordListOptionsModal from '../components/WordList/WordListOptionModal';
 import AddButton from '../components/common/AddButton/AddButton';
 import ChangeStatus from '../components/common/Status/Status';
 import Speaker from '../components/common/Speaker/Speaker';
+import AlertModal from '../components/common/AlertModal/AlertModal';
 
 //Recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -58,8 +59,15 @@ type WordListItem = {
 function WordList() {
 	const [wordList, setWordList] = useState<WordListItem[]>([]);
 	const [checkedList, setCheckedList] = useRecoilState(checkedWordList);
+
 	const [filterModal, setFilterModal] = useState<boolean>(false);
+
 	const [optionModal, setOptionModal] = useState<boolean>(false);
+	const [alertDeleteModalOpen, setAlertDeleteModalOpen] = useState(false);
+	const [alertUnmarkModalOpen, setAlertUnmarkModalOpen] = useState(false);
+	const [alertCheckModalOpen, setAlertCheckModalOpen] = useState(false);
+	const [alertUnknownModalOpen, setAlertUnknownModalOpen] = useState(false);
+
 	const [booktitle, setBooktitle] = useState('단어장');
 	const [findWord, setFindWord] = useState({
 		findword: '',
@@ -215,6 +223,10 @@ function WordList() {
 									setModalOpen={setOptionModal}
 									wordList={wordList}
 									setWordList={setWordList}
+									setAlertDeleteOpen={setAlertDeleteModalOpen}
+									setAlertUnmarkOpen={setAlertUnmarkModalOpen}
+									setAlertCheckOpen={setAlertCheckModalOpen}
+									setAlertUnknownOpen={setAlertUnknownModalOpen}
 								/>
 							)}
 						</div>
@@ -249,8 +261,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-											? true
-											: false
+												? true
+												: false
 									}
 								/>
 							</div>
@@ -313,6 +325,33 @@ function WordList() {
 						/>
 					)}
 				</div>
+				<AlertModal
+					isOpen={alertDeleteModalOpen}
+					onClose={() => {
+						setAlertDeleteModalOpen(false);
+					}}
+					message='삭제가 완료되었습니다.' />
+				<AlertModal
+					isOpen={alertUnmarkModalOpen}
+					onClose={() => {
+						setAlertUnmarkModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 미분류 처리되었습니다.' />
+				<AlertModal
+					isOpen={alertCheckModalOpen}
+					onClose={() => { 
+						setAlertCheckModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 외움 처리되었습니다.' />
+				<AlertModal
+					isOpen={alertUnknownModalOpen}
+					onClose={() => { 
+						setAlertUnknownModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 헷갈림 처리되었습니다.' />
 			</main>
 		</>
 	);
