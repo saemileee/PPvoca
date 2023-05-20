@@ -13,7 +13,7 @@ import {
 } from './QuizOptions';
 import { bookListAll } from '../../apis/book';
 
-export interface Quiz {
+export interface InterfaceQuiz {
 	id: string;
 	title: string;
 	description: string;
@@ -21,11 +21,11 @@ export interface Quiz {
 }
 
 interface ListProps {
-	quizInfo: Quiz;
+	quizInfo: InterfaceQuiz;
 }
 type TypeBookList = { id: string; name: string };
 
-function List({ quizInfo }: ListProps) {
+function QuizList({ quizInfo }: ListProps) {
 	const userToken = useRecoilValue(userTokenState);
 
 	const [showOptionModal, setShowOptionModal] = useState(false);
@@ -155,4 +155,4 @@ function List({ quizInfo }: ListProps) {
 	);
 }
 
-export default List;
+export default QuizList;
