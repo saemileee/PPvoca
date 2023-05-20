@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, ChangeEvent, MouseEvent, FC } from 'react';
-import styles from './wordform.module.scss';
+import styles from './WordForm.module.scss';
 import { IoSearchOutline } from 'react-icons/io5';
 
 interface WordInputProps {

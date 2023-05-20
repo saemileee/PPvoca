@@ -6,7 +6,6 @@ import { BsJournalBookmark } from 'react-icons/bs';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BsArrowDownUp } from 'react-icons/bs';
 import { useRecoilValue } from 'recoil';
-import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
 
 import { addedBook, selectedBook, updatedBook } from '../apis/book';
@@ -69,63 +68,71 @@ function BookForm() {
 	}
 	// 단어장 가져오기
 	const getBookList = async () => {
-		try {
-			if (!bookId) {
-				return;
+		if (userToken) {
+			try {
+				if (!bookId) {
+					return;
+				}
+				const response = await selectedBook(bookId, userToken);
+				bookData = response.data[0];
+				if (response.status === 200) {
+					setBookInfo({
+						bookDescription: bookData.description,
+						bookName: bookData.name,
+						word: bookData.start_lang,
+						meaning: bookData.end_lang,
+					});
+				}
+			} catch (err) {
+				console.log(err);
+				alert('단어장 정보를 불러오는데 실패하였습니다.');
 			}
-			const response = await selectedBook(bookId, userToken);
-			bookData = response.data[0];
-			if (response.status === 200) {
-				setBookInfo({
-					bookDescription: bookData.description,
-					bookName: bookData.name,
-					word: bookData.start_lang,
-					meaning: bookData.end_lang,
-				});
-			}
-		} catch (err) {
-			console.log(err);
-			alert('단어장 정보를 불러오는데 실패하였습니다.');
+		} else {
+			// 샘플 단어장 가져오기
 		}
 	};
 
 	// 단어장 생성 및 수정
 	const handleSubmit = async () => {
-		if (!bookInfo.bookName) {
-			return;
-		}
-		const data = {
-			name: bookInfo.bookName,
-			description: bookInfo.bookDescription,
-			start_lang: bookInfo.word,
-			end_lang: bookInfo.meaning,
-		};
+		if (userToken) {
+			if (!bookInfo.bookName) {
+				return;
+			}
+			const data = {
+				name: bookInfo.bookName,
+				description: bookInfo.bookDescription,
+				start_lang: bookInfo.word,
+				end_lang: bookInfo.meaning,
+			};
 
-		if (addPage) {
-			try {
-				const response = await addedBook(userToken, data);
-				if (response.status === 201) {
-					alert(`[${bookInfo.bookName}] 생성 완료`);
-					navigate('/book/list');
+			if (addPage) {
+				try {
+					const response = await addedBook(userToken, data);
+					if (response.status === 201) {
+						alert(`[${bookInfo.bookName}] 생성 완료`);
+						navigate('/book/list');
+					}
+				} catch (err) {
+					console.log(err);
+					alert('단어장 생성 실패');
 				}
-			} catch (err) {
-				console.log(err);
-				alert('단어장 생성 실패');
+			} else if (editPage) {
+				try {
+					if (!bookId) {
+						return;
+					}
+					const response = await updatedBook(bookId, userToken, data);
+					if (response.status === 200) {
+						alert(`[${bookInfo.bookName}] 수정 완료`);
+						navigate('/book/list');
+					}
+				} catch (err) {
+					console.log(err);
+					alert('단어장 수정 실패');
+				}
 			}
-		} else if (editPage) {
-			try {
-				if (!bookId) {
-					return;
-				}
-				const response = await updatedBook(bookId, userToken, data);
-				if (response.status === 200) {
-					alert(`[${bookInfo.bookName}] 수정 완료`);
-					navigate('/book/list');
-				}
-			} catch (err) {
-				console.log(err);
-				alert('단어장 수정 실패');
-			}
+		} else {
+			return alert('로그인 후에 이용해주세요.')
 		}
 	};
 

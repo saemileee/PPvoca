@@ -1,159 +1,75 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import {
-	addedWord,
-	selectedWord,
-	crawlingWord,
-	updatedWord,
-} from '../apis/word';
-import WordInput from '../components/WordForm/WordInput';
-import WordHeader from '../components/WordForm/WordHeader';
-import Modal from '../components/common/Modal/Modal';
-
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { addedWord, selectedWord, updatedWord } from '../apis/word';
 import { bookListAll } from '../apis/book';
-import styles from '../components/WordForm/wordform.module.scss';
-
-import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { BsJournalBookmark } from 'react-icons/bs';
-import { HiOutlinePencil } from 'react-icons/hi';
-
 import { useRecoilValue } from 'recoil';
-import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
+
 import Navigation from '../components/common/Navigation/Navigation';
+import WordHeader from '../components/WordForm/WordHeader';
+import BookListModal from '../components/WordForm/BookListModal';
+import WordFormDetail from '../components/WordForm/WordFormDetail'
+import Modal from '../components/common/Modal/Modal';
+import styles from '../components/WordForm/WordForm.module.scss';
+
 
 function WordForm() {
+	const { wordId } = useParams();
 	const userToken = useRecoilValue(userTokenState);
+	const editPage = location.pathname === `/word/edit/${wordId}`;
+	const addPage = location.pathname === '/word/add';
 
-	const [errorCaption, setErrorCaption] = useState('');
+	/** State */
 	const [showModal, setShowModal] = useState(false);
-	const [buttonText, setButtonText] = useState('');
-	const [meaning, setMeaning] = useState('');
-	const [currMeaning, setCurrMeaning] = useState<string[]>([]);
-	const [word, setWord] = useState('');
 	const [bookList, setBookList] = useState([]);
-
-	const [words, setWords] = useState({
-		meaning: '',
-		currMeaning: [],
-		word: '',
-	});
-
-	// 기존 단어장 목록 불러오기 (모달)
 	const [bookInfo, setBookInfo] = useState({
-		bookName: '',
+		name: '',
 		startLang: '',
 		endLang: '',
 		short_id: '',
 	});
+	const [words, setWords] = useState({
+		meaning: '',
+		currMeaning: [] as string[],
+		word: '',
+	});
+	const [bookId, setBookId] = useState('')
 
-	const navigate = useNavigate();
-	const location = useLocation();
-	const { wordId } = useParams();
-	const editPage = location.pathname === `/word/edit/${wordId}`;
-	const addPage = location.pathname === '/word/add';
-
-	// 정규식
-	const validateInput = (inputValue: string, startLang: string): string => {
-		if (!inputValue) {
-			return '';
-		}
-
-		if (startLang === 'korean' && !/^[ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(inputValue)) {
-			return '한글로 입력해 주세요.';
-		} else if (startLang === 'english' && !/^[a-zA-Z]+$/.test(inputValue)) {
-			return '영어로 입력해 주세요.';
-		}
-
-		return '';
-	};
-
-	// 포커스 이동
-	const inputRef = useRef<HTMLInputElement>(null);
-	const focusInput = () => {
-		if (inputRef.current) {
-			inputRef.current.focus();
-		}
-	};
-
-	/** 핸들링 함수 */
-
-	// 단어 검색
-	const handleSearch = async () => {
-		if (bookInfo.startLang === 'korean') {
-			const currMeaning = await crawledWord('ko', word);
-			if (currMeaning && currMeaning.length > 0) {
-				setCurrMeaning(currMeaning);
-			} else {
-				setCurrMeaning([]);
-			}
-		} else if (bookInfo.startLang === 'english') {
-			const currMeaning = await crawledWord('en', word);
-			if (currMeaning && currMeaning.length > 0) {
-				setCurrMeaning(currMeaning);
-			} else {
-				setCurrMeaning([]);
-			}
-		}
-	};
-
-	// 의미 추가
-	const handleMeaningChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setMeaning(e.target.value);
-	};
-
-	const handleAddMeaning = () => {
-		if (meaning.trim() !== '') {
-			setCurrMeaning(prevMeanings => [meaning, ...prevMeanings]);
-			setMeaning('');
-		}
-	};
-
-	// 의미 삭제
-	const handleDeleteMeaning = (index: number) => {
-		setCurrMeaning(prevMeanings => {
-			const updatedMeanings = [...prevMeanings];
-			updatedMeanings.splice(index, 1);
-			return updatedMeanings;
-		});
-	};
 
 	/** API 연결 */
-
-	// 단어 크롤링
-	const crawledWord = async (lang: string, searchWord: string) => {
-		try {
-			const response = await crawlingWord(lang, searchWord);
-			if (response.status === 204) {
-				setErrorCaption('검색 결과가 없습니다.');
-			}
-			focusInput();
-			return response.data;
-		} catch (error) {
-			console.log(error);
-		}
+	type Book = {
+		name: string;
+		startLang: string;
+		endLang: string;
+		short_id: string;
 	};
 
-	// 단어장 모두 검색
+	// 단어장 모두 검색 (로그인, 비로그인)
 	const getBookList = async () => {
-		try {
-			const response = await bookListAll(userToken);
-			if (response.status === 200) {
-				const bookList = response.data;
-				setBookList(bookList);
-				if (bookList.length > 0) {
-					const { name, start_lang, end_lang, short_id } = bookList[0];
-					setBookInfo({
-						bookName: name,
-						startLang: start_lang,
-						endLang: end_lang,
-						short_id: short_id,
-					});
+		if (userToken) {
+			try {
+				const response = await bookListAll(userToken);
+				if (response.status === 200) {
+					const bookLists = response.data;
+					console.log(bookLists)
+					setBookList(bookLists);
+					if (bookLists.length > 0) {
+						if (addPage) {
+							const { name, start_lang, end_lang, short_id } = bookLists[0];
+							setBookInfo({
+								name: name,
+								startLang: start_lang,
+								endLang: end_lang,
+								short_id: short_id,
+							});
+						} else if (editPage) {
+							getWords();
+						}
+					}
 				}
+			} catch (err) {
+				console.log(err);
 			}
-		} catch (err) {
-			console.log(err);
-			// alert('단어장 정보를 불러오는데 실패하였습니다.');
 		}
 	};
 
@@ -164,84 +80,111 @@ function WordForm() {
 				return;
 			}
 			const response = await selectedWord(wordId, userToken);
-			const { word, meanings } = response.data;
+			const { word, meanings, bookId } = response.data;
 			if (response.status === 200) {
-				setWord(word);
-				setCurrMeaning(meanings);
+				// 단어에서 불러온 단어 bookId랑 단어장 목록에서 shortId 같은 거 비교해서 start_lang 찾기
+				setBookId(bookId)
+
+				setWords(prevWords => ({
+					...prevWords,
+					word: word,
+					currMeaning: meanings,
+				}));
 			}
 		} catch (err) {
 			console.log(err);
-			// alert('단어를 불러올 수 없습니다.');
 		}
 	};
 
 	// 단어 추가 및 수정
 	const handleSubmit = async () => {
-		if (!word || (!currMeaning.length && !meaning)) {
-			return;
-		}
-		let meanings = currMeaning;
-		if (meaning) {
-			meanings = [meaning, ...currMeaning];
-		}
-		const addData = {
-			word: word,
-			meanings: meanings,
-			bookId: bookInfo.short_id,
-		};
-
-		const editData = {
-			word: word,
-			meanings: meanings,
-		};
-
-		if (addPage) {
-			try {
-				if (!bookInfo.bookName) {
-					alert('단어장을 선택해주세요.');
-					return;
-				}
-				const response = await addedWord(userToken, addData);
-				if (response.status === 200) {
-					alert(`[${word}] 단어 추가 완료`);
-					setWord('');
-					setMeaning('');
-					setCurrMeaning([]);
-				}
-			} catch (err) {
-				console.log(err);
-				alert('단어를 추가하지 못했습니다.');
+		if (userToken) {
+			if (!words.word || (!words.currMeaning.length && !words.meaning)) {
+				return;
 			}
-		} else if (editPage) {
-			try {
-				if (!wordId) {
-					return;
-				}
-				console.log(wordId);
-				const response = await updatedWord(wordId, userToken, editData);
-				if (response.status === 200) {
-					alert(`[${word}] 단어 수정 완료`);
-					history.back();
-				}
-			} catch (err) {
-				console.log(err);
+			let meanings = words.currMeaning;
+			if (words.meaning) {
+				meanings = [words.meaning, ...words.currMeaning];
 			}
+			const addData = {
+				word: words.word,
+				meanings: meanings,
+				bookId: bookInfo.short_id
+			};
+
+			const editData = {
+				word: words.word,
+				meanings: meanings
+			};
+
+			if (addPage) {
+				try {
+					if (!bookInfo.name) {
+						alert('단어장을 선택해주세요.');
+						return;
+					}
+					const response = await addedWord(userToken, addData);
+					if (response.status === 200) {
+						alert(`[${words.word}] 단어 추가 완료`);
+						setWords(prevWords => ({
+							...prevWords,
+							word: '',
+							meaning: '',
+							currMeaning: []
+						}));
+					}
+				} catch (err) {
+					console.log(err);
+					alert('단어를 추가하지 못했습니다.');
+				}
+			} else if (editPage) {
+				try {
+					if (!wordId) {
+						return;
+					}
+					const response = await updatedWord(wordId, userToken, editData);
+					if (response.status === 200) {
+						alert(`[${words.word}] 단어 수정 완료`);
+						history.back();
+					}
+				} catch (err) {
+					console.log(err);
+				}
+			}
+		} else {
+			// 비로그인 추가 못하게
+			return alert('로그인 후에 이용해주세요.');
 		}
 	};
 
 	useEffect(() => {
-		if (editPage) {
-			getWords();
-		} else {
+		getBookList();
+		if (addPage) {
 			clearData();
 		}
-		getBookList();
 	}, [editPage]);
 
-	// editPage에서 벗어날때 데이터 초기화
+	useEffect(() => {
+		if (bookId && bookList.length > 0) {
+			const selectedBook = bookList.find((book: Book) => book.short_id === bookId);
+			if (selectedBook) {
+				const { start_lang, end_lang } = selectedBook;
+				setBookInfo((prevBookInfo) => ({
+					...prevBookInfo,
+					startLang: start_lang,
+					endLang: end_lang,
+				}));
+			}
+		}
+	}, [bookId, bookList])
+
+
 	const clearData = () => {
-		setWord('');
-		setCurrMeaning([]);
+		setWords(prevWords => ({
+			...prevWords,
+			word: '',
+			currMeaning: [],
+		}));
 	};
 
 	return (
@@ -249,118 +192,37 @@ function WordForm() {
 			<Navigation></Navigation>
 			<main>
 				<div className={styles.container}>
+					{/* WordHeader */}
 					<WordHeader
-						addPage={addPage}
-						editPage={editPage}
-						navigate={navigate}
 						bookInfo={bookInfo}
 						setShowModal={setShowModal}
-						word={word}
-						currMeaning={currMeaning}
-						meaning={meaning}
+						words={words}
 						handleSubmit={handleSubmit}
-						buttonText={buttonText}
 					/>
 
-					<form className={styles.wordForm} onSubmit={e => e.preventDefault()}>
-						<div className={styles.wordInputWrap}>
-							<label htmlFor='word'>{bookInfo.startLang}</label>
-							<WordInput
-								value={word}
-								onKeyDown={e => {
-									if (e.key === 'Enter') {
-										handleSearch();
-									}
-								}}
-								onChange={e => {
-									const inputValue = e.target.value;
-									const errorCaption = validateInput(
-										inputValue,
-										bookInfo.startLang,
-									);
-									setErrorCaption(errorCaption);
-									setWord(inputValue);
-								}}
-								placeholder='단어를 입력해 주세요 (필수)'
-								onClick={handleSearch}
-								errorCaption={errorCaption}
-							/>
-						</div>
-						<div className={styles.wordInputWrap}>
-							<label htmlFor='meaning' className={styles.margin}>
-								{bookInfo.endLang}
-							</label>
-							<input
-								type='text'
-								placeholder='의미를 입력해 주세요 (필수)'
-								value={meaning}
-								ref={inputRef}
-								onChange={handleMeaningChange}
-								onKeyPress={e => {
-									if (e.key === 'Enter') {
-										e.preventDefault();
-										handleAddMeaning();
-									}
-								}}
-							/>
-
-							<ul className={styles.meanList}>
-								{currMeaning.map((word, index) => (
-									<li key={index} className={styles.meanItem}>
-										<p>{word}</p>
-
-										<div>
-											{/* <button
-										>
-											<HiOutlinePencil className={styles.icon} />
-										</button> */}
-											<button
-												className={styles.cancelBtn}
-												onClick={() => handleDeleteMeaning(index)}>
-												<IoIosCloseCircleOutline className={styles.icon} />
-											</button>
-										</div>
-									</li>
-								))}
-							</ul>
-						</div>
-					</form>
+					{/* WordFormDetail */}
+					<WordFormDetail
+						bookInfo={bookInfo}
+						words={words}
+						setWords={setWords}
+					/>
 				</div>
 			</main>
-			{addPage && (
-				<div className={styles.bookBtn}>
+			{/* BookListModal */}
+			{addPage &&
+				(<div className={styles.bookBtn}>
 					<Modal
 						showModal={showModal}
 						setShowModal={setShowModal}
 						title='단어장 선택'>
-						<ul className={styles.modalBookList}>
-							{bookList.map(
-								({ name, start_lang, end_lang, short_id }, index) => (
-									<li
-										key={index}
-										className={`${styles.modalBookItem} ${
-											short_id === bookInfo.short_id ? styles.selected : ''
-										}`}
-										onClick={() => {
-											setShowModal(false);
-											setBookInfo({
-												bookName: name,
-												startLang: start_lang,
-												endLang: end_lang,
-												short_id: short_id,
-											});
-										}}>
-										<div>
-											<BsJournalBookmark className={styles.icon} />
-										</div>
-										{name}
-									</li>
-								),
-							)}
-						</ul>
+						<BookListModal
+							setShowModal={setShowModal}
+							bookList={bookList}
+							bookInfo={bookInfo}
+							setBookInfo={setBookInfo}
+						/>
 					</Modal>
-				</div>
-			)}
+				</div>)}
 		</>
 	);
 }
