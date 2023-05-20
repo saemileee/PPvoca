@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '../common/Modal/Modal';
 import ChangeStatus from '../common/Status/Status';
-import styles from '../components/Quiz/QuizAnswerModal.module.scss';
+import styles from '../Quiz/QuizAnswerModal.module.scss';
 type TypeAnswer = {
 	isCorrect?: boolean;
 	wordId: string;
@@ -26,11 +26,17 @@ function QuizAnswerModal({
 			title='퀴즈 정답 보기'>
 			<ul className={styles.listContainer}>
 				{answerList.map((answer, index) => (
-					<li key={answer.wordId}>
-						<span>{index + 1}.</span>
-						<ChangeStatus id={answer.wordId} initialStatus={answer.status} />
-						<p>{answer.word}</p>
-						<ul>
+					<li key={answer.wordId} className={styles.answerList}>
+						<div
+							className={`${styles.answerContainer} ${
+								answer.isCorrect ? styles.correct : styles.incorrect
+							}`}>
+							<span>{index + 1}.</span>
+							{/* <span>{answer.isCorrect ? 'O' : 'X'}</span> */}
+							<span className={styles.word}>{answer.word}</span>
+							<ChangeStatus id={answer.wordId} initialStatus={answer.status} />
+						</div>
+						<ul className={styles.meaningList}>
 							{answer.meanings.map((meaning: string, index: number) => (
 								<li key={index}>{meaning}</li>
 							))}
