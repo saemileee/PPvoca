@@ -117,7 +117,8 @@ function List({ quizInfo }: ListProps) {
 			<Modal
 				showModal={showOptionModal}
 				setShowModal={setShowOptionModal}
-				title='퀴즈 옵션 설정'>
+				title='퀴즈 옵션 설정'
+			>
 				<ul className={styles.optionContainer}>
 					{/* 컴포넌트화 필요 */}
 					<BookOption onClick={handleBookSelectButtonClick} />
@@ -142,7 +143,8 @@ function List({ quizInfo }: ListProps) {
 			<Modal
 				showModal={showBookSelectModal}
 				setShowModal={setShowBookSelectModal}
-				title='단어장 선택'>
+				title='단어장 선택'
+			>
 				<BookSelectOption
 					bookList={bookList}
 					value={bookOption}
