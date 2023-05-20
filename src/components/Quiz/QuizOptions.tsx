@@ -115,7 +115,8 @@ export function NumberOption({ value, onChange }: NumberOptionProps) {
 				value={value}
 				onChange={e => {
 					onChange(Number(e.target.value));
-				}}></input>
+				}}
+			></input>
 		</li>
 	);
 }

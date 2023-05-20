@@ -244,7 +244,8 @@ function WordList() {
 									if (!wordList.length) {
 										setWordList(prevWordList.current);
 									}
-								}}>
+								}}
+							>
 								<IoSearchOutline />
 							</div>
 						</div>
@@ -260,8 +261,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-												? true
-												: false
+											? true
+											: false
 									}
 								/>
 							</div>
@@ -285,7 +286,8 @@ function WordList() {
 									</div>
 									<div
 										className={styles.edit}
-										onClick={() => handleEdit(item.short_id)}>
+										onClick={() => handleEdit(item.short_id)}
+									>
 										<HiOutlinePencil />
 									</div>
 									<div className={styles.status}>
@@ -328,28 +330,32 @@ function WordList() {
 					onClose={() => {
 						setAlertDeleteModalOpen(false);
 					}}
-					message='삭제가 완료되었습니다.' />
+					message='삭제가 완료되었습니다.'
+				/>
 				<AlertModal
 					isOpen={alertUnmarkModalOpen}
 					onClose={() => {
 						setAlertUnmarkModalOpen(false);
 						location.reload();
 					}}
-					message='전체 단어 미분류 처리되었습니다.' />
+					message='전체 단어 미분류 처리되었습니다.'
+				/>
 				<AlertModal
 					isOpen={alertCheckModalOpen}
-					onClose={() => { 
+					onClose={() => {
 						setAlertCheckModalOpen(false);
 						location.reload();
 					}}
-					message='전체 단어 외움 처리되었습니다.' />
+					message='전체 단어 외움 처리되었습니다.'
+				/>
 				<AlertModal
 					isOpen={alertUnknownModalOpen}
-					onClose={() => { 
+					onClose={() => {
 						setAlertUnknownModalOpen(false);
 						location.reload();
 					}}
-					message='전체 단어 헷갈림 처리되었습니다.' />
+					message='전체 단어 헷갈림 처리되었습니다.'
+				/>
 			</main>
 		</>
 	);

@@ -19,7 +19,8 @@ function Navigation() {
 							to='/word/add'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
 								<BsPencil size={24} />
 							</div>
@@ -30,7 +31,8 @@ function Navigation() {
 							to='/book/list'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
 								<BsJournalBookmark size={24} />
 							</div>
@@ -41,7 +43,8 @@ function Navigation() {
 							to='/quiz/list'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
 								<BsPatchQuestion size={24} />
 							</div>
@@ -52,7 +55,8 @@ function Navigation() {
 							to='/calendar'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
 								<BsCalendar4Week size={24} />
 							</div>
@@ -63,7 +67,8 @@ function Navigation() {
 							to='/login'
 							style={({ isActive }) => ({
 								color: isActive ? 'red' : 'black',
-							})}>
+							})}
+						>
 							<div className={styles.iconWrapper}>
 								<TbLogin size={24} />
 							</div>

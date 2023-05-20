@@ -68,7 +68,8 @@ const FourProngQuiz = () => {
 					<button
 						onClick={() => {
 							currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-						}}>
+						}}
+					>
 						prev
 					</button>
 					<button
@@ -76,7 +77,8 @@ const FourProngQuiz = () => {
 							currentQuiz !== problems.length - 1
 								? setCurrentQuiz(prev => prev + 1)
 								: setIsDone(true)
-						}>
+						}
+					>
 						next
 					</button>
 				</div>
@@ -177,7 +179,8 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}>
+							}}
+						>
 							<span>
 								{selection.meanings.map((meaning: string) => (
 									<span className={styles.selectionMeaning}>{meaning}</span>
@@ -189,7 +192,8 @@ function Quiz({ problemData, page, style, onAnswerClick }: TypeQuizProps) {
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}>
+								className={styles.selectionWord}
+							>
 								{selection.word}
 							</span>
 						</li>

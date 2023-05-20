@@ -31,7 +31,15 @@ type Props = {
 	setAlertUnknownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function WordListOptionsModal({ setModalOpen, wordList, setWordList, setAlertDeleteOpen, setAlertUnmarkOpen, setAlertCheckOpen, setAlertUnknownOpen }: Props) {
+function WordListOptionsModal({
+	setModalOpen,
+	wordList,
+	setWordList,
+	setAlertDeleteOpen,
+	setAlertUnmarkOpen,
+	setAlertCheckOpen,
+	setAlertUnknownOpen,
+}: Props) {
 	const userToken = useRecoilValue(userTokenState);
 	const checkedList = useRecoilValue(checkedWordList);
 
