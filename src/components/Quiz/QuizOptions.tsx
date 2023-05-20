@@ -1,5 +1,6 @@
 import { type } from '@testing-library/user-event/dist/type';
 import React, { useEffect, useState } from 'react';
+import styles from './QuizOptions.module.scss';
 
 type TypeBookOptionProps = { onClick: () => void };
 export function BookOption({ onClick }: TypeBookOptionProps) {

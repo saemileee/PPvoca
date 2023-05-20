@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { fourProngProblems } from './quiz-mock';
 import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
-import QuizResult from '../../pages/QuizResult';
+import QuizResult from './QuizResult';
 import Header from '../common/Header/Header';
 
 type TypeAnswer = {
@@ -97,7 +97,8 @@ const FourProngQuiz = () => {
 						<button
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-							}}>
+							}}
+						>
 							prev
 						</button>
 						<button
@@ -105,7 +106,8 @@ const FourProngQuiz = () => {
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
 									: setIsDone(true)
-							}>
+							}
+						>
 							next
 						</button>
 					</div>
@@ -222,7 +224,8 @@ function Quiz({
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}>
+							}}
+						>
 							<span>
 								{selection.meanings.map((meaning: string) => (
 									<span className={styles.selectionMeaning}>{meaning}</span>
@@ -234,7 +237,8 @@ function Quiz({
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}>
+								className={styles.selectionWord}
+							>
 								{selection.word}
 							</span>
 						</li>
