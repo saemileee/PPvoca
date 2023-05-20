@@ -20,9 +20,14 @@ type FormDataType = {
 type PropsTypes = {
 	setEnableDelete: React.Dispatch<React.SetStateAction<boolean>>;
 	openAlert: (message: string, onClose: null | (() => void)) => void;
+	openConfirmAlert: (handleConfirm: () => void) => void;
 };
 
-function UserDeleteForm({ setEnableDelete, openAlert }: PropsTypes) {
+function UserDeleteForm({
+	setEnableDelete,
+	openAlert,
+	openConfirmAlert,
+}: PropsTypes) {
 	const [userToken, setUserToken] = useRecoilState(userTokenState);
 	const initValue = {
 		password: '',
@@ -36,8 +41,8 @@ function UserDeleteForm({ setEnableDelete, openAlert }: PropsTypes) {
 		setValidationPass,
 	} = useUserValidator(initValue);
 
-	const handleSubmit = async () => {
-		if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
+	const handleSubmit = () => {
+		openConfirmAlert(async () => {
 			try {
 				const data: FormDataType = {
 					typedPassword: value.password,
@@ -61,7 +66,7 @@ function UserDeleteForm({ setEnableDelete, openAlert }: PropsTypes) {
 				//console.log(err);
 				openAlert('회원 탈퇴에 실패하였습니다.', null);
 			}
-		}
+		});
 	};
 
 	useEffect(() => {

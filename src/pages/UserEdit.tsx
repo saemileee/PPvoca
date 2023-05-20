@@ -6,6 +6,7 @@ import Logo from '../components/common/Logo/Logo';
 import UserEditForm from '../components/UserEdit/UserEditForm';
 import UserDeleteForm from '../components/UserEdit/UserDeleteForm';
 import AlertModal from '../components/common/AlertModal/AlertModal';
+import ConfirmAlertModal from '../components/UserEdit/ConfirmAlertModal';
 
 function UserEdit() {
 	const logoStyle = {
@@ -14,6 +15,12 @@ function UserEdit() {
 	};
 
 	const [enableDelete, setEnableDelete] = useState(false);
+	const [confirmAlertModal, setConfirmAlertModal] = useState({
+		isOpen: false,
+		handleConfirm: () => {
+			/* determined later */
+		},
+	});
 	const { alertModal, handleCloseAlert, handleOpenAlert } = useUserAlert();
 
 	return (
@@ -30,6 +37,12 @@ function UserEdit() {
 					<UserDeleteForm
 						setEnableDelete={setEnableDelete}
 						openAlert={handleOpenAlert}
+						openConfirmAlert={(handleConfirm: () => void) =>
+							setConfirmAlertModal({
+								isOpen: true,
+								handleConfirm,
+							})
+						}
 					/>
 				)}
 				{alertModal.isOpen && (
@@ -37,6 +50,14 @@ function UserEdit() {
 						isOpen={alertModal.isOpen}
 						onClose={alertModal.onClose ? alertModal.onClose : handleCloseAlert}
 						message={alertModal.message}
+					/>
+				)}
+				{confirmAlertModal.isOpen && (
+					<ConfirmAlertModal
+						onClose={() =>
+							setConfirmAlertModal(prev => ({ ...prev, isOpen: false }))
+						}
+						onConfirm={confirmAlertModal.handleConfirm}
 					/>
 				)}
 			</main>
