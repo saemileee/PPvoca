@@ -9,6 +9,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
+import QuizList from './pages/QuizList';
+import FourProngQuiz from './components/Quiz/FourProngQuiz';
+import Navigation from './components/common/Navigation/Navigation';
+import QuizResult from './pages/QuizResult';
 
 function App() {
 	return (
@@ -29,6 +33,8 @@ function App() {
 					<Route path='/register' element={<Register />}></Route>
 					<Route path='/user/info' element={<UserInfo />}></Route>
 					<Route path='/user/edit' element={<UserEdit />}></Route>
+					<Route path='/quiz/list' element={<QuizList />}></Route>
+					<Route path='/quiz/four-prong' element={<FourProngQuiz />}></Route>
 				</Routes>
 			</React.Fragment>
 		</BrowserRouter>

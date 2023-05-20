@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 import styles from '../components/Login/Login.module.scss';
-import Header from '../components/common/Header/Header';
+import Navigation from '../components/common/Navigation/Navigation';
 import Logo from '../components/common/Logo/Logo';
 import LoginForm from '../components/Login/LoginForm';
 
@@ -21,7 +21,7 @@ function Login() {
 
 	return (
 		<>
-			<Header />
+			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />
 				<LoginForm />

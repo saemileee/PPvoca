@@ -20,8 +20,7 @@ function Modal({ showModal, setShowModal, title, children }: ModalProps) {
 							<span className={styles.title}>{title}</span>
 							<button
 								className={styles.closeBtn}
-								onClick={() => setShowModal(false)}
-							>
+								onClick={() => setShowModal(false)}>
 								<RiCloseLine className={styles.icon} />
 							</button>
 						</div>

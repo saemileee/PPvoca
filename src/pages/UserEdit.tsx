@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../components/UserEdit/UserEdit.module.scss';
-import Header from '../components/common/Header/Header';
+import Navigation from '../components/common/Navigation/Navigation';
 import Logo from '../components/common/Logo/Logo';
 import UserEditForm from '../components/UserEdit/UserEditForm';
 import UserDeleteForm from '../components/UserEdit/UserDeleteForm';
@@ -15,7 +15,7 @@ function UserEdit() {
 
 	return (
 		<>
-			<Header />
+			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />
 				{!enableDelete ? (

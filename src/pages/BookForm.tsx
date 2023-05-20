@@ -10,7 +10,7 @@ import { infoUser } from '../apis/user';
 import { userTokenState } from '../recoil/userState';
 
 import { addedBook, selectedBook, updatedBook } from '../apis/book';
-import Header from '../components/common/Header/Header';
+import Navigation from '../components/common/Navigation/Navigation';
 
 function BookForm() {
 	const userToken = useRecoilValue(userTokenState);
@@ -137,7 +137,7 @@ function BookForm() {
 
 	return (
 		<>
-			<Header></Header>
+			<Navigation></Navigation>
 			<main>
 				<div className={styles.container}>
 					<BookHeader
@@ -183,8 +183,7 @@ function BookForm() {
 											onClick={e => {
 												e.preventDefault();
 												handleToggleLanguage();
-											}}
-										>
+											}}>
 											<BsArrowDownUp className={styles.icon} />
 										</button>
 									</td>
