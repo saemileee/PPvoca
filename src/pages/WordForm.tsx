@@ -316,7 +316,8 @@ function WordForm() {
 										</button> */}
 											<button
 												className={styles.cancelBtn}
-												onClick={() => handleDeleteMeaning(index)}>
+												onClick={() => handleDeleteMeaning(index)}
+											>
 												<IoIosCloseCircleOutline className={styles.icon} />
 											</button>
 										</div>
@@ -332,7 +333,8 @@ function WordForm() {
 					<Modal
 						showModal={showModal}
 						setShowModal={setShowModal}
-						title='단어장 선택'>
+						title='단어장 선택'
+					>
 						<ul className={styles.modalBookList}>
 							{bookList.map(
 								({ name, start_lang, end_lang, short_id }, index) => (
@@ -349,7 +351,8 @@ function WordForm() {
 												endLang: end_lang,
 												short_id: short_id,
 											});
-										}}>
+										}}
+									>
 										<div>
 											<BsJournalBookmark className={styles.icon} />
 										</div>
