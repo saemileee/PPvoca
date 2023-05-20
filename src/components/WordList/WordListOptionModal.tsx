@@ -121,28 +121,26 @@ function WordListOptionsModal({
 	}, [checkedList]);
 
 	return (
-		<div>
-			<div>
-				<div className={styles.optionscontainer} ref={modalRef}>
-					<div className={styles.delete} onClick={handleDelete}>
-						<AiOutlineDelete />
-						&nbsp;&nbsp;선택된 단어 삭제
-					</div>
-					<div className={styles.unmark} onClick={handleAllUnmark}>
-						<BiMessageSquare />
-						&nbsp;&nbsp;전체 마크 해제
-					</div>
-					<div className={styles.check} onClick={handleAllCheck}>
-						<BiMessageSquareCheck />
-						&nbsp;&nbsp;전체 외운 단어 마크
-					</div>
-					<div className={styles.unknown} onClick={handleAllUnknown}>
-						<BiMessageSquareError />
-						&nbsp;&nbsp;전체 헷갈리는 단어 마크
-					</div>
+		<>
+			<div className={styles.optionscontainer} ref={modalRef}>
+				<div className={styles.delete} onClick={handleDelete}>
+					<AiOutlineDelete />
+					&nbsp;&nbsp;선택된 단어 삭제
+				</div>
+				<div className={styles.unmark} onClick={handleAllUnmark}>
+					<BiMessageSquare />
+					&nbsp;&nbsp;전체 마크 해제
+				</div>
+				<div className={styles.check} onClick={handleAllCheck}>
+					<BiMessageSquareCheck />
+					&nbsp;&nbsp;전체 외운 단어 마크
+				</div>
+				<div className={styles.unknown} onClick={handleAllUnknown}>
+					<BiMessageSquareError />
+					&nbsp;&nbsp;전체 헷갈리는 단어 마크
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

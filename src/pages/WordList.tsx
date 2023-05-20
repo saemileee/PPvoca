@@ -197,6 +197,16 @@ function WordList() {
 		}
 	};
 
+	//Enter 키를 눌렀을 때 검색 확인
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			handleFind(findWord.findword);
+			if (!wordList.length) {
+				setWordList(prevWordList.current);
+			}
+		}
+	};
+
 	const handleEdit = (short_id: string) => {
 		nav(`/word/edit/${short_id}`);
 	};
@@ -236,6 +246,7 @@ function WordList() {
 								name='findword'
 								placeholder='검색어를 입력해 주세요!'
 								onChange={onChangeFindWord}
+								onKeyDown={handleKeyDown}
 							/>
 							<div
 								className={styles.find}
@@ -261,8 +272,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-											? true
-											: false
+												? true
+												: false
 									}
 								/>
 							</div>
