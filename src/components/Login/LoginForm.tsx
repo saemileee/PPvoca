@@ -11,7 +11,11 @@ import styles from './Login.module.scss';
 import UserInput from '../common/UserInput/UserInput';
 import UserButton from '../common/UserButton/UserButton';
 
-function LoginForm() {
+type PropsTypes = {
+	openAlert: (message: string, onClose: null | (() => void)) => void;
+};
+
+function LoginForm({ openAlert }: PropsTypes) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const setUserToken = useSetRecoilState(userTokenState);
@@ -37,13 +41,13 @@ function LoginForm() {
 		};
 		setUserToken(token);
 		Cookies.set('token', token, cookieOptions);
-		alert('로그인되었습니다.');
-
-		if (location.state) {
-			navigate(location.state.url);
-		} else {
-			navigate('/user/info');
-		}
+		openAlert('환영합니다!', () => {
+			if (location.state) {
+				navigate(location.state.url);
+			} else {
+				navigate('/user/info');
+			}
+		});
 	};
 
 	const handleSubmit = async () => {
@@ -67,7 +71,7 @@ function LoginForm() {
 			}
 
 			//console.log(err);
-			alert('로그인에 실패하였습니다.');
+			openAlert('로그인에 실패하였습니다.', null);
 		}
 	};
 
