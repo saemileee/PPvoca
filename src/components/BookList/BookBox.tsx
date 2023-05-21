@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styles from './Style.module.scss';
 import Modal from './BookListModal';
+import { getWords } from '../../apis/book';
 import { BsFileEarmarkWord } from 'react-icons/bs';
 import { BiMessageSquareCheck, BiMessageSquareError } from 'react-icons/bi';
 import { CiMenuKebab } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
-
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 interface BookBoxProps {
 	book: any;
@@ -27,19 +25,9 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 	const userToken = useRecoilValue(userTokenState);
 
 	useEffect(() => {
-		async function fetchWordCount() {
+		const fetchWordCount = async () => {
 			try {
-				let url = `${baseUrl}/words/sample?bookId=${book.short_id}`;
-				let headers = {};
-
-				if (userToken) {
-					url = `${baseUrl}/words?bookId=${book.short_id}`;
-					headers = {
-						Authorization: `Bearer ${userToken}`,
-					};
-				}
-
-				const response = await axios.get(url, { headers });
+				const response = await getWords(book.short_id, userToken);
 				setWordCount(response.data.length);
 				setMemorizedWordCount(
 					response.data.filter((word: { status: number }) => word.status === 1)
@@ -52,7 +40,7 @@ function BookBox({ book, handleEdit, handleDelete }: BookBoxProps) {
 			} catch (error) {
 				console.log(error);
 			}
-		}
+		};
 
 		fetchWordCount();
 	}, [book, userToken]);
