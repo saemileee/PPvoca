@@ -5,6 +5,7 @@ import CalendarPaper from '../components/Calendar/CalendarPaper';
 import { CalendarToggle } from '../components/Calendar/CalendarToggle';
 
 function CalendarPage() {
+	const [toggle, setToggle] = useState(true);
 	return (
 		<>
 			<Navigation />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Calendar from 'react-calendar';
 import './calendar.scss';
+import styles from './CalendarPaper.module.scss';
 import { calendarGetAllWords, calendarGetToday } from '../../apis/calendar';
 import { Word, prettyDate, joinMeanings, markDate } from './CalendarType';
 import { useRecoilValue } from 'recoil';
@@ -71,14 +72,14 @@ function CalendarPaper() {
 					).length;
 					return (
 						<div className='tile-content'>
-							{wordCount > 0 && <div className='dot'>{wordCount}</div>}
+							{wordCount > 0 && <div className={styles.dot}>{wordCount}</div>}
 						</div>
 					);
 				}}
 			/>
-			<ul className='list-container'>
+			<ul className={styles['list_container']}>
 				{wordsList.map((word, index) => (
-					<li key={index} className='list'>
+					<li key={index} className={styles['list']}>
 						<h3>{word.word}</h3>
 						<div>{joinMeanings(word.meanings)}</div>
 						<div>{prettyDate(word.createdAt)}</div>
