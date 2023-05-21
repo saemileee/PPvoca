@@ -19,6 +19,7 @@ import AddButton from '../components/common/AddButton/AddButton';
 import ChangeStatus from '../components/common/Status/Status';
 import Speaker from '../components/common/Speaker/Speaker';
 import AlertModal from '../components/common/AlertModal/AlertModal';
+import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
 
 //Recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -28,6 +29,7 @@ import checkedWordList from '../recoil/checkedWordList';
 //API
 import {
 	getWords,
+	getSampleWords,
 	getWordsByBook,
 	getBookName,
 	findWordById,
@@ -67,6 +69,7 @@ function WordList() {
 	const [alertUnmarkModalOpen, setAlertUnmarkModalOpen] = useState(false);
 	const [alertCheckModalOpen, setAlertCheckModalOpen] = useState(false);
 	const [alertUnknownModalOpen, setAlertUnknownModalOpen] = useState(false);
+	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 
 	const [booktitle, setBooktitle] = useState('단어장');
 	const [findWord, setFindWord] = useState({
@@ -97,7 +100,7 @@ function WordList() {
 
 	//단어장 리스트
 	useEffect(() => {
-		if (bookId) {
+		if (bookId && userToken) {
 			const fetchWords = async () => {
 				try {
 					const response = await getWordsByBook(userToken, bookId);
@@ -108,6 +111,16 @@ function WordList() {
 			};
 			fetchWords();
 			setCheckedList([]);
+		} else if (!userToken) {
+			const fetchWords = async () => {
+				try {
+					const response = await getSampleWords();
+					setWordList(response.data);
+				} catch (err) {
+					console.log(err);
+				}
+			};
+			fetchWords();
 		}
 	}, []);
 
@@ -169,7 +182,12 @@ function WordList() {
 	};
 
 	const handleOption = () => {
-		setOptionModal(true);
+		if (userToken) {
+			setOptionModal(true);
+		} else {
+			setLoginAlertModalOpen(true);
+		}
+
 	};
 
 	//Input창에 단어 검색
@@ -208,7 +226,12 @@ function WordList() {
 	};
 
 	const handleEdit = (short_id: string) => {
-		nav(`/word/edit/${short_id}`);
+		if (userToken) {
+			nav(`/word/edit/${short_id}`);
+		} else {
+			setLoginAlertModalOpen(true);
+		}
+
 	};
 
 	return (
@@ -305,6 +328,7 @@ function WordList() {
 										<ChangeStatus
 											id={item.short_id}
 											initialStatus={item.status}
+											setLoginAlertModal={setLoginAlertModalOpen}
 										/>
 									</div>
 									<div className={styles.speaker}>
@@ -326,7 +350,7 @@ function WordList() {
 								</div>
 							</div>
 						))}
-						<AddButton url='/word/add' />
+						<AddButton url='/word/add' bookId={bookId} />
 					</div>
 					{filterModal && (
 						<WordListFilterModal
@@ -367,6 +391,9 @@ function WordList() {
 					}}
 					message='전체 단어 헷갈림 처리되었습니다.'
 				/>
+				{loginAlertModalOpen && (
+					<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
+				)}
 			</main>
 		</>
 	);

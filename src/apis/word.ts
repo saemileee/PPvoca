@@ -12,6 +12,12 @@ export const getWords = async (token: string) => {
 	return response;
 };
 
+//샘플 단어 가져오기
+export const getSampleWords = async () => {
+	const response = await axios.get(`${baseUrl}/words/sample`);
+	return response;
+}
+
 //특정 단어장의 단어 가져오기
 export const getWordsByBook = async (token: string, id: string) => {
 	const response = await axios.get(`${baseUrl}/words`, {
