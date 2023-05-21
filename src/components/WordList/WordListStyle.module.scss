@@ -81,7 +81,7 @@
 	.count {
 		padding: 5px;
 		font-size: 13px;
-		color: #cc99ff;
+		color: #7353ea;
 	}
 }
 
@@ -134,11 +134,12 @@
 		.meaningBlock {
 			display: inline-block;
 			margin-right: 5px;
-			background-color: #f0e1ff;
+			//background-color: #7353ea;
+			color: #7353ea;
 			margin: 3px;
 			padding: 5px;
 			border-radius: 5px;
-			border: 1px solid #000000;
+			border: 1px solid #7353ea;
 			font-size: 15px;
 		}
 	}
@@ -157,9 +158,8 @@
 	z-index: 2;
 
 	position: absolute;
-	top: 150px;
-	left: 320px;
-	transform: translate(-50%, -50%);
+	top: 45px;
+	right: 10px;
 
 	background-color: #ffffff;
 	border: 1px solid #000000;
