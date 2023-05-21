@@ -1,18 +1,26 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import BookHeader from '../components/BookForm/BookHeader';
-import styles from '../components/BookForm/bookform.module.scss';
-import { BsJournalBookmark } from 'react-icons/bs';
-import { IoLanguageOutline } from 'react-icons/io5';
-import { BsArrowDownUp } from 'react-icons/bs';
+import { addedBook, selectedBook, updatedBook } from '../apis/book';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 
-import { addedBook, selectedBook, updatedBook } from '../apis/book';
+import styles from '../components/BookForm/bookform.module.scss';
+
+import { BsJournalBookmark } from 'react-icons/bs';
+import { IoLanguageOutline } from 'react-icons/io5';
+import { BsArrowDownUp } from 'react-icons/bs';
+
 import Navigation from '../components/common/Navigation/Navigation';
+import BookHeader from '../components/BookForm/BookHeader';
+import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
+import AlertModal from '../components/common/AlertModal/AlertModal';
+
 
 function BookForm() {
 	const userToken = useRecoilValue(userTokenState);
+	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
+	const [alertModalOpen, setAlertModalOpen] = useState(false);
+	const [message, setMessage] = useState('');
 	const navigate = useNavigate();
 	const [bookInfo, setBookInfo] = useState({
 		bookDescription: '',
@@ -27,7 +35,6 @@ function BookForm() {
 	const addPage = location.pathname === '/book/add';
 
 	/** 핸들링 함수 */
-
 	// 단어장 이름 변경
 	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setBookInfo(prevBookInfo => ({
@@ -109,12 +116,12 @@ function BookForm() {
 				try {
 					const response = await addedBook(userToken, data);
 					if (response.status === 201) {
-						alert(`[${bookInfo.bookName}] 생성 완료`);
-						navigate('/book/list');
+						setMessage(`[${bookInfo.bookName}] 생성 완료`)
+						setAlertModalOpen(true);
 					}
 				} catch (err) {
 					console.log(err);
-					alert('단어장 생성 실패');
+					// alert('단어장 생성 실패');
 				}
 			} else if (editPage) {
 				try {
@@ -123,8 +130,8 @@ function BookForm() {
 					}
 					const response = await updatedBook(bookId, userToken, data);
 					if (response.status === 200) {
-						alert(`[${bookInfo.bookName}] 수정 완료`);
-						navigate('/book/list');
+						setMessage(`[${bookInfo.bookName}] 수정 완료`)
+						setAlertModalOpen(true);
 					}
 				} catch (err) {
 					console.log(err);
@@ -132,7 +139,7 @@ function BookForm() {
 				}
 			}
 		} else {
-			return alert('로그인 후에 이용해주세요.')
+			setLoginAlertModalOpen(true);
 		}
 	};
 
@@ -140,7 +147,7 @@ function BookForm() {
 		if (editPage) {
 			getBookList();
 		}
-	}, []);
+	}, [editPage]);
 
 	return (
 		<>
@@ -204,6 +211,19 @@ function BookForm() {
 						</table>
 					</form>
 				</div>
+				<AlertModal
+					isOpen={alertModalOpen}
+					onClose={() => {
+						setAlertModalOpen(false);
+						navigate('/book/list');
+					}}
+					message={message}
+				/>
+				{
+					loginAlertModalOpen && (
+						<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
+					)
+				}
 			</main>
 		</>
 	);

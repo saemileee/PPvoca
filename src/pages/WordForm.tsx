@@ -8,6 +8,8 @@ import { userTokenState } from '../recoil/userState';
 import Navigation from '../components/common/Navigation/Navigation';
 import WordHeader from '../components/WordForm/WordHeader';
 import BookListModal from '../components/WordForm/BookListModal';
+import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
+import AlertModal from '../components/common/AlertModal/AlertModal';
 import WordFormDetail from '../components/WordForm/WordFormDetail'
 import Modal from '../components/common/Modal/Modal';
 import styles from '../components/WordForm/WordForm.module.scss';
@@ -21,6 +23,10 @@ function WordForm() {
 
 	/** State */
 	const [showModal, setShowModal] = useState(false);
+	const [alertModalOpen, setAlertModalOpen] = useState(false);
+	const [shouldGoBack, setShouldGoBack] = useState(false);
+	const [message, setMessage] = useState('');
+	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 	const [bookList, setBookList] = useState([]);
 	const [bookInfo, setBookInfo] = useState({
 		name: '',
@@ -34,7 +40,6 @@ function WordForm() {
 		word: '',
 	});
 	const [bookId, setBookId] = useState('')
-
 
 	/** API 연결 */
 	type Book = {
@@ -125,13 +130,15 @@ function WordForm() {
 					}
 					const response = await addedWord(userToken, addData);
 					if (response.status === 200) {
-						alert(`[${words.word}] 단어 추가 완료`);
+						setMessage(`[${words.word}] 단어 추가 완료`)
+						setAlertModalOpen(true);
 						setWords(prevWords => ({
 							...prevWords,
 							word: '',
 							meaning: '',
 							currMeaning: []
 						}));
+						setShouldGoBack(false);
 					}
 				} catch (err) {
 					console.log(err);
@@ -144,16 +151,17 @@ function WordForm() {
 					}
 					const response = await updatedWord(wordId, userToken, editData);
 					if (response.status === 200) {
-						alert(`[${words.word}] 단어 수정 완료`);
-						history.back();
+						setMessage(`[${words.word}] 단어 수정 완료`);
+						setAlertModalOpen(true);
+						setShouldGoBack(true);
 					}
 				} catch (err) {
 					console.log(err);
 				}
 			}
 		} else {
-			// 비로그인 추가 못하게
-			return alert('로그인 후에 이용해주세요.');
+			setLoginAlertModalOpen(true);
+
 		}
 	};
 
@@ -207,6 +215,21 @@ function WordForm() {
 						setWords={setWords}
 					/>
 				</div>
+				<AlertModal
+					isOpen={alertModalOpen}
+					onClose={() => {
+						setAlertModalOpen(false);
+						if (shouldGoBack) {
+							history.back();
+						}
+					}}
+					message={message}
+				/>
+				{
+					loginAlertModalOpen && (
+						<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
+					)
+				}
 			</main>
 			{/* BookListModal */}
 			{addPage &&
