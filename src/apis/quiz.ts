@@ -8,7 +8,7 @@ export type TypeFourProngsQuiz = {
 	wordStatusOption: number[];
 };
 
-// 단어장 추가
+//사지선다 데이터 갖고오기
 export const getFourProngsQuiz = async (
 	token: string,
 	formData: TypeFourProngsQuiz,
@@ -27,3 +27,16 @@ export const getFourProngsQuiz = async (
 	);
 	return response;
 };
+
+// 답안 데이터 post
+// export const postQuizResult = async (category:string, correctWords, incorrectWords) => {
+// 	const response = await axios.post(
+// 		`${baseUrl}/quiz`,
+// 		{
+// 			headers: {
+// 				Authorization: `Bearer ${token}`,
+// 			},
+// 		},
+// 	);
+// 	return response;
+// };
