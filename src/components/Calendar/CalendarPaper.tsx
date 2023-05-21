@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 /**의존성 */
 import moment from 'moment';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
 import './calender.scss';
 import { calenderGetAllWords } from '../../apis/calendar';
-import { Word, prettyDate, joinMeanings } from './CalendarType';
+import { Word, prettyDate, joinMeanings, markDate } from './CalendarType';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
 
@@ -29,9 +28,10 @@ function CalendarPaper() {
 					year,
 					month,
 				);
+				console.log(데이터);
 				setWordsList(데이터);
 				// createdAt 값을 추출하여 mark 배열에 추가합니다.
-				const createdAtList = 데이터.map(item => prettyDate(item.createdAt));
+				const createdAtList = 데이터.map(item => markDate(item.createdAt));
 				setMark(createdAtList);
 				console.log(mark);
 			} catch (error) {
@@ -57,6 +57,7 @@ function CalendarPaper() {
 					const wordCount = mark.filter(
 						createdAt => createdAt === dateStr,
 					).length;
+					console.log(wordCount);
 
 					return (
 						<div className='tile-content'>

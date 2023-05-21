@@ -3,6 +3,7 @@ import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
 import { Word, prettyDate, joinMeanings } from './CalendarType';
 import { calenderGetAll } from '../../apis/calendar';
+import './calender.scss';
 
 function CalendarList() {
 	const [wordsList, setWordsList] = useState<Word[]>([]);
@@ -23,10 +24,10 @@ function CalendarList() {
 	}, []);
 	return (
 		<>
-			<ul>
+			<ul className={'list-container'}>
 				{wordsList.map((word, index) => {
 					return (
-						<li key={index}>
+						<li key={index} className={'list'}>
 							<h3>{word.word}</h3>
 							<div>{joinMeanings(word.meanings)}</div>
 							<div>{prettyDate(word.createdAt)}</div>
