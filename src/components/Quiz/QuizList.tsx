@@ -50,7 +50,6 @@ function QuizList({ quizInfo }: ListProps) {
 		// 네비게이션으로 사지선다 리스트를 클릭하면 해당 api 호출 +
 		if (id === 'four-prong')
 			getFourProngsQuiz(userToken, quizData).then(res => {
-				console.log(res.data);
 				navigate('/quiz/four-prong', { state: res.data });
 			});
 	};
@@ -111,8 +110,7 @@ function QuizList({ quizInfo }: ListProps) {
 			<Modal
 				showModal={showOptionModal}
 				setShowModal={setShowOptionModal}
-				title='퀴즈 옵션 설정'
-			>
+				title='퀴즈 옵션 설정'>
 				<ul className={styles.optionContainer}>
 					{/* 컴포넌트화 필요 */}
 					<BookOption onClick={handleBookSelectButtonClick} />
@@ -128,15 +126,13 @@ function QuizList({ quizInfo }: ListProps) {
 					/>
 				</ul>
 				<div className={styles.quizStartContainer}>
-					{/* 클릭하면 옵션의 세팅과 퀴즈 id에 따라 알맞은 방법으로 api 호출 */}
 					<button onClick={handleStartQuiz}>퀴즈 시작</button>
 				</div>
 			</Modal>
 			<Modal
 				showModal={showBookSelectModal}
 				setShowModal={setShowBookSelectModal}
-				title='단어장 선택'
-			>
+				title='단어장 선택'>
 				<BookSelectOption
 					bookList={bookList}
 					value={bookOption}

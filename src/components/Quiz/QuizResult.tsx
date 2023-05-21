@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { quizAnswers } from './quiz-mock';
 import QuizAnswerModal from './QuizAnswerModal';
 import styles from './QuizResult.module.scss';
+import { userTokenState } from '../../recoil/userState';
+import { multiWords, postQuizResult } from '../../apis/word';
+import { useRecoilValue } from 'recoil';
 
 type TypeResultProps = {
+	quizCategory: string;
 	correctAnswers: string[];
 	incorrectAnswers: string[];
 	style: { display: string } | undefined;
@@ -19,12 +22,14 @@ type TypeAnswer = {
 	status: number;
 };
 function QuizResult({
+	quizCategory,
 	correctAnswers,
 	incorrectAnswers,
 	style,
 	isDone,
 	onClickQuizRestart,
 }: TypeResultProps) {
+	const userToken = useRecoilValue(userTokenState);
 	const numberOfCorrects = correctAnswers.length;
 	const numberOfAll = correctAnswers.length + incorrectAnswers.length;
 	const correctPercentage = (numberOfCorrects / numberOfAll) * 100;
@@ -42,17 +47,25 @@ function QuizResult({
 
 	// api로 문제들 답 get 하기
 	useEffect(() => {
-		// return setAnswerList(quizAnswers);
-		const newAnswerList = quizAnswers.map((answer: TypeAnswer) => {
-			if (correctAnswers.includes(answer.wordId)) {
-				answer.isCorrect = true;
-				return answer;
-			} else {
-				answer.isCorrect = false;
-				return answer;
-			}
+		const answerIds = [...correctAnswers, ...incorrectAnswers];
+		multiWords(userToken, answerIds).then(res => {
+			const mappedAnswerData = res.data.map((wordData: any) => {
+				return {
+					isCorrect: correctAnswers.includes(wordData.short_id) ? true : false,
+					wordId: wordData.short_id,
+					word: wordData.word,
+					meanings: wordData.meanings,
+					status: wordData.status,
+				};
+			});
+			setAnswerList(mappedAnswerData);
 		});
-		setAnswerList(newAnswerList);
+		const formData = {
+			category: quizCategory,
+			correctWords: correctAnswers,
+			incorrectWords: incorrectAnswers,
+		};
+		postQuizResult(userToken, formData);
 	}, [isDone]);
 
 	return (
@@ -81,8 +94,7 @@ function QuizResult({
 				<button
 					onClick={() => {
 						navigate('/quiz/list');
-					}}
-				>
+					}}>
 					다른 퀴즈 풀기
 				</button>
 			</div>
