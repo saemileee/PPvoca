@@ -11,3 +11,17 @@ export const calenderGetAll = async (token: string) => {
 	});
 	return response.data;
 };
+
+// 모든 단어장 조회
+export const calenderGetAllWords = async (
+	token: string,
+	year: number,
+	month: number,
+) => {
+	const response = await axios.get(`${baseUrl}/words`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};

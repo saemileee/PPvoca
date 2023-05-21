@@ -197,3 +197,61 @@ abbr[title] {
 		text-decoration: none;
 	}
 }
+
+.toggle-switch input {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+}
+
+#container {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+.toggle-switch input[type='checkbox'] {
+	display: none;
+}
+
+.toggle-track {
+	line-height: 1.5rem;
+	display: inline-block;
+	position: relative;
+	width: 60px;
+	height: 25px;
+	border-radius: 60px;
+	background: #8b8b8b;
+}
+.toggle-track:before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: -7.5px;
+	left: -15px;
+	width: 27px;
+	height: 27px;
+	margin: 5px;
+	background: #fff;
+	border-radius: 100%;
+	border: 1px solid #8b8b8b;
+	transition: left 0.3s;
+}
+.toggle-switch input[type='checkbox'] + label .toggle-track:after {
+	content: '단어';
+	display: inline-block;
+	position: absolute;
+	right: 8px;
+	color: #fff;
+}
+
+.toggle-switch input[type='checkbox']:checked + label .toggle-track {
+	background: #fa9aa6;
+}
+.toggle-switch input[type='checkbox']:checked + label .toggle-track:before {
+	left: 40px;
+	border: 1px solid #fa9aa6;
+}
+.toggle-switch input[type='checkbox']:checked + label .toggle-track:after {
+	content: '퀴즈';
+	left: 5px;
+}
