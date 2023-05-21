@@ -185,7 +185,7 @@ function WordList() {
 		bookId: string | undefined = undefined,
 	) => {
 		if (word) {
-			const response = await findWordById(userToken, word, bookId);
+			const response = await findWordById(userToken, word);
 			setWordList(response.data);
 		} else {
 			alert('검색어를 입력해주세요!');
@@ -235,7 +235,8 @@ function WordList() {
 									if (!wordList.length) {
 										setWordList(prevWordList.current);
 									}
-								}}>
+								}}
+							>
 								<IoSearchOutline />
 							</div>
 						</div>
@@ -276,7 +277,8 @@ function WordList() {
 									</div>
 									<div
 										className={styles.edit}
-										onClick={() => handleEdit(item.short_id)}>
+										onClick={() => handleEdit(item.short_id)}
+									>
 										<HiOutlinePencil />
 									</div>
 									<div className={styles.status}>
