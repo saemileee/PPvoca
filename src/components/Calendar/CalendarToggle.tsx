@@ -1,5 +1,5 @@
 import React from 'react';
-import './calender.scss';
+import './calendar.scss';
 export function CalendarToggle() {
 	return (
 		<div id='container'>

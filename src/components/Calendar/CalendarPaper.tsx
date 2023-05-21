@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-/**의존성 */
 import moment from 'moment';
 import Calendar from 'react-calendar';
-import './calender.scss';
-import { calenderGetAllWords } from '../../apis/calendar';
+import './calendar.scss';
+import { calendarGetAllWords, calendarGetToday } from '../../apis/calendar';
 import { Word, prettyDate, joinMeanings, markDate } from './CalendarType';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
@@ -12,53 +11,64 @@ function CalendarPaper() {
 	const [wordsList, setWordsList] = useState<Word[]>([]);
 	const userToken = useRecoilValue(userTokenState);
 	const [value, onChange] = useState<Date>(new Date());
-	const day: string = moment(value).format('YYYY-MM-DD');
-	const currDate: Date = new Date();
-	const currDateTime: string = moment(currDate).format('MM-DD');
 	const [mark, setMark] = useState<string[]>([]);
-	/**useEffect */
+
+	const handleClickDate = async (date: Date) => {
+		const currentDate = moment(date);
+		const year = currentDate.year();
+		const month = currentDate.month() + 1;
+		const day = currentDate.date();
+
+		try {
+			const 데이터: Word[] = await calendarGetToday(
+				userToken,
+				year,
+				month,
+				day,
+			);
+			setWordsList(데이터);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const currentDate = moment();
 			const year = currentDate.year();
 			const month = currentDate.month() + 1;
+
 			try {
-				const 데이터: Word[] = await calenderGetAllWords(
-					userToken,
-					year,
-					month,
-				);
-				console.log(데이터);
-				setWordsList(데이터);
-				// createdAt 값을 추출하여 mark 배열에 추가합니다.
-				const createdAtList = 데이터.map(item => markDate(item.createdAt));
+				const marks: Word[] = await calendarGetAllWords(userToken, year, month);
+				const createdAtList = marks.map(item => markDate(item.createdAt));
 				setMark(createdAtList);
-				console.log(mark);
+				handleClickDate(value); // 초기 로딩 시 현재 날짜의 데이터를 가져오도록 수정
 			} catch (error) {
 				console.error(error);
 			}
 		};
 
 		fetchData();
-	}, []);
+	}, [userToken, value]);
 
 	return (
 		<>
 			<Calendar
-				calendarType={'US'}
-				locale={'ko-KR'}
+				calendarType='US'
+				locale='ko-KR'
 				formatDay={(locale, date) => moment(date).format('D')}
 				value={value}
 				next2Label={null}
 				prev2Label={null}
-				view={'month'}
+				view='month'
+				// @ts-ignore
+				onChange={onChange}
+				onClickDay={handleClickDate}
 				tileContent={({ date }) => {
 					const dateStr = moment(date).format('YYYY-MM-DD');
 					const wordCount = mark.filter(
 						createdAt => createdAt === dateStr,
 					).length;
-					console.log(wordCount);
-
 					return (
 						<div className='tile-content'>
 							{wordCount > 0 && <div className='dot'>{wordCount}</div>}
@@ -66,6 +76,16 @@ function CalendarPaper() {
 					);
 				}}
 			/>
+			<ul className='list-container'>
+				{wordsList.map((word, index) => (
+					<li key={index} className='list'>
+						<h3>{word.word}</h3>
+						<div>{joinMeanings(word.meanings)}</div>
+						<div>{prettyDate(word.createdAt)}</div>
+						<div>{word.status}</div>
+					</li>
+				))}
+			</ul>
 		</>
 	);
 }
