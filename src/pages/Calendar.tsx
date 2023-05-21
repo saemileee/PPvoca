@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Navigation from '../components/common/Navigation/Navigation';
 import CalendarPaper from '../components/Calendar/CalendarPaper';
 import { CalendarToggle } from '../components/Calendar/CalendarToggle';
+import Header from '../components/common/Header/Header';
 
 function CalendarPage() {
 	const [toggle, setToggle] = useState(true);
 	return (
 		<>
+			<Header title='달력' />
 			<Navigation />
 			<main>
 				<CalendarToggle />

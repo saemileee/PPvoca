@@ -7,6 +7,8 @@ import { calendarGetAllWords, calendarGetToday } from '../../apis/calendar';
 import { Word, prettyDate, joinMeanings, markDate } from './CalendarType';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../../recoil/userState';
+import Speaker from '../common/Speaker/Speaker';
+import ChangeStatus from '../common/Status/Status';
 
 function CalendarPaper() {
 	const [wordsList, setWordsList] = useState<Word[]>([]);
@@ -32,7 +34,14 @@ function CalendarPaper() {
 			console.error(error);
 		}
 	};
-
+	//단어 언어 확인
+	const checkLang = (word: string) => {
+		if (/[a-zA-Z]/g.test(word)) {
+			return true;
+		} else if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g.test(word)) {
+			return false;
+		}
+	};
 	useEffect(() => {
 		const fetchData = async () => {
 			const currentDate = moment();
@@ -51,6 +60,10 @@ function CalendarPaper() {
 
 		fetchData();
 	}, [userToken, value]);
+
+	function setLoginAlertModalOpen(value: SetStateAction<boolean>): void {
+		throw new Error('Function not implemented.');
+	}
 
 	return (
 		<>
@@ -83,7 +96,21 @@ function CalendarPaper() {
 						<h3>{word.word}</h3>
 						<div>{joinMeanings(word.meanings)}</div>
 						<div>{prettyDate(word.createdAt)}</div>
-						<div>{word.status}</div>
+						<div>
+							<div className={styles.status}>
+								<ChangeStatus
+									id={word.short_id}
+									initialStatus={word.status}
+									setLoginAlertModal={setLoginAlertModalOpen}
+								/>
+							</div>
+							<div className={styles.speaker}>
+								<Speaker
+									text={word.word}
+									lang={checkLang(word.word) ? 'english' : 'korean'}
+								/>
+							</div>
+						</div>
 					</li>
 				))}
 			</ul>
