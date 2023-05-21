@@ -14,7 +14,11 @@ type ChangeStatusProps = {
 	setLoginAlertModal?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ChangeStatus({ initialStatus, id, setLoginAlertModal }: ChangeStatusProps): ReactElement {
+function ChangeStatus({
+	initialStatus,
+	id,
+	setLoginAlertModal,
+}: ChangeStatusProps): ReactElement {
 	const [status, setStatus] = useState<number>(initialStatus);
 	const userToken = useRecoilValue(userTokenState);
 
@@ -28,10 +32,8 @@ function ChangeStatus({ initialStatus, id, setLoginAlertModal }: ChangeStatusPro
 				console.log(err);
 			}
 		} else {
-			if (setLoginAlertModal)
-				setLoginAlertModal(true);
+			if (setLoginAlertModal) setLoginAlertModal(true);
 		}
-
 	};
 
 	function getStatusIcon() {
@@ -44,12 +46,7 @@ function ChangeStatus({ initialStatus, id, setLoginAlertModal }: ChangeStatusPro
 				return <BiMessageSquare />;
 		}
 	}
-	return (
-		<div onClick={handleChangeStatus}>
-			{getStatusIcon()}
-		</div>
-
-	);
+	return <div onClick={handleChangeStatus}>{getStatusIcon()}</div>;
 }
 
 export default ChangeStatus;

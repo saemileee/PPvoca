@@ -20,6 +20,7 @@ import ChangeStatus from '../components/common/Status/Status';
 import Speaker from '../components/common/Speaker/Speaker';
 import AlertModal from '../components/common/AlertModal/AlertModal';
 import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
+import Navigation from '../components/common/Navigation/Navigation';
 
 //Recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -28,25 +29,15 @@ import checkedWordList from '../recoil/checkedWordList';
 
 //API
 import {
-	getWords,
 	getSampleWords,
 	getWordsByBook,
 	getBookName,
 	findWordById,
 } from '../apis/word';
-import Navigation from '../components/common/Navigation/Navigation';
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
 	bookId: string | undefined;
-};
-
-//Props로 넘겨줄 state 값 타입 설정
-type States = {
-	wordList: string[];
-	setWordList: React.Dispatch<React.SetStateAction<string[]>>;
-	checkedList: string[];
-	setCheckedList: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 //단어 정보들에 대한 타입
@@ -63,7 +54,6 @@ function WordList() {
 	const [checkedList, setCheckedList] = useRecoilState(checkedWordList);
 
 	const [filterModal, setFilterModal] = useState<boolean>(false);
-
 	const [optionModal, setOptionModal] = useState<boolean>(false);
 	const [alertDeleteModalOpen, setAlertDeleteModalOpen] = useState(false);
 	const [alertUnmarkModalOpen, setAlertUnmarkModalOpen] = useState(false);
@@ -75,11 +65,12 @@ function WordList() {
 	const [findWord, setFindWord] = useState({
 		findword: '',
 	});
+
+	const originalWordList = useRef(wordList);
 	const prevWordList = useRef([]);
 
 	const userToken = useRecoilValue(userTokenState);
 	const { bookId } = useParams<RouteParams>();
-	//const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
 	const nav = useNavigate();
 
 	//단어장 이름
@@ -105,6 +96,7 @@ function WordList() {
 				try {
 					const response = await getWordsByBook(userToken, bookId);
 					setWordList(response.data);
+					originalWordList.current = response.data;
 				} catch (err) {
 					console.log(err);
 				}
@@ -116,6 +108,7 @@ function WordList() {
 				try {
 					const response = await getSampleWords();
 					setWordList(response.data);
+					originalWordList.current = response.data;
 				} catch (err) {
 					console.log(err);
 				}
@@ -187,7 +180,6 @@ function WordList() {
 		} else {
 			setLoginAlertModalOpen(true);
 		}
-
 	};
 
 	//Input창에 단어 검색
@@ -231,7 +223,6 @@ function WordList() {
 		} else {
 			setLoginAlertModalOpen(true);
 		}
-
 	};
 
 	return (
@@ -295,8 +286,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-												? true
-												: false
+											? true
+											: false
 									}
 								/>
 							</div>
@@ -357,6 +348,7 @@ function WordList() {
 							setModalOpen={setFilterModal}
 							wordList={wordList}
 							setWordList={setWordList}
+							originalWordList={originalWordList}
 						/>
 					)}
 				</div>

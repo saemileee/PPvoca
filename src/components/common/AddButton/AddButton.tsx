@@ -25,8 +25,7 @@ const WordAddButton = ({ url, bookId }: Props) => {
 				border: '1px solid black',
 				outline: 'none',
 				cursor: 'pointer',
-				transition:
-					'background-color 0.3s ease-in-out, color 0.3s ease-in-out',
+				transition: 'background-color 0.3s ease-in-out, color 0.3s ease-in-out',
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
