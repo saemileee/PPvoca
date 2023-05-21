@@ -12,6 +12,12 @@ export const getWords = async (token: string) => {
 	return response;
 };
 
+//샘플 단어 가져오기
+export const getSampleWords = async () => {
+	const response = await axios.get(`${baseUrl}/words/sample`);
+	return response;
+};
+
 //특정 단어장의 단어 가져오기
 export const getWordsByBook = async (token: string, id: string) => {
 	const response = await axios.get(`${baseUrl}/words`, {
@@ -144,6 +150,36 @@ export const crawlingWord = async (lang: string, searchWord: string) => {
 		params: {
 			lang: lang,
 			word: searchWord,
+		},
+	});
+	return response;
+};
+
+//여러개 단어 가져오기
+export const multiWords = async (token: string, wordIds: string[]) => {
+	const response = await axios.get(
+		`${baseUrl}/words/multiple/${wordIds.join(',')}`,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		},
+	);
+	return response;
+};
+
+//퀴즈 결과 저장
+export const postQuizResult = async (
+	token: string,
+	formData: {
+		category: string;
+		correctWords: string[];
+		incorrectWords: string[];
+	},
+) => {
+	const response = await axios.post(`${baseUrl}/quiz`, formData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
 		},
 	});
 	return response;

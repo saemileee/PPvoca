@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { addedWord, selectedWord, updatedWord } from '../apis/word';
-import { bookListAll } from '../apis/book';
+import { bookListAll, getBooks } from '../apis/book';
 import { useRecoilValue } from 'recoil';
 import { userTokenState } from '../recoil/userState';
 
@@ -24,7 +24,7 @@ function WordForm() {
 	/** State */
 	const [showModal, setShowModal] = useState(false);
 	const [alertModalOpen, setAlertModalOpen] = useState(false);
-	const [shouldGoBack, setShouldGoBack] = useState(false);
+	const [navigateBack, setNavigateBack] = useState(false);
 	const [message, setMessage] = useState('');
 	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 	const [bookList, setBookList] = useState([]);
@@ -41,6 +41,7 @@ function WordForm() {
 	});
 	const [bookId, setBookId] = useState('')
 
+
 	/** API 연결 */
 	type Book = {
 		name: string;
@@ -49,32 +50,48 @@ function WordForm() {
 		short_id: string;
 	};
 
-	// 단어장 모두 검색 (로그인, 비로그인)
+	// 단어장 가져오기 (로그인, 비로그인)
 	const getBookList = async () => {
-		if (userToken) {
-			try {
-				const response = await bookListAll(userToken);
-				if (response.status === 200) {
-					const bookLists = response.data;
-					console.log(bookLists)
-					setBookList(bookLists);
-					if (bookLists.length > 0) {
-						if (addPage) {
-							const { name, start_lang, end_lang, short_id } = bookLists[0];
-							setBookInfo({
-								name: name,
-								startLang: start_lang,
-								endLang: end_lang,
-								short_id: short_id,
-							});
-						} else if (editPage) {
-							getWords();
-						}
+		// 임시로 로컬스토리지에 bookId 넣어서 테스트
+		// const storedBookId = localStorage.getItem('bookId');
+		try {
+			let response;
+			if (userToken) {
+				response = await bookListAll(userToken);
+			} else {
+				response = await getBooks();
+			}
+			if (response.status === 200) {
+				const bookLists = response.data;
+				setBookList(bookLists);
+				if (bookLists.length > 0) {
+					// if (storedBookId) {
+					// 	const foundBook = bookLists.find((book: { short_id: string }) => book.short_id === storedBookId);
+					// 	if (foundBook) {
+					// 		const { name, start_lang, end_lang, short_id } = foundBook;
+					// 		setBookInfo({
+					// 			name: name,
+					// 			startLang: start_lang,
+					// 			endLang: end_lang,
+					// 			short_id: short_id,
+					// 		});
+					// 	}
+					// }else
+					if (addPage) {
+						const { name, start_lang, end_lang, short_id } = bookLists[0];
+						setBookInfo({
+							name: name,
+							startLang: start_lang,
+							endLang: end_lang,
+							short_id: short_id,
+						});
+					} else if (editPage) {
+						getWords();
 					}
 				}
-			} catch (err) {
-				console.log(err);
 			}
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
@@ -105,6 +122,8 @@ function WordForm() {
 	const handleSubmit = async () => {
 		if (userToken) {
 			if (!words.word || (!words.currMeaning.length && !words.meaning)) {
+				setMessage('필드를 모두 입력해주세요')
+				setAlertModalOpen(true);
 				return;
 			}
 			let meanings = words.currMeaning;
@@ -132,17 +151,16 @@ function WordForm() {
 					if (response.status === 200) {
 						setMessage(`[${words.word}] 단어 추가 완료`)
 						setAlertModalOpen(true);
+						setNavigateBack(false);
 						setWords(prevWords => ({
 							...prevWords,
 							word: '',
 							meaning: '',
 							currMeaning: []
 						}));
-						setShouldGoBack(false);
 					}
 				} catch (err) {
 					console.log(err);
-					alert('단어를 추가하지 못했습니다.');
 				}
 			} else if (editPage) {
 				try {
@@ -153,7 +171,7 @@ function WordForm() {
 					if (response.status === 200) {
 						setMessage(`[${words.word}] 단어 수정 완료`);
 						setAlertModalOpen(true);
-						setShouldGoBack(true);
+						setNavigateBack(true);
 					}
 				} catch (err) {
 					console.log(err);
@@ -161,7 +179,6 @@ function WordForm() {
 			}
 		} else {
 			setLoginAlertModalOpen(true);
-
 		}
 	};
 
@@ -219,7 +236,7 @@ function WordForm() {
 					isOpen={alertModalOpen}
 					onClose={() => {
 						setAlertModalOpen(false);
-						if (shouldGoBack) {
+						if (navigateBack) {
 							history.back();
 						}
 					}}

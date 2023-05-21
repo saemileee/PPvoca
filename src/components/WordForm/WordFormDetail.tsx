@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useRef } from "react";
+import React, { useState, useRef, Dispatch, SetStateAction } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import WordInput from './WordInput'
 import styles from './WordForm.module.scss'
@@ -14,7 +14,7 @@ interface WordFormProps {
         meaning: string,
         currMeaning: string[]
     },
-    setWords: React.Dispatch<React.SetStateAction<{
+    setWords: Dispatch<SetStateAction<{
         word: string,
         meaning: string,
         currMeaning: string[]

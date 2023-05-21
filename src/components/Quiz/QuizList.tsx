@@ -13,12 +13,13 @@ import {
 } from './QuizOptions';
 import { bookListAll } from '../../apis/book';
 import { getFourProngsQuiz } from '../../apis/quiz';
+import AlertModal from '../common/AlertModal/AlertModal';
 
 export interface InterfaceQuiz {
 	id: string;
 	title: string;
 	description: string;
-	img: string;
+	icon: any;
 }
 
 interface ListProps {
@@ -33,13 +34,23 @@ function QuizList({ quizInfo }: ListProps) {
 	const [showOptionModal, setShowOptionModal] = useState(false);
 	const [showBookSelectModal, setShowBookSelectModal] = useState(false);
 
-	const { id, title, description, img } = quizInfo;
+	const { id, title, description, icon } = quizInfo;
 
 	const [bookList, setBookList] = useState<TypeBookList[]>([]);
 	const [bookOption, setBookOption] = useState<TypeBookList[] | any>([]);
-	const [typeOption, setTypeOption] = useState<string>('word');
+	// const [typeOption, setTypeOption] = useState<string>('word');
 	const [numberOption, setNumberOption] = useState<number>(5);
 	const [wordStatusOption, setWordStatusOption] = useState<number[]>([0, 1, 2]);
+	const [isUnopenedAlertShow, setIsUnopenedAlertShow] = useState(false);
+
+	const handleQuizListClick = () => {
+		if (id === 'dictation' || id === 'word-card' || id === 'flicker') {
+			setIsUnopenedAlertShow(true);
+		} else {
+			setShowOptionModal(true);
+		}
+	};
+
 	const handleStartQuiz = () => {
 		const quizData = {
 			bookOption: bookOption.map((book: TypeBookList) => book.id),
@@ -50,7 +61,6 @@ function QuizList({ quizInfo }: ListProps) {
 		// 네비게이션으로 사지선다 리스트를 클릭하면 해당 api 호출 +
 		if (id === 'four-prong')
 			getFourProngsQuiz(userToken, quizData).then(res => {
-				console.log(res.data);
 				navigate('/quiz/four-prong', { state: res.data });
 			});
 	};
@@ -65,11 +75,11 @@ function QuizList({ quizInfo }: ListProps) {
 		});
 	};
 
-	const handleTypeInputChange = (value: string) => {
-		setTypeOption(() => {
-			return value;
-		});
-	};
+	// const handleTypeInputChange = (value: string) => {
+	// 	setTypeOption(() => {
+	// 		return value;
+	// 	});
+	// };
 
 	const handleNumberInputChange = (value: number) => {
 		setNumberOption(() => {
@@ -99,11 +109,9 @@ function QuizList({ quizInfo }: ListProps) {
 
 	return (
 		<>
-			<div className={styles.list} onClick={() => setShowOptionModal(true)}>
-				<div className={styles['img-container']}>
-					<img src={img}></img>
-				</div>
-				<div className={styles['des-container']}>
+			<div className={styles.list} onClick={handleQuizListClick}>
+				<div className={styles.iconContainer}>{icon}</div>
+				<div className={styles.desContainer}>
 					<p>{title}</p>
 					<p>{description}</p>
 				</div>
@@ -114,9 +122,8 @@ function QuizList({ quizInfo }: ListProps) {
 				title='퀴즈 옵션 설정'
 			>
 				<ul className={styles.optionContainer}>
-					{/* 컴포넌트화 필요 */}
 					<BookOption onClick={handleBookSelectButtonClick} />
-					<TypeOption value={typeOption} onChange={handleTypeInputChange} />
+					{/* <TypeOption value={typeOption} onChange={handleTypeInputChange} /> */}
 					<NumberOption
 						value={numberOption}
 						onChange={handleNumberInputChange}
@@ -128,7 +135,6 @@ function QuizList({ quizInfo }: ListProps) {
 					/>
 				</ul>
 				<div className={styles.quizStartContainer}>
-					{/* 클릭하면 옵션의 세팅과 퀴즈 id에 따라 알맞은 방법으로 api 호출 */}
 					<button onClick={handleStartQuiz}>퀴즈 시작</button>
 				</div>
 			</Modal>
@@ -143,6 +149,13 @@ function QuizList({ quizInfo }: ListProps) {
 					onChange={handleBookInputChange}
 				/>
 			</Modal>
+			{isUnopenedAlertShow && (
+				<AlertModal
+					isOpen={isUnopenedAlertShow}
+					onClose={() => setIsUnopenedAlertShow(false)}
+					message='준비 중 입니다.'
+				/>
+			)}
 		</>
 	);
 }

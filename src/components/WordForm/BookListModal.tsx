@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import styles from './WordForm.module.scss'
 import { BsJournalBookmark } from 'react-icons/bs';
 
 
-interface Book {
+type Book = {
     name: string;
     start_lang: string;
     end_lang: string;
     short_id: string;
-}
+};
 
-interface BookListModalProps {
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+type BookListModalProps = {
+    setShowModal: Dispatch<SetStateAction<boolean>>;
     bookList: Book[];
     bookInfo: {
         name: string;
@@ -19,8 +19,8 @@ interface BookListModalProps {
         endLang: string;
         short_id: string;
     };
-    setBookInfo: React.Dispatch<
-        React.SetStateAction<{
+    setBookInfo: Dispatch<
+        SetStateAction<{
             name: string;
             startLang: string;
             endLang: string;
@@ -29,12 +29,12 @@ interface BookListModalProps {
     >;
 }
 
-const BookListModal: React.FC<BookListModalProps> = ({
+function BookListModal({
     setShowModal,
     bookList,
     bookInfo,
     setBookInfo,
-}) => {
+}: BookListModalProps) {
     return (
         <ul className={styles.modalBookList}>
             {bookList.map(({ name, start_lang, end_lang, short_id }, index) => (
@@ -60,6 +60,6 @@ const BookListModal: React.FC<BookListModalProps> = ({
             ))}
         </ul>
     );
-};
+}
 
 export default BookListModal;

@@ -18,6 +18,9 @@ import WordListOptionsModal from '../components/WordList/WordListOptionModal';
 import AddButton from '../components/common/AddButton/AddButton';
 import ChangeStatus from '../components/common/Status/Status';
 import Speaker from '../components/common/Speaker/Speaker';
+import AlertModal from '../components/common/AlertModal/AlertModal';
+import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
+import Navigation from '../components/common/Navigation/Navigation';
 
 //Recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -26,24 +29,15 @@ import checkedWordList from '../recoil/checkedWordList';
 
 //API
 import {
-	getWords,
+	getSampleWords,
 	getWordsByBook,
 	getBookName,
 	findWordById,
 } from '../apis/word';
-import Navigation from '../components/common/Navigation/Navigation';
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
 	bookId: string | undefined;
-};
-
-//Props로 넘겨줄 state 값 타입 설정
-type States = {
-	wordList: string[];
-	setWordList: React.Dispatch<React.SetStateAction<string[]>>;
-	checkedList: string[];
-	setCheckedList: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 //단어 정보들에 대한 타입
@@ -58,17 +52,25 @@ type WordListItem = {
 function WordList() {
 	const [wordList, setWordList] = useState<WordListItem[]>([]);
 	const [checkedList, setCheckedList] = useRecoilState(checkedWordList);
+
 	const [filterModal, setFilterModal] = useState<boolean>(false);
 	const [optionModal, setOptionModal] = useState<boolean>(false);
+	const [alertDeleteModalOpen, setAlertDeleteModalOpen] = useState(false);
+	const [alertUnmarkModalOpen, setAlertUnmarkModalOpen] = useState(false);
+	const [alertCheckModalOpen, setAlertCheckModalOpen] = useState(false);
+	const [alertUnknownModalOpen, setAlertUnknownModalOpen] = useState(false);
+	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
+
 	const [booktitle, setBooktitle] = useState('단어장');
 	const [findWord, setFindWord] = useState({
 		findword: '',
 	});
+
+	const originalWordList = useRef(wordList);
 	const prevWordList = useRef([]);
 
 	const userToken = useRecoilValue(userTokenState);
 	const { bookId } = useParams<RouteParams>();
-	//const book_id = 'aB3V06EaqbhAtq8m_Z6Tk';
 	const nav = useNavigate();
 
 	//단어장 이름
@@ -89,17 +91,29 @@ function WordList() {
 
 	//단어장 리스트
 	useEffect(() => {
-		if (bookId) {
+		if (bookId && userToken) {
 			const fetchWords = async () => {
 				try {
 					const response = await getWordsByBook(userToken, bookId);
 					setWordList(response.data);
+					originalWordList.current = response.data;
 				} catch (err) {
 					console.log(err);
 				}
 			};
 			fetchWords();
 			setCheckedList([]);
+		} else if (!userToken) {
+			const fetchWords = async () => {
+				try {
+					const response = await getSampleWords();
+					setWordList(response.data);
+					originalWordList.current = response.data;
+				} catch (err) {
+					console.log(err);
+				}
+			};
+			fetchWords();
 		}
 	}, []);
 
@@ -161,7 +175,11 @@ function WordList() {
 	};
 
 	const handleOption = () => {
-		setOptionModal(true);
+		if (userToken) {
+			setOptionModal(true);
+		} else {
+			setLoginAlertModalOpen(true);
+		}
 	};
 
 	//Input창에 단어 검색
@@ -180,7 +198,10 @@ function WordList() {
 		}
 	}, [findWord, userToken]);
 
-	const handleFind = async (word: string) => {
+	const handleFind = async (
+		word: string,
+		bookId: string | undefined = undefined,
+	) => {
 		if (word) {
 			const response = await findWordById(userToken, word);
 			setWordList(response.data);
@@ -189,8 +210,22 @@ function WordList() {
 		}
 	};
 
+	//Enter 키를 눌렀을 때 검색 확인
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			handleFind(findWord.findword);
+			if (!wordList.length) {
+				setWordList(prevWordList.current);
+			}
+		}
+	};
+
 	const handleEdit = (short_id: string) => {
-		nav(`/word/edit/${short_id}`);
+		if (userToken) {
+			nav(`/word/edit/${short_id}`);
+		} else {
+			setLoginAlertModalOpen(true);
+		}
 	};
 
 	return (
@@ -215,6 +250,10 @@ function WordList() {
 									setModalOpen={setOptionModal}
 									wordList={wordList}
 									setWordList={setWordList}
+									setAlertDeleteOpen={setAlertDeleteModalOpen}
+									setAlertUnmarkOpen={setAlertUnmarkModalOpen}
+									setAlertCheckOpen={setAlertCheckModalOpen}
+									setAlertUnknownOpen={setAlertUnknownModalOpen}
 								/>
 							)}
 						</div>
@@ -224,6 +263,7 @@ function WordList() {
 								name='findword'
 								placeholder='검색어를 입력해 주세요!'
 								onChange={onChangeFindWord}
+								onKeyDown={handleKeyDown}
 							/>
 							<div
 								className={styles.find}
@@ -282,6 +322,7 @@ function WordList() {
 										<ChangeStatus
 											id={item.short_id}
 											initialStatus={item.status}
+											setLoginAlertModal={setLoginAlertModalOpen}
 										/>
 									</div>
 									<div className={styles.speaker}>
@@ -303,16 +344,51 @@ function WordList() {
 								</div>
 							</div>
 						))}
-						<AddButton url='/word/add' />
+						<AddButton url='/word/add' bookId={bookId} />
 					</div>
 					{filterModal && (
 						<WordListFilterModal
 							setModalOpen={setFilterModal}
 							wordList={wordList}
 							setWordList={setWordList}
+							originalWordList={originalWordList}
 						/>
 					)}
 				</div>
+				<AlertModal
+					isOpen={alertDeleteModalOpen}
+					onClose={() => {
+						setAlertDeleteModalOpen(false);
+					}}
+					message='삭제가 완료되었습니다.'
+				/>
+				<AlertModal
+					isOpen={alertUnmarkModalOpen}
+					onClose={() => {
+						setAlertUnmarkModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 미분류 처리되었습니다.'
+				/>
+				<AlertModal
+					isOpen={alertCheckModalOpen}
+					onClose={() => {
+						setAlertCheckModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 외움 처리되었습니다.'
+				/>
+				<AlertModal
+					isOpen={alertUnknownModalOpen}
+					onClose={() => {
+						setAlertUnknownModalOpen(false);
+						location.reload();
+					}}
+					message='전체 단어 헷갈림 처리되었습니다.'
+				/>
+				{loginAlertModalOpen && (
+					<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
+				)}
 			</main>
 		</>
 	);
