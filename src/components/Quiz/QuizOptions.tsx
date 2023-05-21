@@ -5,7 +5,7 @@ import styles from './QuizOptions.module.scss';
 type TypeBookOptionProps = { onClick: () => void };
 export function BookOption({ onClick }: TypeBookOptionProps) {
 	return (
-		<li>
+		<li className={styles.bookOption}>
 			<p>문제 범위</p>
 			<button onClick={onClick}>{/* {selectedBookNames} */}선택</button>
 		</li>
@@ -39,23 +39,25 @@ export function BookSelectOption({
 	};
 
 	return (
-		<ul>
+		<ul className={styles.bookList}>
 			{bookList ? (
 				bookList.map((book: TypeBookList) => (
 					<li key={book.id}>
-						{book.name}
-						<input
-							id={book.id}
-							value={book.name}
-							name='book'
-							type='checkbox'
-							checked={
-								value.find((option: TypeBookList) => option.id === book.id)
-									? true
-									: false
-							}
-							onChange={e => handleCheckboxChange(e)}
-						/>
+						<label>
+							{book.name}
+							<input
+								id={book.id}
+								value={book.name}
+								name='book'
+								type='checkbox'
+								checked={
+									value.find((option: TypeBookList) => option.id === book.id)
+										? true
+										: false
+								}
+								onChange={e => handleCheckboxChange(e)}
+							/>
+						</label>
 					</li>
 				))
 			) : (
@@ -68,7 +70,7 @@ export function BookSelectOption({
 type TypeOptionProps = { value: string; onChange: (value: string) => void };
 export function TypeOption({ value, onChange }: TypeOptionProps) {
 	return (
-		<li>
+		<li className={styles.typeOption}>
 			<p>문제 타입</p>
 			<label htmlFor='word-type'>
 				단어
@@ -83,7 +85,7 @@ export function TypeOption({ value, onChange }: TypeOptionProps) {
 					}}
 				/>
 			</label>
-			<label>
+			<label htmlFor='meaning-type'>
 				의미
 				<input
 					type='radio'
@@ -139,7 +141,7 @@ export function WordStatusOption({ value, onChange }: WordStatusOptionProps) {
 	};
 
 	return (
-		<li>
+		<li className={styles.statusOption}>
 			<p>문제 상태</p>
 			<label>
 				미분류 단어

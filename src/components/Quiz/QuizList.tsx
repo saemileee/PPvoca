@@ -12,6 +12,7 @@ import {
 	WordStatusOption,
 } from './QuizOptions';
 import { bookListAll } from '../../apis/book';
+import { getFourProngsQuiz } from '../../apis/quiz';
 
 export interface InterfaceQuiz {
 	id: string;
@@ -26,6 +27,7 @@ interface ListProps {
 type TypeBookList = { id: string; name: string };
 
 function QuizList({ quizInfo }: ListProps) {
+	const navigate = useNavigate();
 	const userToken = useRecoilValue(userTokenState);
 
 	const [showOptionModal, setShowOptionModal] = useState(false);
@@ -39,26 +41,18 @@ function QuizList({ quizInfo }: ListProps) {
 	const [numberOption, setNumberOption] = useState<number>(5);
 	const [wordStatusOption, setWordStatusOption] = useState<number[]>([0, 1, 2]);
 	const handleStartQuiz = () => {
-		console.log(bookOption);
-		console.log(typeOption);
-		console.log(numberOption);
-		console.log(wordStatusOption);
-
-		const bookIds = bookOption.map((book: TypeBookList) => book.id);
-		const params = {
-			books: bookIds.join(','),
-			number: numberOption.toString(),
-			status: wordStatusOption.join(','),
+		const quizData = {
+			bookOption: bookOption.map((book: TypeBookList) => book.id),
+			numberOption,
+			wordStatusOption,
 		};
 
-		const path = '/quiz';
-
-		const urlObject = new URL(path, window.location.origin);
-		Object.entries(params).forEach(([key, value]) => {
-			urlObject.searchParams.set(key, value);
-		});
-		const url = urlObject.toString();
-		console.log(url);
+		// 네비게이션으로 사지선다 리스트를 클릭하면 해당 api 호출 +
+		if (id === 'four-prong')
+			getFourProngsQuiz(userToken, quizData).then(res => {
+				console.log(res.data);
+				navigate('/quiz/four-prong', { state: res.data });
+			});
 	};
 
 	const handleBookSelectButtonClick = () => {
@@ -133,11 +127,9 @@ function QuizList({ quizInfo }: ListProps) {
 						onChange={handleWordStatusInputChange}
 					/>
 				</ul>
-				<div>
+				<div className={styles.quizStartContainer}>
 					{/* 클릭하면 옵션의 세팅과 퀴즈 id에 따라 알맞은 방법으로 api 호출 */}
-					<button className='quiz-start-button' onClick={handleStartQuiz}>
-						퀴즈 시작
-					</button>
+					<button onClick={handleStartQuiz}>퀴즈 시작</button>
 				</div>
 			</Modal>
 			<Modal
