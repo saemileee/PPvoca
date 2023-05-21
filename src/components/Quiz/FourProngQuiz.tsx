@@ -5,6 +5,7 @@ import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
 import QuizResult from './QuizResult';
 import Header from '../common/Header/Header';
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md';
 
 type TypeAnswer = {
 	short_id: string;
@@ -36,7 +37,6 @@ const FourProngQuiz = () => {
 	useEffect(() => {
 		const myState = location.state;
 		setProblems(myState);
-		// console.log(myState);
 	}, []);
 
 	//리스타트 시 문제 순서 랜덤 변경
@@ -116,7 +116,7 @@ const FourProngQuiz = () => {
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
 							}}>
-							prev
+							<MdOutlineNavigateBefore size={24} color='#252525' />
 						</button>
 						<button
 							onClick={() =>
@@ -124,7 +124,7 @@ const FourProngQuiz = () => {
 									? setCurrentQuiz(prev => prev + 1)
 									: handleDoneClick()
 							}>
-							next
+							<MdOutlineNavigateNext size={24} color='#252525' />
 						</button>
 					</div>
 				</div>
@@ -217,8 +217,8 @@ function Quiz({
 			<div className={styles.problemContainer}>
 				<p>{answer.word}</p>
 				<ul style={!isShowAnswer ? { display: 'none' } : undefined}>
-					{answer.meanings.map((meaning: string) => (
-						<li>{meaning}</li>
+					{answer.meanings.map((meaning: string, index: number) => (
+						<li key={`answer-meaning-${index}`}>{meaning}</li>
 					))}
 				</ul>
 			</div>
@@ -242,11 +242,17 @@ function Quiz({
 									e.currentTarget.dataset.index!,
 								);
 							}}>
-							<span>
-								{selection.meanings.map((meaning: string) => (
-									<span className={styles.selectionMeaning}>{meaning}</span>
-								))}
-							</span>
+							<div>
+								<span>
+									{selection.meanings.map((meaning: string, index: number) => (
+										<span
+											key={`meaning-${index}`}
+											className={styles.selectionMeaning}>
+											{meaning}
+										</span>
+									))}
+								</span>
+							</div>
 							<span
 								style={
 									!selectedSelections.includes(index)
