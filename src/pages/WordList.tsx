@@ -180,7 +180,10 @@ function WordList() {
 		}
 	}, [findWord, userToken]);
 
-	const handleFind = async (word: string) => {
+	const handleFind = async (
+		word: string,
+		bookId: string | undefined = undefined,
+	) => {
 		if (word) {
 			const response = await findWordById(userToken, word);
 			setWordList(response.data);
