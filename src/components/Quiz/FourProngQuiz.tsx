@@ -36,6 +36,7 @@ const FourProngQuiz = () => {
 	useEffect(() => {
 		const myState = location.state;
 		setProblems(myState);
+		// console.log(myState);
 	}, []);
 
 	//리스타트 시 문제 순서 랜덤 변경
@@ -65,7 +66,20 @@ const FourProngQuiz = () => {
 			});
 		}
 	};
-	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
+
+	const handleDoneClick = () => {
+		const allProblemIds = problems.map(problem => problem.answer.short_id);
+		// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가
+		const selectedIds = [...correctAnswers, ...incorrectAnswers];
+		setIncorrectAnswers(prev => {
+			const unselectedIds = allProblemIds.filter(
+				wordId => !selectedIds.includes(wordId),
+			);
+			return [...prev, ...unselectedIds];
+		});
+		setIsDone(true);
+	};
+
 	const handleQuizRestartButtonClick = () => {
 		setIsRestartButtonClick(prev => prev + 1);
 		setCurrentQuiz(0);
@@ -95,6 +109,8 @@ const FourProngQuiz = () => {
 								/>
 						  ))
 						: '생성 된 문제가 없습니다.'}
+
+					{/* 컴포넌트화 필요 */}
 					<div className={styles.buttonContainer}>
 						<button
 							onClick={() => {
@@ -106,21 +122,22 @@ const FourProngQuiz = () => {
 							onClick={() =>
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
-									: setIsDone(true)
+									: handleDoneClick()
 							}>
 							next
 						</button>
 					</div>
 				</div>
 			</div>
-			<QuizResult
-				quizCategory={'사지선다'}
-				correctAnswers={correctAnswers}
-				incorrectAnswers={incorrectAnswers}
-				style={!isDone ? { display: 'none' } : undefined}
-				isDone={isDone}
-				onClickQuizRestart={() => handleQuizRestartButtonClick}
-			/>
+			{isDone && (
+				<QuizResult
+					quizCategory={'사지선다'}
+					correctAnswers={correctAnswers}
+					incorrectAnswers={incorrectAnswers}
+					isDone={isDone}
+					onClickQuizRestart={() => handleQuizRestartButtonClick}
+				/>
+			)}
 		</>
 	);
 };

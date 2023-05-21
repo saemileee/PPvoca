@@ -112,9 +112,8 @@ function QuizList({ quizInfo }: ListProps) {
 				setShowModal={setShowOptionModal}
 				title='퀴즈 옵션 설정'>
 				<ul className={styles.optionContainer}>
-					{/* 컴포넌트화 필요 */}
 					<BookOption onClick={handleBookSelectButtonClick} />
-					<TypeOption value={typeOption} onChange={handleTypeInputChange} />
+					{/* <TypeOption value={typeOption} onChange={handleTypeInputChange} /> */}
 					<NumberOption
 						value={numberOption}
 						onChange={handleNumberInputChange}

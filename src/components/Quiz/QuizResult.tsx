@@ -10,7 +10,6 @@ type TypeResultProps = {
 	quizCategory: string;
 	correctAnswers: string[];
 	incorrectAnswers: string[];
-	style: { display: string } | undefined;
 	isDone: boolean;
 	onClickQuizRestart: any;
 };
@@ -25,7 +24,6 @@ function QuizResult({
 	quizCategory,
 	correctAnswers,
 	incorrectAnswers,
-	style,
 	isDone,
 	onClickQuizRestart,
 }: TypeResultProps) {
@@ -69,7 +67,7 @@ function QuizResult({
 	}, [isDone]);
 
 	return (
-		<div style={style} className={styles.resultContainer}>
+		<div className={styles.resultContainer}>
 			<div className={styles.result}>
 				<svg viewBox='0 0 200 200'>
 					<circle cx='100' cy='100' r='90' />
