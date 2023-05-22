@@ -162,8 +162,7 @@ function WordFormDetail({ bookInfo, words, setWords }: WordFormProps) {
 							<div>
 								<button
 									className={styles.cancelBtn}
-									onClick={() => handleDeleteMeaning(index)}
-								>
+									onClick={() => handleDeleteMeaning(index)}>
 									<IoIosCloseCircleOutline className={styles.icon} />
 								</button>
 							</div>
