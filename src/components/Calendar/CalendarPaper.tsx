@@ -61,9 +61,7 @@ function CalendarPaper() {
 		fetchData();
 	}, [userToken, value]);
 
-	function setLoginAlertModalOpen(value: SetStateAction<boolean>): void {
-		throw new Error('Function not implemented.');
-	}
+	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 
 	return (
 		<>
@@ -101,7 +99,10 @@ function CalendarPaper() {
 								<ChangeStatus
 									id={word.short_id}
 									initialStatus={word.status}
-									setLoginAlertModal={setLoginAlertModalOpen}
+									setLoginAlertModal={
+										// @ts-ignore
+										setLoginAlertModalOpen
+									}
 								/>
 							</div>
 							<div className={styles.speaker}>
