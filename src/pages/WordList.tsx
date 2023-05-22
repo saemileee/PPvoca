@@ -235,31 +235,31 @@ function WordList() {
 			<main>
 				<div className={styles.container}>
 					<div className={styles.fixed}>
-							<Header
-								title={booktitle}
-								addGoBackButton={true}
-								rightComponent={
-									<div className={styles.title}>
-										<div className={styles.filter} onClick={handleFilter}>
-											<GiSettingsKnobs size={24} color='#736ef3' />
-										</div>
-										<div className={styles.option} onClick={handleOption}>
-											<CiMenuKebab size={24} color='#736ef3' />
-										</div>
-										{optionModal && (
-											<WordListOptionsModal
-												setModalOpen={setOptionModal}
-												wordList={wordList}
-												setWordList={setWordList}
-												setAlertDeleteOpen={setAlertDeleteModalOpen}
-												setAlertUnmarkOpen={setAlertUnmarkModalOpen}
-												setAlertCheckOpen={setAlertCheckModalOpen}
-												setAlertUnknownOpen={setAlertUnknownModalOpen}
-											/>
-										)}
+						<Header
+							title={booktitle}
+							addGoBackButton={true}
+							rightComponent={
+								<div className={styles.title}>
+									<div className={styles.filter} onClick={handleFilter}>
+										<GiSettingsKnobs size={24} color='#736ef3' />
 									</div>
-								}
-							/>
+									<div className={styles.option} onClick={handleOption}>
+										<CiMenuKebab size={24} color='#736ef3' />
+									</div>
+									{optionModal && (
+										<WordListOptionsModal
+											setModalOpen={setOptionModal}
+											wordList={wordList}
+											setWordList={setWordList}
+											setAlertDeleteOpen={setAlertDeleteModalOpen}
+											setAlertUnmarkOpen={setAlertUnmarkModalOpen}
+											setAlertCheckOpen={setAlertCheckModalOpen}
+											setAlertUnknownOpen={setAlertUnknownModalOpen}
+										/>
+									)}
+								</div>
+							}
+						/>
 						<div className={styles.search}>
 							<input
 								className={styles.input}
@@ -292,8 +292,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-												? true
-												: false
+											? true
+											: false
 									}
 								/>
 							</div>
@@ -347,7 +347,7 @@ function WordList() {
 								</div>
 							</div>
 						))}
-						<AddButton url='/word/add' bookId={bookId} />
+						{userToken && <AddButton url='/word/add' bookId={bookId} />}
 					</div>
 					{filterModal && (
 						<WordListFilterModal

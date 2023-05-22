@@ -14,7 +14,8 @@ const WordAddButton = ({ url, bookId }: Props) => {
 	return (
 		<button
 			onClick={() => nav(url, { state: newState })}
-			className={styles.addButton}>
+			className={styles.addButton}
+		>
 			<AiOutlinePlus style={{ color: 'white' }} />
 		</button>
 	);

@@ -60,6 +60,7 @@ function WordForm() {
 				setBookList(bookLists);
 				if (bookLists.length > 0) {
 					// 해당 단어장에서 단어 추가 시 해당 단어장 선택되기 or nav 탭에서 단어 추가 시 첫번 째 단어장 선택되기
+					// prettier-ignore
 					const selectedBook = bookIdLocation.state
 						? bookLists.find(
 								(book: { short_id: string }) =>
@@ -74,9 +75,6 @@ function WordForm() {
 							endLang: end_lang,
 							short_id,
 						});
-					} else if (editPage) {
-						getWords();
-						console.log(1);
 					}
 				}
 			}
@@ -180,6 +178,8 @@ function WordForm() {
 		getBookList();
 		if (addPage) {
 			clearData();
+		} else if (editPage) {
+			getWords();
 		}
 	}, [editPage]);
 
@@ -247,7 +247,8 @@ function WordForm() {
 					<Modal
 						showModal={showModal}
 						setShowModal={setShowModal}
-						title='단어장 선택'>
+						title='단어장 선택'
+					>
 						<BookListModal
 							setShowModal={setShowModal}
 							bookList={bookList}

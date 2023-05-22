@@ -25,7 +25,8 @@ const Navigation = () => {
 									location.pathname === '/word/add'
 										? '#7353ea'
 										: 'rgb(113 113 113)',
-							}}>
+							}}
+						>
 							<div className={styles.iconWrapper}>
 								<BsPencil size={24} />
 							</div>
@@ -44,7 +45,8 @@ const Navigation = () => {
 									location.pathname === `/word/edit/${params.wordId}`
 										? '#7353ea'
 										: 'rgb(113 113 113)',
-							}}>
+							}}
+						>
 							<div className={styles.iconWrapper}>
 								<BsJournalBookmark size={24} />
 							</div>
@@ -58,7 +60,8 @@ const Navigation = () => {
 									location.pathname === '/quiz/list'
 										? '#7353ea'
 										: 'rgb(113 113 113)',
-							}}>
+							}}
+						>
 							<div className={styles.iconWrapper}>
 								<BsPatchQuestion size={24} />
 							</div>
@@ -72,7 +75,8 @@ const Navigation = () => {
 									location.pathname === '/calendar'
 										? '#7353ea'
 										: 'rgb(113 113 113)',
-							}}>
+							}}
+						>
 							<div className={styles.iconWrapper}>
 								<BsCalendar4Week size={24} />
 							</div>
@@ -89,7 +93,8 @@ const Navigation = () => {
 									location.pathname === '/user/edit'
 										? '#7353ea'
 										: 'rgb(113 113 113)',
-							}}>
+							}}
+						>
 							<div className={styles.iconWrapper}>
 								<TbLogin size={24} />
 							</div>
