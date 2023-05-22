@@ -29,14 +29,18 @@ export const getFourProngsQuiz = async (
 };
 
 // 답안 데이터 post
-// export const postQuizResult = async (category:string, correctWords, incorrectWords) => {
-// 	const response = await axios.post(
-// 		`${baseUrl}/quiz`,
-// 		{
-// 			headers: {
-// 				Authorization: `Bearer ${token}`,
-// 			},
-// 		},
-// 	);
-// 	return response;
-// };
+export const postQuizResult = async (
+	token: string,
+	formData: {
+		category: string;
+		correctWords: string[];
+		incorrectWords: string[];
+	},
+) => {
+	await axios.post(`${baseUrl}/quiz`, formData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return;
+};

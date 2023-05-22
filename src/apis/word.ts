@@ -154,3 +154,16 @@ export const crawlingWord = async (lang: string, searchWord: string) => {
 	});
 	return response;
 };
+
+//여러개 단어 가져오기
+export const multiWords = async (token: string, wordIds: string[]) => {
+	const response = await axios.get(
+		`${baseUrl}/words/multiple/${wordIds.join(',')}`,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		},
+	);
+	return response;
+};

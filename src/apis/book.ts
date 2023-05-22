@@ -67,7 +67,7 @@ export const getBooks = async (token?: string) => {
 	}
 
 	const response = await axios.get(url, { headers });
-	return response.data;
+	return response;
 };
 
 // 단어장 삭제
@@ -91,5 +91,6 @@ export const getWords = async (bookId: string, token?: string) => {
 		};
 	}
 
-	return await axios.get(url, { headers });
+	const response = await axios.get(url, { headers });
+	return response;
 };

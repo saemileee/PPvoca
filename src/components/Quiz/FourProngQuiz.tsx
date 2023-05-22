@@ -5,6 +5,7 @@ import styles from './FourProng.module.scss';
 import ChangeStatus from '../common/Status/Status';
 import QuizResult from './QuizResult';
 import Header from '../common/Header/Header';
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md';
 
 type TypeAnswer = {
 	short_id: string;
@@ -65,7 +66,20 @@ const FourProngQuiz = () => {
 			});
 		}
 	};
-	// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가 필요
+
+	const handleDoneClick = () => {
+		const allProblemIds = problems.map(problem => problem.answer.short_id);
+		// 문제 안 풀고 넘어갔을 때 isDone일 때 incorrectAnswers에 문제 Id 추가
+		const selectedIds = [...correctAnswers, ...incorrectAnswers];
+		setIncorrectAnswers(prev => {
+			const unselectedIds = allProblemIds.filter(
+				wordId => !selectedIds.includes(wordId),
+			);
+			return [...prev, ...unselectedIds];
+		});
+		setIsDone(true);
+	};
+
 	const handleQuizRestartButtonClick = () => {
 		setIsRestartButtonClick(prev => prev + 1);
 		setCurrentQuiz(0);
@@ -76,9 +90,11 @@ const FourProngQuiz = () => {
 
 	return (
 		<>
-			<Header title={'사지선다'}></Header>
-			<div className={styles.quizContainer}>
-				<div style={isDone ? { display: 'none' } : undefined}>
+			<Header title={'사지선다'} addGoBackButton={true}></Header>
+			<div
+				className={styles.quizContainer}
+				style={isDone ? { display: 'none' } : undefined}>
+				<div>
 					{problems
 						? problems.map((problem, index) => (
 								<Quiz
@@ -95,33 +111,35 @@ const FourProngQuiz = () => {
 								/>
 						  ))
 						: '생성 된 문제가 없습니다.'}
+
+					{/* 컴포넌트화 필요 */}
 					<div className={styles.buttonContainer}>
 						<button
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-							}}
-						>
-							prev
+							}}>
+							<MdOutlineNavigateBefore size={24} color='#252525' />
 						</button>
 						<button
 							onClick={() =>
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
-									: setIsDone(true)
-							}
-						>
-							next
+									: handleDoneClick()
+							}>
+							<MdOutlineNavigateNext size={24} color='#252525' />
 						</button>
 					</div>
 				</div>
 			</div>
-			<QuizResult
-				correctAnswers={correctAnswers}
-				incorrectAnswers={incorrectAnswers}
-				style={!isDone ? { display: 'none' } : undefined}
-				isDone={isDone}
-				onClickQuizRestart={() => handleQuizRestartButtonClick}
-			/>
+			{isDone && (
+				<QuizResult
+					quizCategory={'사지선다'}
+					correctAnswers={correctAnswers}
+					incorrectAnswers={incorrectAnswers}
+					isDone={isDone}
+					onClickQuizRestart={() => handleQuizRestartButtonClick}
+				/>
+			)}
 		</>
 	);
 };
@@ -197,13 +215,12 @@ function Quiz({
 					{page.currentPage}/{page.allPages}
 				</span>
 				<ChangeStatus id={answer.short_id} initialStatus={answer.status} />
-				{/* <span className={styles.status}>status</span> */}
 			</div>
 			<div className={styles.problemContainer}>
 				<p>{answer.word}</p>
 				<ul style={!isShowAnswer ? { display: 'none' } : undefined}>
-					{answer.meanings.map((meaning: string) => (
-						<li>{meaning}</li>
+					{answer.meanings.map((meaning: string, index: number) => (
+						<li key={`answer-meaning-${index}`}>{meaning}</li>
 					))}
 				</ul>
 			</div>
@@ -226,21 +243,25 @@ function Quiz({
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}
-						>
-							<span>
-								{selection.meanings.map((meaning: string) => (
-									<span className={styles.selectionMeaning}>{meaning}</span>
-								))}
-							</span>
+							}}>
+							<div>
+								<span>
+									{selection.meanings.map((meaning: string, index: number) => (
+										<span
+											key={`meaning-${index}`}
+											className={styles.selectionMeaning}>
+											{meaning}
+										</span>
+									))}
+								</span>
+							</div>
 							<span
 								style={
 									!selectedSelections.includes(index)
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}
-							>
+								className={styles.selectionWord}>
 								{selection.word}
 							</span>
 						</li>

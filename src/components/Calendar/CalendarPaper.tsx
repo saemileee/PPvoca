@@ -1,51 +1,119 @@
 import React, { useEffect, useState } from 'react';
-/**의존성 */
-import Calendar from 'react-calendar';
 import moment from 'moment';
-import 'react-calendar/dist/Calendar.css';
-import './calender.scss';
+import Calendar from 'react-calendar';
+import './calendar.scss';
+import styles from './CalendarPaper.module.scss';
+import { calendarGetAllWords, calendarGetToday } from '../../apis/calendar';
+import { Word, prettyDate, joinMeanings, markDate } from './CalendarType';
+import { useRecoilValue } from 'recoil';
+import { userTokenState } from '../../recoil/userState';
+import Speaker from '../common/Speaker/Speaker';
+import ChangeStatus from '../common/Status/Status';
 
 function CalendarPaper() {
+	const [wordsList, setWordsList] = useState<Word[]>([]);
+	const userToken = useRecoilValue(userTokenState);
 	const [value, onChange] = useState<Date>(new Date());
-	const day: string = moment(value).format('YYYY-MM-DD');
-	const currDate: Date = new Date();
-	const currDateTime: string = moment(currDate).format('MM-DD');
-	const mark: string[] = [
-		'2023-05-10',
-		'2023-05-11',
-		'2023-05-13',
-		'2023-05-19',
-		'2023-05-20',
-		'2023-05-21',
-	];
+	const [mark, setMark] = useState<string[]>([]);
+
+	const handleClickDate = async (date: Date) => {
+		const currentDate = moment(date);
+		const year = currentDate.year();
+		const month = currentDate.month() + 1;
+		const day = currentDate.date();
+
+		try {
+			const 데이터: Word[] = await calendarGetToday(
+				userToken,
+				year,
+				month,
+				day,
+			);
+			setWordsList(데이터);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	//단어 언어 확인
+	const checkLang = (word: string) => {
+		if (/[a-zA-Z]/g.test(word)) {
+			return true;
+		} else if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g.test(word)) {
+			return false;
+		}
+	};
+	useEffect(() => {
+		const fetchData = async () => {
+			const currentDate = moment();
+			const year = currentDate.year();
+			const month = currentDate.month() + 1;
+
+			try {
+				const marks: Word[] = await calendarGetAllWords(userToken, year, month);
+				const createdAtList = marks.map(item => markDate(item.createdAt));
+				setMark(createdAtList);
+				handleClickDate(value); // 초기 로딩 시 현재 날짜의 데이터를 가져오도록 수정
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		fetchData();
+	}, [userToken, value]);
+
+	function setLoginAlertModalOpen(value: SetStateAction<boolean>): void {
+		throw new Error('Function not implemented.');
+	}
+
 	return (
 		<>
 			<Calendar
-				calendarType={'US'}
-				locale={'ko-KR'}
-				formatDay={(locale, date) => moment(date).format('D')} // '일' 표시 x
+				calendarType='US'
+				locale='ko-KR'
+				formatDay={(locale, date) => moment(date).format('D')}
 				value={value}
 				next2Label={null}
 				prev2Label={null}
-				view={'month'}
-				tileContent={({ date, view }) => {
-					// 날짜 타일에 컨텐츠 추가하기 (html 태그)
-					// 추가할 html 태그를 변수 초기화
-					const html: JSX.Element[] = [];
-					// 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-					if (mark.find(x => x === moment(date).format('YYYY-MM-DD'))) {
-						html.push(<div className='dot'>{10}</div>);
-					}
-					// 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
+				view='month'
+				// @ts-ignore
+				onChange={onChange}
+				onClickDay={handleClickDate}
+				tileContent={({ date }) => {
+					const dateStr = moment(date).format('YYYY-MM-DD');
+					const wordCount = mark.filter(
+						createdAt => createdAt === dateStr,
+					).length;
 					return (
-						<>
-							<div className='flex justify-center items-center absoluteDiv'>
-								{html}
-							</div>
-						</>
+						<div className='tile-content'>
+							{wordCount > 0 && <div className={styles.dot}>{wordCount}</div>}
+						</div>
 					);
 				}}
 			/>
+			<ul className={styles['list_container']}>
+				{wordsList.map((word, index) => (
+					<li key={index} className={styles['list']}>
+						<h3>{word.word}</h3>
+						<div>{joinMeanings(word.meanings)}</div>
+						<div>{prettyDate(word.createdAt)}</div>
+						<div>
+							<div className={styles.status}>
+								<ChangeStatus
+									id={word.short_id}
+									initialStatus={word.status}
+									setLoginAlertModal={setLoginAlertModalOpen}
+								/>
+							</div>
+							<div className={styles.speaker}>
+								<Speaker
+									text={word.word}
+									lang={checkLang(word.word) ? 'english' : 'korean'}
+								/>
+							</div>
+						</div>
+					</li>
+				))}
+			</ul>
 		</>
 	);
 }
