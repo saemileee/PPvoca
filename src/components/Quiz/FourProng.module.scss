@@ -1,5 +1,6 @@
 .quizContainer {
 	padding: 18px 16px 0 16px;
+	height: inherit;
 	.contentsContainer {
 	}
 
@@ -17,7 +18,7 @@
 	}
 
 	.problemContainer {
-		height: 380px;
+		height: 40vh;
 		margin: 0 32px 0 32px;
 		text-align: center;
 		p {
