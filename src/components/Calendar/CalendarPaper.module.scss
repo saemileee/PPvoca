@@ -19,7 +19,7 @@ abbr[title] {
 	padding-top: 2px;
 }
 .list_container {
-	height: 290px;
+	height: calc(100vh - 532px);
 	width: 100%;
 	overflow-y: scroll;
 }
