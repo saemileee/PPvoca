@@ -8,6 +8,7 @@ import Navigation from '../components/common/Navigation/Navigation';
 import Logo from '../components/common/Logo/Logo';
 import RegisterForm from '../components/Register/RegisterForm';
 import AlertModal from '../components/common/AlertModal/AlertModal';
+import Header from '../components/common/Header/Header';
 
 function Register() {
 	const userToken = useRecoilValue(userTokenState);
@@ -25,6 +26,7 @@ function Register() {
 
 	return (
 		<>
+			<Header title={'회원가입'} addGoBackButton={true} />
 			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />

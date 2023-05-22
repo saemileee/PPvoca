@@ -8,6 +8,7 @@ import Navigation from '../components/common/Navigation/Navigation';
 import Logo from '../components/common/Logo/Logo';
 import LoginForm from '../components/Login/LoginForm';
 import AlertModal from '../components/common/AlertModal/AlertModal';
+import Header from '../components/common/Header/Header';
 
 function Login() {
 	const userToken = useRecoilValue(userTokenState);
@@ -24,6 +25,7 @@ function Login() {
 
 	return (
 		<>
+			<Header title={'로그인'} />
 			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />
