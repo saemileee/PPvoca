@@ -235,17 +235,16 @@ function WordList() {
 			<main>
 				<div className={styles.container}>
 					<div className={styles.fixed}>
-						<div className={styles.title}>
 							<Header
 								title={booktitle}
 								addGoBackButton={true}
 								rightComponent={
-									<div>
+									<div className={styles.title}>
 										<div className={styles.filter} onClick={handleFilter}>
-											<GiSettingsKnobs />
+											<GiSettingsKnobs size={24} color='#736ef3' />
 										</div>
 										<div className={styles.option} onClick={handleOption}>
-											<CiMenuKebab />
+											<CiMenuKebab size={24} color='#736ef3' />
 										</div>
 										{optionModal && (
 											<WordListOptionsModal
@@ -261,7 +260,6 @@ function WordList() {
 									</div>
 								}
 							/>
-						</div>
 						<div className={styles.search}>
 							<input
 								className={styles.input}
