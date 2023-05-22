@@ -74,8 +74,6 @@ function WordForm() {
 							endLang: end_lang,
 							short_id,
 						});
-					} else if (editPage) {
-						getWords();
 					}
 				}
 			}
@@ -178,6 +176,8 @@ function WordForm() {
 		getBookList();
 		if (addPage) {
 			clearData();
+		} else if (editPage) {
+			getWords();
 		}
 	}, [editPage]);
 
