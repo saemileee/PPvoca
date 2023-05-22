@@ -90,9 +90,11 @@ const FourProngQuiz = () => {
 
 	return (
 		<>
-			<Header title={'사지선다'}></Header>
-			<div className={styles.quizContainer}>
-				<div style={isDone ? { display: 'none' } : undefined}>
+			<Header title={'사지선다'} addGoBackButton={true}></Header>
+			<div
+				className={styles.quizContainer}
+				style={isDone ? { display: 'none' } : undefined}>
+				<div>
 					{problems
 						? problems.map((problem, index) => (
 								<Quiz
@@ -115,8 +117,7 @@ const FourProngQuiz = () => {
 						<button
 							onClick={() => {
 								currentQuiz !== 0 ? setCurrentQuiz(prev => prev - 1) : null;
-							}}
-						>
+							}}>
 							<MdOutlineNavigateBefore size={24} color='#252525' />
 						</button>
 						<button
@@ -124,8 +125,7 @@ const FourProngQuiz = () => {
 								currentQuiz !== problems.length - 1
 									? setCurrentQuiz(prev => prev + 1)
 									: handleDoneClick()
-							}
-						>
+							}>
 							<MdOutlineNavigateNext size={24} color='#252525' />
 						</button>
 					</div>
@@ -243,15 +243,13 @@ function Quiz({
 									e.currentTarget.dataset.correct!,
 									e.currentTarget.dataset.index!,
 								);
-							}}
-						>
+							}}>
 							<div>
 								<span>
 									{selection.meanings.map((meaning: string, index: number) => (
 										<span
 											key={`meaning-${index}`}
-											className={styles.selectionMeaning}
-										>
+											className={styles.selectionMeaning}>
 											{meaning}
 										</span>
 									))}
@@ -263,8 +261,7 @@ function Quiz({
 										? { display: 'none' }
 										: undefined
 								}
-								className={styles.selectionWord}
-							>
+								className={styles.selectionWord}>
 								{selection.word}
 							</span>
 						</li>

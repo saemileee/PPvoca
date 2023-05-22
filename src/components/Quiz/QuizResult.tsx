@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuizAnswerModal from './QuizAnswerModal';
 import styles from './QuizResult.module.scss';
 import { userTokenState } from '../../recoil/userState';
-import { multiWords, postQuizResult } from '../../apis/word';
+import { multiWords } from '../../apis/word';
 import { useRecoilValue } from 'recoil';
+import { postQuizResult } from '../../apis/quiz';
 
 type TypeResultProps = {
 	quizCategory: string;
@@ -38,33 +39,49 @@ function QuizResult({
 	const navigate = useNavigate();
 
 	const [isShowQuizAnswers, setIsShowQuizAnswers] = useState(false);
-
-	// 문제들 api 보내기
-	// 문제 답 + 뜻 + 정오답 여부 mapping
 	const [answerList, setAnswerList] = useState<TypeAnswer[]>([]);
+	const [isPostedResult, setIsPostedResult] = useState(false);
 
-	// api로 문제들 답 get 하기
 	useEffect(() => {
-		const answerIds = [...correctAnswers, ...incorrectAnswers];
-		multiWords(userToken, answerIds).then(res => {
-			const mappedAnswerData = res.data.map((wordData: any) => {
-				return {
-					isCorrect: correctAnswers.includes(wordData.short_id) ? true : false,
-					wordId: wordData.short_id,
-					word: wordData.word,
-					meanings: wordData.meanings,
-					status: wordData.status,
-				};
+		if (isDone) {
+			const answerIds = [...correctAnswers, ...incorrectAnswers];
+			multiWords(userToken, answerIds).then(res => {
+				const mappedAnswerData = res.data.map((wordData: any) => {
+					return {
+						isCorrect: correctAnswers.includes(wordData.short_id)
+							? true
+							: false,
+						wordId: wordData.short_id,
+						word: wordData.word,
+						meanings: wordData.meanings,
+						status: wordData.status,
+					};
+				});
+				setAnswerList(mappedAnswerData);
+				return;
 			});
-			setAnswerList(mappedAnswerData);
-		});
-		const formData = {
-			category: quizCategory,
-			correctWords: correctAnswers,
-			incorrectWords: incorrectAnswers,
-		};
-		postQuizResult(userToken, formData);
-	}, [isDone]);
+		}
+	}, [
+		correctAnswers,
+		incorrectAnswers,
+		isDone,
+		isPostedResult,
+		quizCategory,
+		userToken,
+	]);
+
+	useEffect(() => {
+		if (isDone && !isPostedResult) {
+			const formData = {
+				category: quizCategory,
+				correctWords: [...correctAnswers],
+				incorrectWords: [...incorrectAnswers],
+			};
+			postQuizResult(userToken, formData);
+			setIsPostedResult(true);
+			return;
+		}
+	}, []);
 
 	return (
 		<div className={styles.resultContainer}>
@@ -92,8 +109,7 @@ function QuizResult({
 				<button
 					onClick={() => {
 						navigate('/quiz/list');
-					}}
-				>
+					}}>
 					다른 퀴즈 풀기
 				</button>
 			</div>
