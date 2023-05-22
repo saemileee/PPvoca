@@ -24,7 +24,8 @@ function BookList() {
 	useEffect(() => {
 		const fetchBooks = async () => {
 			try {
-				const booksData = await getBooks(userToken);
+				const response = await getBooks(userToken);
+				const booksData = response.data;
 				setBooks(booksData);
 			} catch (error) {
 				console.log(error);
