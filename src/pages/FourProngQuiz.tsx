@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import styles from './FourProng.module.scss';
-import ChangeStatus from '../common/Status/Status';
-import QuizResult from './QuizResult';
-import Header from '../common/Header/Header';
+import styles from '../components/Quiz/FourProng.module.scss';
+import ChangeStatus from '../components/common/Status/Status';
+import QuizResult from '../components/Quiz/QuizResult';
+import Header from '../components/common/Header/Header';
 import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md';
 
 type TypeAnswer = {
