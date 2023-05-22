@@ -6,6 +6,7 @@ import Logo from '../components/common/Logo/Logo';
 import UserInfoDetail from '../components/UserInfo/UserInfoDetail';
 import UserInfoButtons from '../components/UserInfo/UserInfoButtons';
 import AlertModal from '../components/common/AlertModal/AlertModal';
+import Header from '../components/common/Header/Header';
 
 function UserInfo() {
 	const { alertModal, handleCloseAlert, handleOpenAlert } = useUserAlert();
@@ -16,6 +17,7 @@ function UserInfo() {
 
 	return (
 		<>
+			<Header title='마이페이지' />
 			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />
