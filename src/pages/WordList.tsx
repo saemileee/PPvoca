@@ -292,8 +292,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-											? true
-											: false
+												? true
+												: false
 									}
 								/>
 							</div>
@@ -347,7 +347,10 @@ function WordList() {
 								</div>
 							</div>
 						))}
-						<AddButton url='/word/add' bookId={bookId} />
+						{userToken &&
+							<AddButton url='/word/add' bookId={bookId} />
+						}
+
 					</div>
 					{filterModal && (
 						<WordListFilterModal
