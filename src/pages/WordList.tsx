@@ -34,6 +34,7 @@ import {
 	getBookName,
 	findWordById,
 } from '../apis/word';
+import Header from '../components/common/Header/Header';
 
 //BookList에서 Params로 받아올 bookId
 type RouteParams = {
@@ -61,7 +62,7 @@ function WordList() {
 	const [alertUnknownModalOpen, setAlertUnknownModalOpen] = useState(false);
 	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 
-	const [booktitle, setBooktitle] = useState('단어장');
+	const [booktitle, setBooktitle] = useState('샘플 단어장');
 	const [findWord, setFindWord] = useState({
 		findword: '',
 	});
@@ -234,29 +235,31 @@ function WordList() {
 			<main>
 				<div className={styles.container}>
 					<div className={styles.fixed}>
-						<div className={styles.title}>
-							<div className={styles.back} onClick={handleBack}>
-								<MdArrowBackIosNew />
-							</div>
-							<div className={styles.bookName}>{booktitle}</div>
-							<div className={styles.filter} onClick={handleFilter}>
-								<GiSettingsKnobs />
-							</div>
-							<div className={styles.option} onClick={handleOption}>
-								<CiMenuKebab />
-							</div>
-							{optionModal && (
-								<WordListOptionsModal
-									setModalOpen={setOptionModal}
-									wordList={wordList}
-									setWordList={setWordList}
-									setAlertDeleteOpen={setAlertDeleteModalOpen}
-									setAlertUnmarkOpen={setAlertUnmarkModalOpen}
-									setAlertCheckOpen={setAlertCheckModalOpen}
-									setAlertUnknownOpen={setAlertUnknownModalOpen}
-								/>
-							)}
-						</div>
+							<Header
+								title={booktitle}
+								addGoBackButton={true}
+								rightComponent={
+									<div className={styles.title}>
+										<div className={styles.filter} onClick={handleFilter}>
+											<GiSettingsKnobs size={24} color='#736ef3' />
+										</div>
+										<div className={styles.option} onClick={handleOption}>
+											<CiMenuKebab size={24} color='#736ef3' />
+										</div>
+										{optionModal && (
+											<WordListOptionsModal
+												setModalOpen={setOptionModal}
+												wordList={wordList}
+												setWordList={setWordList}
+												setAlertDeleteOpen={setAlertDeleteModalOpen}
+												setAlertUnmarkOpen={setAlertUnmarkModalOpen}
+												setAlertCheckOpen={setAlertCheckModalOpen}
+												setAlertUnknownOpen={setAlertUnknownModalOpen}
+											/>
+										)}
+									</div>
+								}
+							/>
 						<div className={styles.search}>
 							<input
 								className={styles.input}
@@ -289,8 +292,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-											? true
-											: false
+												? true
+												: false
 									}
 								/>
 							</div>
