@@ -10,7 +10,10 @@ import { userTokenState } from '../../recoil/userState';
 import Speaker from '../common/Speaker/Speaker';
 import ChangeStatus from '../common/Status/Status';
 
-function CalendarPaper() {
+type PaperProps = {
+	setLoginAlertModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+function CalendarPaper({ setLoginAlertModal }: PaperProps) {
 	const [wordsList, setWordsList] = useState<Word[]>([]);
 	const userToken = useRecoilValue(userTokenState);
 	const [value, onChange] = useState<Date>(new Date());
@@ -61,8 +64,6 @@ function CalendarPaper() {
 		fetchData();
 	}, [userToken, value]);
 
-	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
-
 	return (
 		<>
 			<Calendar
@@ -99,10 +100,7 @@ function CalendarPaper() {
 								<ChangeStatus
 									id={word.short_id}
 									initialStatus={word.status}
-									setLoginAlertModal={
-										// @ts-ignore
-										setLoginAlertModalOpen
-									}
+									setLoginAlertModal={setLoginAlertModal}
 								/>
 							</div>
 							<div className={styles.speaker}>
