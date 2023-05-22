@@ -6,12 +6,11 @@ import { userTokenState } from '../recoil/userState';
 
 import styles from '../components/BookForm/bookform.module.scss';
 
-import BookFormDetail from '../components/BookForm/BookFormDetail'
+import BookFormDetail from '../components/BookForm/BookFormDetail';
 import Navigation from '../components/common/Navigation/Navigation';
 import BookHeader from '../components/BookForm/BookHeader';
 import LoginAlertModal from '../components/common/LoginAlertModal/LoginAlertModal';
 import AlertModal from '../components/common/AlertModal/AlertModal';
-
 
 function BookForm() {
 	const userToken = useRecoilValue(userTokenState);
@@ -32,89 +31,69 @@ function BookForm() {
 	const editPage = location.pathname === `/book/edit/${bookId}`;
 	const addPage = location.pathname === '/book/add';
 
-
-
 	/** API 연결 */
-	let bookData: BookData = {
-		name: '',
-		description: '',
-		start_lang: '',
-		end_lang: '',
-	};
-	type BookData = {
-		name: string;
-		description: string;
-		start_lang: string;
-		end_lang: string;
-	}
 	// 단어장 가져오기
 	const getBookList = async () => {
-		if (userToken) {
-			try {
-				if (!bookId) {
-					return;
-				}
-				const response = await selectedBook(bookId, userToken);
-				bookData = response.data[0];
-				if (response.status === 200) {
-					setBookInfo({
-						bookDescription: bookData.description,
-						bookName: bookData.name,
-						word: bookData.start_lang,
-						meaning: bookData.end_lang,
-					});
-				}
-			} catch (err) {
-				console.log(err);
-				alert('단어장 정보를 불러오는데 실패하였습니다.');
+		try {
+			if (!userToken || !bookId) return;
+			const response = await selectedBook(bookId, userToken);
+			if (response.status === 200) {
+				const bookData = response.data[0];
+				setBookInfo({
+					bookDescription: bookData.description,
+					bookName: bookData.name,
+					word: bookData.start_lang,
+					meaning: bookData.end_lang,
+				});
 			}
+		} catch (err) {
+			console.log(err);
 		}
 	};
 
 	// 단어장 생성 및 수정
 	const handleSubmit = async () => {
-		if (userToken) {
-			if (!bookInfo.bookName) {
-				setMessage('단어장 이름을 입력해주세요')
-				setAlertModalOpen(true);
-				return;
-			}
-			const data = {
-				name: bookInfo.bookName,
-				description: bookInfo.bookDescription,
-				start_lang: bookInfo.word,
-				end_lang: bookInfo.meaning,
-			};
-
-			if (addPage) {
-				try {
-					const response = await addedBook(userToken, data);
-					if (response.status === 201) {
-						setMessage(`[${bookInfo.bookName}] 생성 완료`)
-						setAlertModalOpen(true);
-						setNavigateBack(true)
-					}
-				} catch (err) {
-					console.log(err);
-				}
-			} else if (editPage) {
-				try {
-					if (!bookId) {
-						return;
-					}
-					const response = await updatedBook(bookId, userToken, data);
-					if (response.status === 200) {
-						setMessage(`[${bookInfo.bookName}] 수정 완료`)
-						setAlertModalOpen(true);
-						setNavigateBack(true)
-					}
-				} catch (err) {
-					console.log(err);
-					alert('단어장 수정 실패');
-				}
-			}
-		} else {
+		if (!userToken) {
 			setLoginAlertModalOpen(true);
+			return;
+		}
+		if (!bookInfo.bookName) {
+			setMessage('단어장 이름을 입력해주세요');
+			setAlertModalOpen(true);
+			return;
+		}
+		const data = {
+			name: bookInfo.bookName,
+			description: bookInfo.bookDescription,
+			start_lang: bookInfo.word,
+			end_lang: bookInfo.meaning,
+		};
+
+		if (addPage) {
+			try {
+				const response = await addedBook(userToken, data);
+				if (response.status === 201) {
+					setMessage(`[${bookInfo.bookName}] 생성 완료`);
+					setAlertModalOpen(true);
+					setNavigateBack(true);
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		} else if (editPage) {
+			try {
+				if (!bookId) {
+					return;
+				}
+				const response = await updatedBook(bookId, userToken, data);
+				if (response.status === 200) {
+					setMessage(`[${bookInfo.bookName}] 수정 완료`);
+					setAlertModalOpen(true);
+					setNavigateBack(true);
+				}
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	};
 
@@ -140,10 +119,7 @@ function BookForm() {
 						}
 						onButtonClick={handleSubmit}
 					/>
-					<BookFormDetail
-						bookInfo={bookInfo}
-						setBookInfo={setBookInfo}
-					/>
+					<BookFormDetail bookInfo={bookInfo} setBookInfo={setBookInfo} />
 				</div>
 				<AlertModal
 					isOpen={alertModalOpen}
@@ -155,11 +131,9 @@ function BookForm() {
 					}}
 					message={message}
 				/>
-				{
-					loginAlertModalOpen && (
-						<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
-					)
-				}
+				{loginAlertModalOpen && (
+					<LoginAlertModal onClose={() => setLoginAlertModalOpen(false)} />
+				)}
 			</main>
 		</>
 	);

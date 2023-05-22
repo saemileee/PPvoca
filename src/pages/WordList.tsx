@@ -289,8 +289,8 @@ function WordList() {
 										checkedList.length === 0
 											? false
 											: checkedList.length === wordList.length
-												? true
-												: false
+											? true
+											: false
 									}
 								/>
 							</div>

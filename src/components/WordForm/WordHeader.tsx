@@ -4,7 +4,6 @@ import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import styles from './WordForm.module.scss';
 
-
 type WordHeaderProps = {
 	bookInfo: { name: string };
 	words: {
@@ -57,8 +56,11 @@ function WordHeader({
 			) : null}
 
 			<div
-				className={`${styles.submitBtn} ${words.word && (words.currMeaning.length || words.meaning) ? styles.active : ''
-					}`}
+				className={`${styles.submitBtn} ${
+					words.word && (words.currMeaning.length || words.meaning)
+						? styles.active
+						: ''
+				}`}
 				onClick={handleSubmit}
 			>
 				{addPage ? '추가' : editPage ? '수정' : null}

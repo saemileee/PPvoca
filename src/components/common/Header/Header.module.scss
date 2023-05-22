@@ -1,14 +1,36 @@
 .commonHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0;
 	background-color: rgb(255, 255, 255);
 	height: 48px;
 	width: 100%;
 	text-align: center;
 	color: #736ef3;
-	padding: 18px 0 18px;
 	font-weight: 700;
 	position: absolute;
 	z-index: 9999;
 	border-bottom: 1px solid rgb(223, 223, 223);
+	span:nth-child(1) {
+		text-align: left;
+		width: 20%;
+		flex-grow: 1;
+		button {
+			height: 48px;
+			width: 48px;
+			border: none;
+			background-color: unset;
+		}
+	}
+	span:nth-child(2) {
+		width: 60%;
+		flex-grow: 1;
+	}
+	span:nth-child(3) {
+		width: 20%;
+		flex-grow: 1;
+	}
 }
 
 .headerContainer::after {
