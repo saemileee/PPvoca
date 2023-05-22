@@ -61,7 +61,7 @@ function WordList() {
 	const [alertUnknownModalOpen, setAlertUnknownModalOpen] = useState(false);
 	const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
 
-	const [booktitle, setBooktitle] = useState('단어장');
+	const [booktitle, setBooktitle] = useState('샘플 단어장');
 	const [findWord, setFindWord] = useState({
 		findword: '',
 	});
