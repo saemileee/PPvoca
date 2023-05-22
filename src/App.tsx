@@ -11,9 +11,8 @@ import Register from './pages/Register';
 import UserInfo from './pages/UserInfo';
 import UserEdit from './pages/UserEdit';
 import Quiz from './pages/Quiz';
-import FourProngQuiz from './components/Quiz/FourProngQuiz';
+import FourProngQuiz from './pages/FourProngQuiz';
 import Navigation from './components/common/Navigation/Navigation';
-import QuizResult from './components/Quiz/QuizResult';
 import Logo from './components/common/Logo/Logo';
 
 function App() {

@@ -62,9 +62,9 @@ function WordForm() {
 					// 해당 단어장에서 단어 추가 시 해당 단어장 선택되기 or nav 탭에서 단어 추가 시 첫번 째 단어장 선택되기
 					const selectedBook = bookIdLocation.state
 						? bookLists.find(
-							(book: { short_id: string }) =>
-								book.short_id === bookIdLocation.state.bookId,
-						)
+								(book: { short_id: string }) =>
+									book.short_id === bookIdLocation.state.bookId,
+						  )
 						: bookLists[0];
 					if (selectedBook) {
 						const { name, start_lang, end_lang, short_id } = selectedBook;

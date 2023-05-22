@@ -7,6 +7,7 @@ import UserEditForm from '../components/UserEdit/UserEditForm';
 import UserDeleteForm from '../components/UserEdit/UserDeleteForm';
 import AlertModal from '../components/common/AlertModal/AlertModal';
 import ConfirmAlertModal from '../components/UserEdit/ConfirmAlertModal';
+import Header from '../components/common/Header/Header';
 
 function UserEdit() {
 	const logoStyle = {
@@ -25,6 +26,7 @@ function UserEdit() {
 
 	return (
 		<>
+			<Header title='회원 정보 수정' addGoBackButton={true} />
 			<Navigation />
 			<main className={styles.container}>
 				<Logo style={logoStyle} />
