@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { addedWord, selectedWord, updatedWord } from '../apis/word';
 import { bookListAll, getBooks } from '../apis/book';
 import { useRecoilValue } from 'recoil';
@@ -20,6 +20,7 @@ function WordForm() {
 	const userToken = useRecoilValue(userTokenState);
 	const editPage = location.pathname === `/word/edit/${wordId}`;
 	const addPage = location.pathname === '/word/add';
+	const bookIdLocation = useLocation();
 
 	/** State */
 	const [showModal, setShowModal] = useState(false);
@@ -50,40 +51,24 @@ function WordForm() {
 		short_id: string;
 	};
 
+
 	// 단어장 가져오기 (로그인, 비로그인)
 	const getBookList = async () => {
-		// 임시로 로컬스토리지에 bookId 넣어서 테스트
-		// const storedBookId = localStorage.getItem('bookId');
 		try {
-			let response;
-			if (userToken) {
-				response = await bookListAll(userToken);
-			} else {
-				response = await getBooks();
-			}
+			const response = userToken ? await bookListAll(userToken) : await getBooks();
 			if (response.status === 200) {
 				const bookLists = response.data;
 				setBookList(bookLists);
 				if (bookLists.length > 0) {
-					// if (storedBookId) {
-					// 	const foundBook = bookLists.find((book: { short_id: string }) => book.short_id === storedBookId);
-					// 	if (foundBook) {
-					// 		const { name, start_lang, end_lang, short_id } = foundBook;
-					// 		setBookInfo({
-					// 			name: name,
-					// 			startLang: start_lang,
-					// 			endLang: end_lang,
-					// 			short_id: short_id,
-					// 		});
-					// 	}
-					// }else
-					if (addPage) {
-						const { name, start_lang, end_lang, short_id } = bookLists[0];
+					// 해당 단어장에서 단어 추가 시 해당 단어장 선택되기 or nav 탭에서 단어 추가 시 첫번 째 단어장 선택되기
+					const selectedBook = bookIdLocation.state ? bookLists.find((book: { short_id: string }) => book.short_id === bookIdLocation.state.bookId) : bookLists[0];
+					if (selectedBook) {
+						const { name, start_lang, end_lang, short_id } = selectedBook;
 						setBookInfo({
-							name: name,
+							name,
 							startLang: start_lang,
 							endLang: end_lang,
-							short_id: short_id,
+							short_id,
 						});
 					} else if (editPage) {
 						getWords();
@@ -94,6 +79,7 @@ function WordForm() {
 			console.log(err);
 		}
 	};
+
 
 	// 단어 불러오기
 	const getWords = async () => {
@@ -106,7 +92,6 @@ function WordForm() {
 			if (response.status === 200) {
 				// 단어에서 불러온 단어 bookId랑 단어장 목록에서 shortId 같은 거 비교해서 start_lang 찾기
 				setBookId(bookId)
-
 				setWords(prevWords => ({
 					...prevWords,
 					word: word,
