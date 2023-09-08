@@ -1,46 +1,99 @@
-# Getting Started with Create React App
+# 💡 단어를 추가하고 퀴즈를 풀며 단어를 외울 수 있는 영단어장 서비스
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+🗓️ **23.05.07 ~ 23. 05. 25 (3주)**
 
-In the project directory, you can run:
+**👨‍👧‍👦 프론트엔드 & 백엔드 7명**
 
-### `npm start`
+https://github.com/elicestudy/dev-FE
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+https://github.com/elicestudy/dev-BE
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**팀 프로젝트 스터디**
 
-### `npm run build`
+- 프론트엔드 & 백엔드 개발 담당
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**프로젝트 결과물**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- http://ppvoca.p-e.kr/
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**테스트용 계정**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> 🔐 **ID**: signin@test.com
+> **PW** : Test!@1234
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+**기술스택**
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+|  | 기술  |
+| --- | --- |
+| FE | react, typescript, recoil, scss |
+| BE | nodejs, express, mongodb, mongoose, postman, JWT |
+| Crawling | axios, cheerio |
+| API | SpeechSynthesisUtterance |
+| Deploy | gcp, centOS 8, pm2, nginx |
+| 협업 | 피그마, 깃허브 기관 |
+| 컨벤션 | eslint,  prettier |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+**프로젝트 주제**
+
+**목적**
+
+- 사용자가 직접 영단어와 뜻을 추가하고 퀴즈, 달력기능 등을 통해 효율적인 영단어 암기를 도와주는 서비스입니다.
+
+**목표**
+
+- 언제 어디서나 쉽게 서비스를 사용할 수 있도록 모바일 환경에 최적화된 경험을 제공합니다.
+- 비회원 유저도 서비스의 전반적인 기능을 탐색할 수 있게하여 회원 가입을 유도하며 사용자를 유치하고자 합니다.
+
+---
+
+**프로젝트 회고**
+
+[[2차 스터디 프로젝트/백엔드] 깃 협업, 3계층 구조, api 명세서 작성, 데이터 크롤링](https://velog.io/@saemileee/2차-스터디-프로젝트백엔드-깃-협업-3계층-구조-api-명세서-작성-데이터-크롤링)
+
+[[2차 스터디 프로젝트/백엔드] JWT 토큰으로 로그인 api 구현, 유효성 검사, 에처러리와 상태코드](https://velog.io/@saemileee/2차-스터디-프로젝트백엔드-JWT-토큰으로-로그인-api-구현-유효성-검사-에처러리와-상태코드)
+
+[[2차 스터디 프로젝트/프론트엔드] 리액트로 사지선다 영어 퀴즈 구현하기](https://velog.io/@saemileee/2차-스터디-프로젝트프론트엔드-퀴즈-구현)
+
+---
+
+**활용 기술스택**
+
+- `TypeScript` `React`
+- `SCSS` `Axios`
+- `Node.js` `Express`
+- `MongoDB` `Mongoose`
+- `JWT` `cheerio`
+
+---
+
+**프론트엔드 개인 구현 기능**
+
+- 퀴즈 리스트 페이지
+    - 퀴즈 옵션 선택 상태 관리, UI 및 기능
+    - 퀴즈 컴포넌트 UI 및 기능
+    - `axios` 통신으로 응답받은 사지선다 퀴즈 데이터가공, UI 및 기능
+    - 퀴즈 결과 관련 상태 관리 및 기능
+    - 틀린 문제 다시 풀기 로직 및 기능
+    - 퀴즈 정답 리스팅 UI 및 기능
+
+---
+
+**백엔드 개인 구현 기능**
+
+- `MVC` 디자인 패턴 개발
+- 유저 `JWT` 토큰 인증
+- 회원관련 CRUD 구현
+- `cheerio` 를 활용한 단어 뜻 사전 크롤링
